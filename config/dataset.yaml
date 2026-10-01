@@ -1,0 +1,40 @@
+seed: 2026
+passages:
+  count_per_gender: 8
+  dev_per_gender: 4
+  minimum_duration_s: 60.0
+  maximum_duration_s: 120.0
+  silence_between_utterances_s: 0.5
+  trim_threshold_dbfs: -40.0
+  trim_frame_ms: 20.0
+  trim_hop_ms: 10.0
+  trim_padding_ms: 10.0
+alignment:
+  minimum_median_confidence: 0.5
+  low_confidence_threshold: 0.3
+  maximum_low_confidence_fraction: 0.15
+ladder:
+  levels:
+    - severity_level: 1
+      flaw_count: 1
+      severity: 0.2
+    - severity_level: 2
+      flaw_count: 2
+      severity: 0.35
+    - severity_level: 3
+      flaw_count: 3
+      severity: 0.5
+    - severity_level: 4
+      flaw_count: 5
+      severity: 0.7
+    - severity_level: 5
+      flaw_count: 7
+      severity: 0.9
+  region_word_count: 3
+  minimum_region_separation_words: 4
+controls:
+  gain_db: 6.0
+  noise_snr_db: 30.0
+  mp3_bitrate_kbps: 128
+validation:
+  spot_check_count: 6

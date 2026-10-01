@@ -2,6 +2,9 @@
 
 import numpy as np
 import pytest
+import soundfile as sf
+import tempfile
+from pathlib import Path
 
 from speechlens.injection import (
     FlawSpec,
@@ -14,6 +17,8 @@ from speechlens.injection import (
     stumble_repeat,
     volume_dropoff,
 )
+from speechlens.injection.engine import _psola_duration
+from scripts.make_dataset import _write_flac
 from speechlens.schema import WordTiming
 
 
@@ -143,6 +148,109 @@ def test_insertions_change_duration_by_labeled_rendered_audio(flaw_type: str) ->
     assert output.size - audio.size == inserted_samples
 
 
+def test_long_pause_uses_nonzero_room_tone_at_source_noise_floor() -> None:
+    """Inserted room tone is nonzero and RMS-matched to the clip's quiet segment."""
+    times = np.arange(5 * SAMPLE_RATE_HZ, dtype=np.float32) / SAMPLE_RATE_HZ
+    audio = np.zeros(times.size, dtype=np.float32)
+    active_voice = (times >= 0.2) & (times <= 1.0)
+    quiet_room = (times >= 3.0) & (times <= 4.0)
+    audio[active_voice] = 0.2 * np.sin(2 * np.pi * 180 * times[active_voice])
+    audio[quiet_room] = 0.002 * np.sin(2 * np.pi * 180 * times[quiet_room])
+    timings = [
+        WordTiming(word="one", start_s=0.25, end_s=0.55),
+        WordTiming(word="two", start_s=0.7, end_s=0.95),
+    ]
+
+    changed, labels, _ = long_pause(
+        audio, timings, (0, 1), 0.5, np.random.default_rng(5)
+    )
+    start = round(labels[0].rendered_start_s * SAMPLE_RATE_HZ)
+    end = round(labels[0].rendered_end_s * SAMPLE_RATE_HZ)
+    pause = changed[start:end]
+    reference = audio[round(3.2 * SAMPLE_RATE_HZ) : round(3.3 * SAMPLE_RATE_HZ)]
+    pause_rms = float(np.sqrt(np.mean(np.square(pause, dtype=np.float64))))
+    reference_rms = float(np.sqrt(np.mean(np.square(reference, dtype=np.float64))))
+    difference_db = abs(20.0 * np.log10(pause_rms / reference_rms))
+
+    assert np.any(pause != 0.0)
+    assert pause[0] == 0.0
+    assert pause[-1] == 0.0
+    assert difference_db <= 3.0
+
+
+@pytest.mark.parametrize(
+    ("severity", "expected_duration_s"),
+    [(0.2, 0.6), (0.5, 1.3), (1.0, 3.0)],
+)
+def test_long_pause_duration_uses_configured_severity_knots(
+    severity: float,
+    expected_duration_s: float,
+) -> None:
+    """Configured pause severity knots map to the requested duration values."""
+    output, labels, _ = long_pause(
+        make_signal(),
+        make_timings(),
+        REGION,
+        severity,
+        np.random.default_rng(4),
+    )
+
+    actual_duration_s = labels[0].rendered_end_s - labels[0].rendered_start_s
+    assert output.size > 0
+    assert abs(actual_duration_s - expected_duration_s) <= 1 / SAMPLE_RATE_HZ
+
+
+def test_dataset_flac_preserves_sub_pcm16_room_tone() -> None:
+    """The generated 24-bit FLAC retains quiet samples below the PCM16 LSB."""
+    import tempfile
+
+    quiet = np.full(SAMPLE_RATE_HZ, 1.2e-5, dtype=np.float32)
+    with tempfile.TemporaryDirectory(prefix="speechlens-pcm24-", dir=Path.cwd()) as directory:
+        path = Path(directory) / "quiet.flac"
+        _write_flac(path, quiet)
+        decoded, sample_rate = sf.read(path, dtype="float32")
+
+    assert sample_rate == SAMPLE_RATE_HZ
+    assert np.any(decoded != 0.0)
+    assert float(np.sqrt(np.mean(np.square(decoded, dtype=np.float64)))) > 0.0
+
+
+def test_stumble_repeat_label_duration_grows_with_severity() -> None:
+    """Stumble bands repeat progressively more source material and pauses."""
+    durations = []
+    for severity in (0.2, 0.5, 0.9):
+        _, labels, _ = stumble_repeat(
+            make_signal(),
+            make_timings(),
+            REGION,
+            severity,
+            np.random.default_rng(1),
+        )
+        durations.append(labels[0].rendered_end_s - labels[0].rendered_start_s)
+
+    assert durations[0] < durations[1] < durations[2]
+
+
+@pytest.mark.parametrize(
+    ("severity", "expected_added_words"),
+    [(0.399, 1), (0.4, 2), (0.7, 2), (0.701, 4)],
+)
+def test_stumble_repeat_uses_configured_severity_bands(
+    severity: float,
+    expected_added_words: int,
+) -> None:
+    """Stumble word count changes at the configured severity boundaries."""
+    _, _, updated = stumble_repeat(
+        make_signal(),
+        make_timings(),
+        REGION,
+        severity,
+        np.random.default_rng(1),
+    )
+
+    assert len(updated) == len(make_timings()) + expected_added_words
+
+
 @pytest.mark.parametrize("flaw_type", ["filler", "stumble_repeat"])
 def test_randomized_effects_are_seed_deterministic(flaw_type: str) -> None:
     """Identical seeds produce byte-identical waveforms, labels, and timings."""
@@ -151,6 +259,16 @@ def test_randomized_effects_are_seed_deterministic(flaw_type: str) -> None:
 
     assert first[0].tobytes() == second[0].tobytes()
     assert first[1:] == second[1:]
+
+
+def test_duration_psola_reuses_byte_identical_cached_samples() -> None:
+    """Identical duration-transform requests are stable across Praat calls."""
+    audio = make_signal()
+
+    first = _psola_duration(audio, 1.4)
+    second = _psola_duration(audio, 1.4)
+
+    assert first.tobytes() == second.tobytes()
 
 
 def test_long_pause_rejects_a_preexisting_long_natural_gap() -> None:

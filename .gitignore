@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 .venv/
+.speechlens_cache/
 .env
 .pytest_cache/
 .ipynb_checkpoints/
@@ -12,3 +13,5 @@ eval/results/*.png
 data/processed/demo/
 *.egg-info/
 .DS_Store
+data/processed/
+.speechlens_cache/

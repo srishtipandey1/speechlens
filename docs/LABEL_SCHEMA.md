@@ -90,4 +90,12 @@ Inserted `filler` audio is a synthetic approximation, not a human-recorded
 filler: it selects a steady voiced vowel excerpt from the same speaker,
 compresses its F0 contour toward the excerpt median, and applies short fades.
 The corresponding label notes this approximation. A duplicated `stumble_repeat`
-uses the speaker's own preceding word audio.
+uses the speaker's own preceding word audio. Its severity bands choose the
+number of preceding words and repeat count, with a short inserted hesitation
+between repeated copies at higher severity.
+
+`long_pause` uses a sustained low-level non-silent room-tone excerpt selected
+from the same clip, loops it with crossfades, and fades both pause edges. The
+severity-duration knots and sentence-join exclusion settings are maintained in
+`config/injection.yaml`; the inserted audio is labeled across its full rendered
+interval while its source label points to the original word boundary.

@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import math
+import hashlib
+import json
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -19,6 +21,7 @@ from speechlens.schema import FlawLabel, WordTiming
 Region = tuple[int, int]
 InjectionResult = tuple[np.ndarray, list[FlawLabel], list[WordTiming]]
 _CONFIG_PATH = Path(__file__).resolve().parents[3] / "config" / "injection.yaml"
+_PSOLA_CACHE_ROOT = Path(__file__).resolve().parents[3] / ".speechlens_cache" / "psola_duration"
 
 
 @dataclass(frozen=True)
@@ -215,6 +218,24 @@ def _praat_manipulation(segment: np.ndarray) -> parselmouth.Data:
 
 def _psola_duration(segment: np.ndarray, rate_factor: float) -> np.ndarray:
     """Apply a constant Praat duration-tier factor with PSOLA resynthesis."""
+    cache_key = hashlib.sha256()
+    cache_key.update(np.ascontiguousarray(segment, dtype=np.float32).tobytes())
+    cache_key.update(
+        json.dumps(
+            {
+                "rate_factor": rate_factor,
+                "sample_rate_hz": _sample_rate(),
+                "praat": _config()["praat"],
+                "cache_version": 1,
+            },
+            sort_keys=True,
+        ).encode("utf-8")
+    )
+    cached_path = _PSOLA_CACHE_ROOT / f"{cache_key.hexdigest()}.npy"
+    if cached_path.is_file():
+        samples = np.load(cached_path, allow_pickle=False)
+        return np.ascontiguousarray(samples, dtype=np.float32)
+
     manipulation = _praat_manipulation(segment)
     duration_tier = praat.call(manipulation, "Extract duration tier")
     duration_s = segment.size / _sample_rate()
@@ -227,7 +248,24 @@ def _psola_duration(segment: np.ndarray, rate_factor: float) -> np.ndarray:
     target_samples = max(1, round(segment.size / rate_factor))
     if samples.size < target_samples:
         samples = np.pad(samples, (0, target_samples - samples.size))
-    return np.ascontiguousarray(samples[:target_samples], dtype=np.float32)
+    samples = np.ascontiguousarray(samples[:target_samples], dtype=np.float32)
+    _PSOLA_CACHE_ROOT.mkdir(parents=True, exist_ok=True)
+    temporary_path = cached_path.with_suffix(".tmp")
+    with temporary_path.open("wb") as cache_file:
+        np.save(cache_file, samples, allow_pickle=False)
+    temporary_path.replace(cached_path)
+    return samples
+
+
+def identity_resynthesis(audio: np.ndarray) -> np.ndarray:
+    """Resynthesize unchanged duration through the same Praat PSOLA path."""
+    waveform = np.asarray(audio, dtype=np.float32)
+    if waveform.ndim != 1 or waveform.size == 0 or not np.isfinite(waveform).all():
+        raise ValueError("audio must be finite, non-empty, mono float audio")
+    resynthesized = _psola_duration(np.ascontiguousarray(waveform), 1.0)
+    if resynthesized.size != waveform.size:
+        resynthesized = np.resize(resynthesized, waveform.size).astype(np.float32)
+    return _limit_peak(resynthesized)
 
 
 def _pitch_points(tier: parselmouth.Data) -> list[tuple[float, float]]:
@@ -343,12 +381,83 @@ def _short_gap_boundary(
     return previous_index, boundary_sample, natural_gap
 
 
+def _severity_curve(severity: float, points: Sequence[Mapping[str, float]], value_key: str) -> float:
+    """Linearly interpolate a configured severity-to-value curve."""
+    ordered = sorted(points, key=lambda point: float(point["severity"]))
+    for left, right in zip(ordered, ordered[1:]):
+        left_severity = float(left["severity"])
+        right_severity = float(right["severity"])
+        if left_severity <= severity <= right_severity:
+            fraction = (severity - left_severity) / (right_severity - left_severity)
+            left_value = float(left[value_key])
+            right_value = float(right[value_key])
+            return left_value + fraction * (right_value - left_value)
+    return float(ordered[-1][value_key])
+
+
+def _quietest_room_tone(audio: np.ndarray, sample_count: int) -> np.ndarray:
+    """Extract the lowest-RMS sustained non-silent segment from the source clip."""
+    settings = _config()["long_pause"]
+    window_samples = min(
+        audio.size,
+        max(1, round(float(settings["room_tone_window_s"]) * _sample_rate())),
+    )
+    hop_samples = max(1, round(float(settings["room_tone_hop_s"]) * _sample_rate()))
+    rms_floor = float(settings["minimum_room_tone_rms"])
+    active_fraction = float(settings["room_tone_minimum_active_fraction"])
+    sample_floor = float(settings["room_tone_minimum_sample_amplitude"])
+    starts = np.arange(0, audio.size - window_samples + 1, hop_samples)
+    squared = np.square(audio, dtype=np.float64)
+    active = (np.abs(audio) >= sample_floor).astype(np.int64)
+    squared_sum = np.concatenate(([0.0], np.cumsum(squared)))
+    active_sum = np.concatenate(([0], np.cumsum(active)))
+    window_energy = squared_sum[starts + window_samples] - squared_sum[starts]
+    window_active = active_sum[starts + window_samples] - active_sum[starts]
+    rms_values = np.sqrt(window_energy / window_samples)
+    active_fractions = window_active / window_samples
+    eligible = np.flatnonzero(
+        (rms_values >= rms_floor) & (active_fractions >= active_fraction)
+    )
+    if eligible.size == 0:
+        raise ValueError("source clip has no non-silent room-tone segment")
+    selected = int(eligible[np.argmin(rms_values[eligible])])
+    best_start = int(starts[selected])
+
+    room_tone = audio[best_start : best_start + window_samples]
+    fade_samples = min(
+        round(float(settings["fade_duration_s"]) * _sample_rate()),
+        room_tone.size // 4,
+    )
+    looped = room_tone.copy()
+    while looped.size < sample_count:
+        next_segment = room_tone
+        overlap = min(fade_samples, looped.size, next_segment.size)
+        if overlap:
+            ramp = np.linspace(0.0, 1.0, overlap, endpoint=True, dtype=np.float32)
+            crossfade = looped[-overlap:] * (1.0 - ramp) + next_segment[:overlap] * ramp
+            looped = np.concatenate((looped[:-overlap], crossfade, next_segment[overlap:]))
+        else:
+            looped = np.concatenate((looped, next_segment))
+    inserted = np.ascontiguousarray(looped[:sample_count], dtype=np.float32)
+
+    edge_fade = min(
+        round(float(settings["fade_duration_s"]) * _sample_rate()),
+        inserted.size // 2,
+    )
+    if edge_fade:
+        ramp = np.linspace(0.0, 1.0, edge_fade, endpoint=True, dtype=np.float32)
+        inserted[:edge_fade] *= ramp
+        inserted[-edge_fade:] *= ramp[::-1]
+    return inserted
+
+
 def long_pause(
     audio: np.ndarray,
     word_timings: Sequence[WordTiming],
     region: Region,
     severity: float,
     rng: np.random.Generator,
+    room_tone_source: np.ndarray | None = None,
 ) -> InjectionResult:
     """Insert a silence pause at a word boundary that is not already long."""
     waveform, _, _ = _validate(audio, word_timings, region, severity)
@@ -356,17 +465,16 @@ def long_pause(
         return _no_op(waveform, word_timings)
     previous_index, boundary_sample, natural_gap = _short_gap_boundary(word_timings, region)
     settings = _config()["long_pause"]
-    pause_s = float(settings["minimum_duration_s"]) + severity * (
-        float(settings["maximum_duration_s"]) - float(settings["minimum_duration_s"])
-    )
-    inserted = np.zeros(round(pause_s * _sample_rate()), dtype=np.float32)
+    pause_s = _severity_curve(severity, settings["duration_by_severity"], "duration_s")
+    source_audio = waveform if room_tone_source is None else np.asarray(room_tone_source, dtype=np.float32)
+    inserted = _quietest_room_tone(source_audio, round(pause_s * _sample_rate()))
     output, timings = _insert_audio(waveform, boundary_sample, inserted, word_timings)
     anchor_s = _seconds_at(boundary_sample)
     label = _region_label(
         "long_pause", severity, anchor_s, anchor_s + 1 / _sample_rate(),
         boundary_sample, boundary_sample + inserted.size,
         (previous_index, previous_index + 1),
-        notes=f"Inserted silence at a {natural_gap:.3f} s natural gap.",
+        notes=f"Inserted same-clip room tone at a {natural_gap:.3f} s natural gap.",
     )
     return _limit_peak(output), [label], timings
 
@@ -383,8 +491,11 @@ def monotone(
     if severity == 0:
         return _no_op(waveform, word_timings)
     original_start, original_end = _region_times(word_timings, region)
-    minimum_scale = float(_config()["monotone"]["minimum_contour_scale"])
-    contour_scale = 1.0 - severity * (1.0 - minimum_scale)
+    contour_scale = _severity_curve(
+        severity,
+        _config()["monotone"]["severity_contour_scale"],
+        "scale",
+    )
     changed = _psola_pitch_compress(waveform[start_sample:end_sample], contour_scale)
     output = _limit_peak(_splice(waveform, start_sample, end_sample, changed))
     label = _region_label(
@@ -524,39 +635,54 @@ def stumble_repeat(
         return _no_op(waveform, word_timings)
     settings = _config()["stumble_repeat"]
     available = region[0]
-    if available < int(settings["minimum_words"]):
+    if severity < float(settings["low_severity_max"]):
+        repeated_count = int(settings["low_previous_words"])
+        repeat_count = int(settings["low_repeat_count"])
+    elif severity <= float(settings["medium_severity_max"]):
+        repeated_count = int(settings["medium_previous_words"])
+        repeat_count = int(settings["medium_repeat_count"])
+    else:
+        repeated_count = int(settings["high_previous_words"])
+        repeat_count = int(settings["high_repeat_count"])
+    if available < repeated_count:
         raise ValueError("stumble_repeat needs at least one preceding word")
-    max_words = min(int(settings["maximum_words"]), available)
-    minimum_words = int(settings["minimum_words"])
-    requested_words = (
-        max_words
-        if rng.random() < severity
-        else minimum_words
-    )
-    repeated_count = min(requested_words, max_words)
     repeated_start_index = region[0] - repeated_count
     repeated_end_index = region[0]
     source_start = _sample_at(word_timings[repeated_start_index].start_s)
     source_end = _sample_at(word_timings[repeated_end_index - 1].end_s)
     repeated_audio = waveform[source_start:source_end].copy()
-    inserted_timings = [
-        _make_timing(
-            timing,
-            region_start_sample + _sample_at(timing.start_s) - source_start,
-            region_start_sample + _sample_at(timing.end_s) - source_start,
+    gap_minimum = float(settings["repeat_gap_minimum_s"])
+    gap_maximum = float(settings["repeat_gap_maximum_s"])
+    gap_samples = round((gap_minimum + severity * (gap_maximum - gap_minimum)) * _sample_rate())
+    repeat_gap = np.zeros(gap_samples, dtype=np.float32)
+    chunks: list[np.ndarray] = []
+    inserted_timings: list[WordTiming] = []
+    cursor = region_start_sample
+    for repeat_index in range(repeat_count):
+        if repeat_index:
+            chunks.append(repeat_gap)
+            cursor += repeat_gap.size
+        chunks.append(repeated_audio)
+        inserted_timings.extend(
+            _make_timing(
+                timing,
+                cursor + _sample_at(timing.start_s) - source_start,
+                cursor + _sample_at(timing.end_s) - source_start,
+            )
+            for timing in word_timings[repeated_start_index:repeated_end_index]
         )
-        for timing in word_timings[repeated_start_index:repeated_end_index]
-    ]
+        cursor += repeated_audio.size
+    inserted_audio = np.concatenate(chunks).astype(np.float32, copy=False)
     output, timings = _insert_audio(
-        waveform, region_start_sample, repeated_audio, word_timings, inserted_timings
+        waveform, region_start_sample, inserted_audio, word_timings, inserted_timings
     )
     original_start = word_timings[repeated_start_index].start_s
     original_end = word_timings[repeated_end_index - 1].end_s
     label = _region_label(
         "stumble_repeat", severity, original_start, original_end,
-        region_start_sample, region_start_sample + repeated_audio.size,
+        region_start_sample, region_start_sample + inserted_audio.size,
         range(repeated_start_index, repeated_end_index),
-        notes=f"Repeated {repeated_count} preceding word(s).",
+        notes=f"Repeated {repeated_count} preceding word(s) {repeat_count} time(s) with {gap_samples / _sample_rate():.3f} s gap.",
     )
     return _limit_peak(output), [label], timings
 
@@ -606,6 +732,7 @@ def apply_flaws(
     edits shift later samples or insert synthetic timing entries.
     """
     current_audio = np.ascontiguousarray(audio, dtype=np.float32)
+    original_audio = current_audio.copy()
     current_timings = list(word_timings)
     specs = [_coerce_spec(item) for item in flaw_specs]
     ordered_by_source = sorted(specs, key=lambda item: (item.region[0], item.region[1]))
@@ -624,13 +751,23 @@ def apply_flaws(
             raise ValueError("composed region no longer addresses a word timing")
         shift_boundary = _sample_at(current_timings[start_index].start_s)
         old_length = current_audio.size
-        current_audio, labels, current_timings = injector(
-            current_audio,
-            current_timings,
-            spec.region,
-            spec.severity,
-            rng,
-        )
+        if spec.flaw_type == "long_pause":
+            current_audio, labels, current_timings = long_pause(
+                current_audio,
+                current_timings,
+                spec.region,
+                spec.severity,
+                rng,
+                room_tone_source=original_audio,
+            )
+        else:
+            current_audio, labels, current_timings = injector(
+                current_audio,
+                current_timings,
+                spec.region,
+                spec.severity,
+                rng,
+            )
         delta_samples = current_audio.size - old_length
         if delta_samples:
             all_labels = [

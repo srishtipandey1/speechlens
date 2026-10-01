@@ -36,6 +36,11 @@ def run_task(task: str) -> None:
         run_setup()
     elif task == "test":
         subprocess.run([sys.executable, "-m", "pytest"], check=True)
+    elif task == "dataset":
+        subprocess.run(
+            [sys.executable, "-m", "scripts.make_dataset"],
+            check=True,
+        )
     else:
         print("not implemented yet")
 
