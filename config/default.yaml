@@ -1,0 +1,5 @@
+seed: 42
+audio:
+  channels: 1
+  sample_rate_hz: 16000
+  dtype: float32

@@ -5,6 +5,7 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 node_modules/
-data/raw/
+data/raw/*
+!data/raw/.gitkeep
 *.egg-info/
 .DS_Store
