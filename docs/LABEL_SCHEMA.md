@@ -76,3 +76,18 @@ It allows the CTC alignment to assign frames to an unknown speech span between
 known words. The wildcard does not identify or transcribe that speech, and its
 span can be broad or absorb speech that would otherwise align to nearby words.
 Use it sparingly and manually inspect alignments that contain it.
+
+## Injection Ground Truth
+
+Injection functions accept a half-open word-index region `[start, end)`. Their
+labels preserve source intervals from the ideal timings and separately record
+rendered intervals after sample-domain splices. Insertions use a one-sample
+source interval to represent the original boundary; rendered intervals cover
+the inserted audio exactly. Later word timings are shifted by integer sample
+counts, and pace transformations rescale the selected word boundaries.
+
+Inserted `filler` audio is a synthetic approximation, not a human-recorded
+filler: it selects a steady voiced vowel excerpt from the same speaker,
+compresses its F0 contour toward the excerpt median, and applies short fades.
+The corresponding label notes this approximation. A duplicated `stumble_repeat`
+uses the speaker's own preceding word audio.

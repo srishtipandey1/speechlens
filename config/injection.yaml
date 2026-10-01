@@ -1,0 +1,26 @@
+sample_rate_hz: 16000
+peak_ceiling: 0.999
+praat:
+  time_step_s: 0.01
+  pitch_floor_hz: 75.0
+  pitch_ceiling_hz: 600.0
+pace:
+  fast_rate_max: 1.8
+  slow_rate_min: 0.55
+monotone:
+  minimum_contour_scale: 0.02
+long_pause:
+  minimum_duration_s: 1.5
+  maximum_duration_s: 3.0
+  maximum_natural_gap_s: 0.6
+volume_dropoff:
+  maximum_drop_db: 24.0
+filler:
+  minimum_duration_s: 0.25
+  maximum_duration_s: 0.5
+  pitch_contour_scale: 0.35
+  fade_duration_s: 0.02
+  label_word: uh
+stumble_repeat:
+  minimum_words: 1
+  maximum_words: 2

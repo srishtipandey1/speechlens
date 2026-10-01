@@ -9,5 +9,6 @@ data/raw/*
 !data/raw/.gitkeep
 !data/raw/SOURCES.md
 eval/results/*.png
+data/processed/demo/
 *.egg-info/
 .DS_Store
