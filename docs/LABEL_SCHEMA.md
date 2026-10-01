@@ -1,3 +1,60 @@
 # Label Schema
-(To be generated in prompt P1. Defines how every flaw is labeled in the
-original and rendered timelines.)
+
+This document defines the metadata and temporal flaw-label contract. Times are
+seconds from the start of the corresponding audio timeline. The schema does not
+perform audio processing or infer labels.
+
+## Transcript
+
+Each transcript has a stable `id`, human-readable `title`, full `text`,
+`source`, `license`, and `language`. Source and license record provenance; do
+not assume a recording is reusable without checking its license.
+
+## Recording
+
+Each recording has an `id`, its `transcript_id`, a `speaker_id`, optional
+`speaker_gender`, `kind`, `severity_level`, `audio_path`, `sample_rate`,
+`duration_s`, `source`, and `license`. `kind` is one of `ideal`, `injected`,
+`human_flawed`, or `control`. Severity is an integer from zero through five.
+Non-ideal recordings require `parent_recording_id`,
+which must resolve to an ideal recording in the same recording collection.
+Ideal recordings cannot have a parent.
+
+`sample_rate` is a positive integer. `duration_s` is finite and positive. The
+schema records the declared metadata only; it does not inspect the audio file.
+
+## Word Timing
+
+Each `WordTiming` stores `word`, `start_s`, and `end_s`. Both times are finite
+and non-negative, and `start_s` must be less than `end_s`.
+
+## Flaw Label
+
+`flaw_type` is one of `pace_fast`, `pace_slow`, `long_pause`, `monotone`,
+`volume_dropoff`, `filler`, or `stumble_repeat`. `severity` is a finite value
+from zero through one. `word_indices` contains zero-based, non-negative word
+indices; an empty list is allowed when a flaw cannot be attributed to a word.
+`notes` is an optional explanatory string and defaults to empty.
+
+Each flaw stores two independent intervals:
+
+- `original_start_s` and `original_end_s` refer to the ideal/source timeline.
+- `rendered_start_s` and `rendered_end_s` refer to the flawed recording timeline.
+
+All four times are finite and non-negative, and each start must be less than
+its end. Time transformations can shift or stretch an interval, so the two
+timelines must be labeled independently. Flaws in a `Pair` are ordered by
+`rendered_start_s`; equal start times retain their input order.
+
+## Pair
+
+A `Pair` links `ideal_recording_id` and `flawed_recording_id` and contains a
+list of `FlawLabel` items. Pair-level membership is represented by IDs; use a
+recording collection to validate parent references and a repository/data
+catalog to resolve pair IDs.
+
+## JSON
+
+`save_json` writes UTF-8 JSON with recursively sorted object keys and a trailing
+newline. `load_json` parses JSON and validates it against the requested Pydantic
+model. List order is preserved, including the sorted flaw order in a pair.
