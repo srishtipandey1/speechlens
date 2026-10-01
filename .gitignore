@@ -7,5 +7,7 @@ __pycache__/
 node_modules/
 data/raw/*
 !data/raw/.gitkeep
+!data/raw/SOURCES.md
+eval/results/*.png
 *.egg-info/
 .DS_Store

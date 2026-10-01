@@ -48,8 +48,12 @@ class Recording(SchemaModel):
     parent_recording_id: str | None = None
 
     @model_validator(mode="after")
-    def validate_parent_requirement(self) -> "Recording":
-        """Require derived recordings to name a parent and ideals to have none."""
+    def validate_recording_rules(self) -> "Recording":
+        """Validate recording severity and parent requirements by kind."""
+        if self.kind in {"ideal", "control"} and self.severity_level != 0:
+            raise ValueError(f"{self.kind} recordings must have severity_level 0")
+        if self.kind in {"injected", "human_flawed"} and self.severity_level == 0:
+            raise ValueError(f"{self.kind} recordings must have severity_level 1 to 5")
         if self.kind == "ideal" and self.parent_recording_id is not None:
             raise ValueError("ideal recordings cannot have a parent recording")
         if self.kind != "ideal" and not self.parent_recording_id:
@@ -88,6 +92,7 @@ class WordTiming(SchemaModel):
     word: str
     start_s: NonNegativeTime
     end_s: NonNegativeTime
+    confidence: Annotated[FiniteFloat, Field(ge=0, le=1)] | None = None
 
     @model_validator(mode="after")
     def validate_interval(self) -> "WordTiming":

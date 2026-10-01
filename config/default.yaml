@@ -3,3 +3,8 @@ audio:
   channels: 1
   sample_rate_hz: 16000
   dtype: float32
+test_clip:
+  min_consecutive_audio_s: 25.0
+  minimum_duration_s: 20.0
+  maximum_duration_s: 30.0
+  silence_between_utterances_s: 0.3

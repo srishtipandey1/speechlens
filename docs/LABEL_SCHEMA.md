@@ -16,9 +16,11 @@ Each recording has an `id`, its `transcript_id`, a `speaker_id`, optional
 `speaker_gender`, `kind`, `severity_level`, `audio_path`, `sample_rate`,
 `duration_s`, `source`, and `license`. `kind` is one of `ideal`, `injected`,
 `human_flawed`, or `control`. Severity is an integer from zero through five.
-Non-ideal recordings require `parent_recording_id`,
-which must resolve to an ideal recording in the same recording collection.
-Ideal recordings cannot have a parent.
+Ideal and control recordings must have severity level zero. Injected and
+human-flawed recordings must have a severity level from one through five.
+Non-ideal recordings require `parent_recording_id`, which must resolve to an
+ideal recording in the same recording collection. Ideal recordings cannot
+have a parent.
 
 `sample_rate` is a positive integer. `duration_s` is finite and positive. The
 schema records the declared metadata only; it does not inspect the audio file.
@@ -26,7 +28,9 @@ schema records the declared metadata only; it does not inspect the audio file.
 ## Word Timing
 
 Each `WordTiming` stores `word`, `start_s`, and `end_s`. Both times are finite
-and non-negative, and `start_s` must be less than `end_s`.
+and non-negative, and `start_s` must be less than `end_s`. `confidence` is an
+optional value from zero through one; forced alignment populates it from the
+geometric mean of the aligned frame probabilities.
 
 ## Flaw Label
 
@@ -58,3 +62,17 @@ catalog to resolve pair IDs.
 `save_json` writes UTF-8 JSON with recursively sorted object keys and a trailing
 newline. `load_json` parses JSON and validates it against the requested Pydantic
 model. List order is preserved, including the sorted flaw order in a pair.
+
+## MMS_FA Alignment
+
+The aligner lowercases ASCII words, retains apostrophes, strips other
+punctuation, and expands numeric tokens into English words. Each expanded token
+retains its original whitespace-token index; output timings are aggregated
+back to the original source word. Alignment is limited to the English
+character inventory supported by the installed MMS_FA bundle.
+
+A standalone `*` or `<star>` in the transcript becomes MMS_FA's wildcard token.
+It allows the CTC alignment to assign frames to an unknown speech span between
+known words. The wildcard does not identify or transcribe that speech, and its
+span can be broad or absorb speech that would otherwise align to nearby words.
+Use it sparingly and manually inspect alignments that contain it.

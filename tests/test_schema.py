@@ -30,7 +30,7 @@ def make_recording(
         transcript_id="transcript-1",
         speaker_id="speaker-1",
         kind=kind,
-        severity_level=0 if kind == "ideal" else 2,
+        severity_level=0 if kind in {"ideal", "control"} else 2,
         audio_path="audio/sample.wav",
         sample_rate=16000,
         duration_s=30.0,
@@ -133,7 +133,37 @@ def test_recording_collection_validates_parent_existence_and_kind() -> None:
 def test_non_ideal_recording_requires_parent() -> None:
     """A non-ideal recording cannot omit its source ideal ID."""
     with pytest.raises(ValidationError, match="require parent_recording_id"):
-        make_recording("flawed-1", "control")
+        make_recording("flawed-1", "injected")
+
+
+@pytest.mark.parametrize(
+    ("kind", "severity_level", "valid"),
+    [
+        ("ideal", 0, True),
+        ("ideal", 1, False),
+        ("control", 0, True),
+        ("control", 2, False),
+        ("injected", 1, True),
+        ("injected", 0, False),
+        ("human_flawed", 5, True),
+        ("human_flawed", 0, False),
+    ],
+)
+def test_recording_severity_matches_kind(
+    kind: str,
+    severity_level: int,
+    valid: bool,
+) -> None:
+    """Recording severity is constrained by the recording kind."""
+    parent_recording_id = None if kind == "ideal" else "ideal-1"
+    data = make_recording(kind, kind, parent_recording_id).model_dump()
+    data["severity_level"] = severity_level
+
+    if valid:
+        Recording.model_validate(data)
+    else:
+        with pytest.raises(ValidationError, match="severity_level"):
+            Recording.model_validate(data)
 
 
 def test_pair_json_round_trip_preserves_shifted_flaw() -> None:
