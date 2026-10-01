@@ -1,0 +1,2159 @@
+{
+  "alignment_quality": null,
+  "control_transform": null,
+  "gender": "M",
+  "original_word_timings": [
+    {
+      "confidence": 0.048902929769160136,
+      "end_s": 0.26,
+      "start_s": 0.02,
+      "word": "MISTER"
+    },
+    {
+      "confidence": 0.9250429366727452,
+      "end_s": 0.68,
+      "start_s": 0.3,
+      "word": "QUILTER"
+    },
+    {
+      "confidence": 0.9963282238024218,
+      "end_s": 0.84,
+      "start_s": 0.76,
+      "word": "IS"
+    },
+    {
+      "confidence": 0.9976824388558161,
+      "end_s": 0.96,
+      "start_s": 0.88,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9901068205221639,
+      "end_s": 1.54,
+      "start_s": 1.02,
+      "word": "APOSTLE"
+    },
+    {
+      "confidence": 0.9985145732305409,
+      "end_s": 1.7,
+      "start_s": 1.62,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9966198216193377,
+      "end_s": 1.82,
+      "start_s": 1.74,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9959373710007486,
+      "end_s": 2.06,
+      "start_s": 1.84,
+      "word": "MIDDLE"
+    },
+    {
+      "confidence": 0.9660903798558962,
+      "end_s": 2.62,
+      "start_s": 2.1,
+      "word": "CLASSES"
+    },
+    {
+      "confidence": 0.9977296739962047,
+      "end_s": 2.9,
+      "start_s": 2.8,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9979362716970429,
+      "end_s": 3.02,
+      "start_s": 2.94,
+      "word": "WE"
+    },
+    {
+      "confidence": 0.9960514315320056,
+      "end_s": 3.16,
+      "start_s": 3.08,
+      "word": "ARE"
+    },
+    {
+      "confidence": 0.9996450579853794,
+      "end_s": 3.48,
+      "start_s": 3.18,
+      "word": "GLAD"
+    },
+    {
+      "confidence": 0.9983794160119358,
+      "end_s": 3.62,
+      "start_s": 3.54,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.5467289623810992,
+      "end_s": 4.04,
+      "start_s": 3.7,
+      "word": "WELCOME"
+    },
+    {
+      "confidence": 0.9983242273267451,
+      "end_s": 4.28,
+      "start_s": 4.12,
+      "word": "HIS"
+    },
+    {
+      "confidence": 0.999393601000063,
+      "end_s": 4.82,
+      "start_s": 4.36,
+      "word": "GOSPEL"
+    },
+    {
+      "confidence": 0.9991114542096068,
+      "end_s": 5.62,
+      "start_s": 5.44,
+      "word": "NOR"
+    },
+    {
+      "confidence": 0.9973330303740273,
+      "end_s": 5.86,
+      "start_s": 5.72,
+      "word": "IS"
+    },
+    {
+      "confidence": 0.12314702151868201,
+      "end_s": 6.2,
+      "start_s": 5.96,
+      "word": "MISTER"
+    },
+    {
+      "confidence": 0.9267316267521281,
+      "end_s": 6.64,
+      "start_s": 6.24,
+      "word": "QUILTER'S"
+    },
+    {
+      "confidence": 0.9949313148524289,
+      "end_s": 7.02,
+      "start_s": 6.74,
+      "word": "MANNER"
+    },
+    {
+      "confidence": 0.9996674676842631,
+      "end_s": 7.38,
+      "start_s": 7.2,
+      "word": "LESS"
+    },
+    {
+      "confidence": 0.9891620912841314,
+      "end_s": 8.1,
+      "start_s": 7.5,
+      "word": "INTERESTING"
+    },
+    {
+      "confidence": 0.998839041971062,
+      "end_s": 8.32,
+      "start_s": 8.16,
+      "word": "THAN"
+    },
+    {
+      "confidence": 0.9987066874988618,
+      "end_s": 8.58,
+      "start_s": 8.42,
+      "word": "HIS"
+    },
+    {
+      "confidence": 0.9932417514395984,
+      "end_s": 9.12,
+      "start_s": 8.78,
+      "word": "MATTER"
+    },
+    {
+      "confidence": 0.9869827485283285,
+      "end_s": 9.7,
+      "start_s": 9.64,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.9334815498671297,
+      "end_s": 10.04,
+      "start_s": 9.78,
+      "word": "TELLS"
+    },
+    {
+      "confidence": 0.9986042808190805,
+      "end_s": 10.26,
+      "start_s": 10.1,
+      "word": "US"
+    },
+    {
+      "confidence": 0.9936854881977968,
+      "end_s": 10.6,
+      "start_s": 10.42,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.9967557367159655,
+      "end_s": 10.82,
+      "start_s": 10.72,
+      "word": "AT"
+    },
+    {
+      "confidence": 0.9260315986174105,
+      "end_s": 11.06,
+      "start_s": 10.88,
+      "word": "THIS"
+    },
+    {
+      "confidence": 0.9994356920885583,
+      "end_s": 11.6,
+      "start_s": 11.18,
+      "word": "FESTIVE"
+    },
+    {
+      "confidence": 0.9959423692343221,
+      "end_s": 12.06,
+      "start_s": 11.68,
+      "word": "SEASON"
+    },
+    {
+      "confidence": 0.9983515200852812,
+      "end_s": 12.22,
+      "start_s": 12.16,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9953946982384495,
+      "end_s": 12.36,
+      "start_s": 12.28,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9687754468156097,
+      "end_s": 12.68,
+      "start_s": 12.44,
+      "word": "YEAR"
+    },
+    {
+      "confidence": 0.9852259100279837,
+      "end_s": 13.46,
+      "start_s": 13.28,
+      "word": "WITH"
+    },
+    {
+      "confidence": 0.38941738940980175,
+      "end_s": 14.06,
+      "start_s": 13.56,
+      "word": "CHRISTMAS"
+    },
+    {
+      "confidence": 0.838080475723127,
+      "end_s": 14.2,
+      "start_s": 14.12,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.15816966640833996,
+      "end_s": 14.54,
+      "start_s": 14.28,
+      "word": "ROAST"
+    },
+    {
+      "confidence": 0.8366442414489872,
+      "end_s": 14.86,
+      "start_s": 14.62,
+      "word": "BEEF"
+    },
+    {
+      "confidence": 0.9516162029495221,
+      "end_s": 15.32,
+      "start_s": 15.02,
+      "word": "LOOMING"
+    },
+    {
+      "confidence": 0.996912993582161,
+      "end_s": 15.7,
+      "start_s": 15.36,
+      "word": "BEFORE"
+    },
+    {
+      "confidence": 0.9983326608644375,
+      "end_s": 15.94,
+      "start_s": 15.76,
+      "word": "US"
+    },
+    {
+      "confidence": 0.5981484404389308,
+      "end_s": 17.36,
+      "start_s": 16.86,
+      "word": "SIMILES"
+    },
+    {
+      "confidence": 0.9847471618504837,
+      "end_s": 17.64,
+      "start_s": 17.4,
+      "word": "DRAWN"
+    },
+    {
+      "confidence": 0.9277197912448669,
+      "end_s": 17.84,
+      "start_s": 17.7,
+      "word": "FROM"
+    },
+    {
+      "confidence": 0.9988913801885372,
+      "end_s": 18.26,
+      "start_s": 17.98,
+      "word": "EATING"
+    },
+    {
+      "confidence": 0.9943930247227658,
+      "end_s": 18.46,
+      "start_s": 18.38,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9959390602762946,
+      "end_s": 18.6,
+      "start_s": 18.5,
+      "word": "ITS"
+    },
+    {
+      "confidence": 0.9893162921475016,
+      "end_s": 19.1,
+      "start_s": 18.68,
+      "word": "RESULTS"
+    },
+    {
+      "confidence": 0.9859926222259432,
+      "end_s": 19.54,
+      "start_s": 19.24,
+      "word": "OCCUR"
+    },
+    {
+      "confidence": 0.9778758644655703,
+      "end_s": 19.9,
+      "start_s": 19.66,
+      "word": "MOST"
+    },
+    {
+      "confidence": 0.9383680251059507,
+      "end_s": 20.26,
+      "start_s": 19.98,
+      "word": "READILY"
+    },
+    {
+      "confidence": 0.9968670783807527,
+      "end_s": 20.46,
+      "start_s": 20.38,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9955812225801082,
+      "end_s": 20.62,
+      "start_s": 20.54,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9997228330867715,
+      "end_s": 20.98,
+      "start_s": 20.68,
+      "word": "MIND"
+    },
+    {
+      "confidence": 0.9979803098754055,
+      "end_s": 21.56,
+      "start_s": 21.5,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.9965770181454059,
+      "end_s": 21.78,
+      "start_s": 21.64,
+      "word": "HAS"
+    },
+    {
+      "confidence": 0.9970328794459371,
+      "end_s": 22.16,
+      "start_s": 21.86,
+      "word": "GRAVE"
+    },
+    {
+      "confidence": 0.16795048983400535,
+      "end_s": 22.6,
+      "start_s": 22.24,
+      "word": "DOUBTS"
+    },
+    {
+      "confidence": 0.9361519844513789,
+      "end_s": 22.94,
+      "start_s": 22.7,
+      "word": "WHETHER"
+    },
+    {
+      "confidence": 0.9507443862320896,
+      "end_s": 23.3,
+      "start_s": 23.16,
+      "word": "SIR"
+    },
+    {
+      "confidence": 0.5131405278395561,
+      "end_s": 23.66,
+      "start_s": 23.34,
+      "word": "FREDERICK"
+    },
+    {
+      "confidence": 0.11025282257017881,
+      "end_s": 24.14,
+      "start_s": 23.74,
+      "word": "LEIGHTON'S"
+    },
+    {
+      "confidence": 0.9994804672009072,
+      "end_s": 24.46,
+      "start_s": 24.24,
+      "word": "WORK"
+    },
+    {
+      "confidence": 0.997249128182375,
+      "end_s": 24.7,
+      "start_s": 24.56,
+      "word": "IS"
+    },
+    {
+      "confidence": 0.20986492866678946,
+      "end_s": 25.06,
+      "start_s": 24.84,
+      "word": "REALLY"
+    },
+    {
+      "confidence": 0.9994230185958123,
+      "end_s": 25.64,
+      "start_s": 25.32,
+      "word": "GREEK"
+    },
+    {
+      "confidence": 0.9359120884861084,
+      "end_s": 26.06,
+      "start_s": 25.78,
+      "word": "AFTER"
+    },
+    {
+      "confidence": 0.9884170565654685,
+      "end_s": 26.38,
+      "start_s": 26.18,
+      "word": "ALL"
+    },
+    {
+      "confidence": 0.973991177796046,
+      "end_s": 27.18,
+      "start_s": 27.06,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9995250095558932,
+      "end_s": 27.36,
+      "start_s": 27.22,
+      "word": "CAN"
+    },
+    {
+      "confidence": 0.9923967057155587,
+      "end_s": 27.82,
+      "start_s": 27.42,
+      "word": "DISCOVER"
+    },
+    {
+      "confidence": 0.9980736046701444,
+      "end_s": 28.02,
+      "start_s": 27.92,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9977407057133642,
+      "end_s": 28.16,
+      "start_s": 28.06,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.9995616616869382,
+      "end_s": 28.4,
+      "start_s": 28.28,
+      "word": "BUT"
+    },
+    {
+      "confidence": 0.9315389379885957,
+      "end_s": 28.78,
+      "start_s": 28.52,
+      "word": "LITTLE"
+    },
+    {
+      "confidence": 0.9944159859947558,
+      "end_s": 29.02,
+      "start_s": 28.9,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.5881631508236222,
+      "end_s": 29.64,
+      "start_s": 29.34,
+      "word": "ROCKY"
+    },
+    {
+      "confidence": 0.7664456622121743,
+      "end_s": 30.18,
+      "start_s": 29.82,
+      "word": "ITHACA"
+    },
+    {
+      "confidence": 0.39586152072687497,
+      "end_s": 31.4,
+      "start_s": 30.9,
+      "word": "LINNELL'S"
+    },
+    {
+      "confidence": 0.8952371784257361,
+      "end_s": 31.94,
+      "start_s": 31.52,
+      "word": "PICTURES"
+    },
+    {
+      "confidence": 0.8852187441426674,
+      "end_s": 32.3,
+      "start_s": 32.16,
+      "word": "ARE"
+    },
+    {
+      "confidence": 0.9807181494371748,
+      "end_s": 32.38,
+      "start_s": 32.36,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9938049375362886,
+      "end_s": 32.68,
+      "start_s": 32.48,
+      "word": "SORT"
+    },
+    {
+      "confidence": 0.9371152443253501,
+      "end_s": 32.78,
+      "start_s": 32.72,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9550835506797537,
+      "end_s": 33.42,
+      "start_s": 33.32,
+      "word": "UP"
+    },
+    {
+      "confidence": 0.6967253332676094,
+      "end_s": 33.9,
+      "start_s": 33.56,
+      "word": "GUARDS"
+    },
+    {
+      "confidence": 0.8514672445990761,
+      "end_s": 34.04,
+      "start_s": 33.92,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.27781156029858284,
+      "end_s": 34.22,
+      "start_s": 34.1,
+      "word": "AT"
+    },
+    {
+      "confidence": 0.16682361434088916,
+      "end_s": 34.34,
+      "start_s": 34.24,
+      "word": "EM"
+    },
+    {
+      "confidence": 0.9527664234964389,
+      "end_s": 35.2,
+      "start_s": 34.7,
+      "word": "PAINTINGS"
+    },
+    {
+      "confidence": 0.9970588142683802,
+      "end_s": 35.84,
+      "start_s": 35.74,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.935171571168371,
+      "end_s": 36.32,
+      "start_s": 35.88,
+      "word": "MASON'S"
+    },
+    {
+      "confidence": 0.770719170028872,
+      "end_s": 37.06,
+      "start_s": 36.4,
+      "word": "EXQUISITE"
+    },
+    {
+      "confidence": 0.0443989200230631,
+      "end_s": 37.48,
+      "start_s": 37.14,
+      "word": "IDYLLS"
+    },
+    {
+      "confidence": 0.8661395431143075,
+      "end_s": 37.82,
+      "start_s": 37.64,
+      "word": "ARE"
+    },
+    {
+      "confidence": 0.989499533506101,
+      "end_s": 38.02,
+      "start_s": 37.88,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.9833610998519001,
+      "end_s": 38.8,
+      "start_s": 38.32,
+      "word": "NATIONAL"
+    },
+    {
+      "confidence": 0.9906612571422563,
+      "end_s": 39.02,
+      "start_s": 38.92,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.9803288172437259,
+      "end_s": 39.1,
+      "start_s": 39.08,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9288900222574831,
+      "end_s": 39.5,
+      "start_s": 39.16,
+      "word": "JINGO"
+    },
+    {
+      "confidence": 0.9780622823360418,
+      "end_s": 40.08,
+      "start_s": 39.72,
+      "word": "POEM"
+    },
+    {
+      "confidence": 0.08702713486783133,
+      "end_s": 42.06,
+      "start_s": 41.82,
+      "word": "MISTER"
+    },
+    {
+      "confidence": 0.6673686228344198,
+      "end_s": 42.4,
+      "start_s": 42.12,
+      "word": "BIRKET"
+    },
+    {
+      "confidence": 0.894951368380278,
+      "end_s": 42.96,
+      "start_s": 42.46,
+      "word": "FOSTER'S"
+    },
+    {
+      "confidence": 0.9868301946131641,
+      "end_s": 43.66,
+      "start_s": 43.06,
+      "word": "LANDSCAPES"
+    },
+    {
+      "confidence": 0.8910275056369175,
+      "end_s": 44.42,
+      "start_s": 43.96,
+      "word": "SMILE"
+    },
+    {
+      "confidence": 0.97971673441545,
+      "end_s": 44.54,
+      "start_s": 44.46,
+      "word": "AT"
+    },
+    {
+      "confidence": 0.991131416839316,
+      "end_s": 44.88,
+      "start_s": 44.72,
+      "word": "ONE"
+    },
+    {
+      "confidence": 0.9420034636940698,
+      "end_s": 45.24,
+      "start_s": 45.0,
+      "word": "MUCH"
+    },
+    {
+      "confidence": 0.9979113672090465,
+      "end_s": 45.34,
+      "start_s": 45.28,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9815191117306163,
+      "end_s": 45.46,
+      "start_s": 45.36,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9992083699452291,
+      "end_s": 45.8,
+      "start_s": 45.52,
+      "word": "SAME"
+    },
+    {
+      "confidence": 0.9991932184396985,
+      "end_s": 46.0,
+      "start_s": 45.84,
+      "word": "WAY"
+    },
+    {
+      "confidence": 0.9877735758164373,
+      "end_s": 46.2,
+      "start_s": 46.06,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.12455269876135147,
+      "end_s": 46.5,
+      "start_s": 46.24,
+      "word": "MISTER"
+    },
+    {
+      "confidence": 0.9169318886936263,
+      "end_s": 47.02,
+      "start_s": 46.58,
+      "word": "CARKER"
+    },
+    {
+      "confidence": 0.840031233364752,
+      "end_s": 47.62,
+      "start_s": 47.48,
+      "word": "USED"
+    },
+    {
+      "confidence": 0.9846470604368267,
+      "end_s": 47.72,
+      "start_s": 47.66,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9936150204838016,
+      "end_s": 48.14,
+      "start_s": 47.8,
+      "word": "FLASH"
+    },
+    {
+      "confidence": 0.4690542424624793,
+      "end_s": 48.28,
+      "start_s": 48.16,
+      "word": "HIS"
+    },
+    {
+      "confidence": 0.9164835440268354,
+      "end_s": 48.8,
+      "start_s": 48.4,
+      "word": "TEETH"
+    },
+    {
+      "confidence": 0.9587044563559545,
+      "end_s": 50.2,
+      "start_s": 50.1,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.14842796505619035,
+      "end_s": 50.48,
+      "start_s": 50.24,
+      "word": "MISTER"
+    },
+    {
+      "confidence": 0.989647710957571,
+      "end_s": 50.76,
+      "start_s": 50.52,
+      "word": "JOHN"
+    },
+    {
+      "confidence": 0.6430825689555153,
+      "end_s": 51.28,
+      "start_s": 50.84,
+      "word": "COLLIER"
+    },
+    {
+      "confidence": 0.9975251163351178,
+      "end_s": 51.9,
+      "start_s": 51.66,
+      "word": "GIVES"
+    },
+    {
+      "confidence": 0.9216574351467749,
+      "end_s": 52.06,
+      "start_s": 51.92,
+      "word": "HIS"
+    },
+    {
+      "confidence": 0.3695372091873104,
+      "end_s": 52.38,
+      "start_s": 52.14,
+      "word": "SITTER"
+    },
+    {
+      "confidence": 0.9948389059565994,
+      "end_s": 52.58,
+      "start_s": 52.56,
+      "word": "A"
+    },
+    {
+      "confidence": 0.7851905224097532,
+      "end_s": 53.26,
+      "start_s": 52.72,
+      "word": "CHEERFUL"
+    },
+    {
+      "confidence": 0.9958026447556562,
+      "end_s": 53.78,
+      "start_s": 53.4,
+      "word": "SLAP"
+    },
+    {
+      "confidence": 0.9776504233280287,
+      "end_s": 53.92,
+      "start_s": 53.84,
+      "word": "ON"
+    },
+    {
+      "confidence": 0.42185319436906005,
+      "end_s": 54.02,
+      "start_s": 53.96,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9724112760109135,
+      "end_s": 54.46,
+      "start_s": 54.1,
+      "word": "BACK"
+    },
+    {
+      "confidence": 0.987812302680526,
+      "end_s": 55.18,
+      "start_s": 54.84,
+      "word": "BEFORE"
+    },
+    {
+      "confidence": 0.9906645287765913,
+      "end_s": 55.26,
+      "start_s": 55.2,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.9966203627645773,
+      "end_s": 55.7,
+      "start_s": 55.36,
+      "word": "SAYS"
+    },
+    {
+      "confidence": 0.9590982244984669,
+      "end_s": 56.0,
+      "start_s": 55.82,
+      "word": "LIKE"
+    },
+    {
+      "confidence": 0.985036005862605,
+      "end_s": 56.04,
+      "start_s": 56.02,
+      "word": "A"
+    },
+    {
+      "confidence": 0.2936853549161357,
+      "end_s": 56.94,
+      "start_s": 56.3,
+      "word": "SHAMPOOER"
+    },
+    {
+      "confidence": 0.7534421832478936,
+      "end_s": 57.08,
+      "start_s": 57.02,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9564147961428902,
+      "end_s": 57.16,
+      "start_s": 57.14,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9215103483022151,
+      "end_s": 57.62,
+      "start_s": 57.28,
+      "word": "TURKISH"
+    },
+    {
+      "confidence": 0.9953159089125339,
+      "end_s": 58.0,
+      "start_s": 57.68,
+      "word": "BATH"
+    },
+    {
+      "confidence": 0.9970471175416096,
+      "end_s": 58.84,
+      "start_s": 58.58,
+      "word": "NEXT"
+    },
+    {
+      "confidence": 0.8621452228686046,
+      "end_s": 59.16,
+      "start_s": 58.88,
+      "word": "MAN"
+    },
+    {
+      "confidence": 0.9936702915428539,
+      "end_s": 59.86,
+      "start_s": 59.78,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.9938058902778371,
+      "end_s": 59.98,
+      "start_s": 59.88,
+      "word": "IS"
+    },
+    {
+      "confidence": 0.7304030723749462,
+      "end_s": 60.64,
+      "start_s": 60.14,
+      "word": "OBVIOUSLY"
+    },
+    {
+      "confidence": 0.9974494911085524,
+      "end_s": 61.52,
+      "start_s": 60.8,
+      "word": "UNNECESSARY"
+    },
+    {
+      "confidence": 0.9993427260714467,
+      "end_s": 61.78,
+      "start_s": 61.64,
+      "word": "FOR"
+    },
+    {
+      "confidence": 0.9996621009331118,
+      "end_s": 61.94,
+      "start_s": 61.84,
+      "word": "US"
+    },
+    {
+      "confidence": 0.9990448763278313,
+      "end_s": 62.08,
+      "start_s": 62.0,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9599421056507061,
+      "end_s": 62.46,
+      "start_s": 62.18,
+      "word": "POINT"
+    },
+    {
+      "confidence": 0.9740574057865433,
+      "end_s": 62.64,
+      "start_s": 62.52,
+      "word": "OUT"
+    },
+    {
+      "confidence": 0.9635155348174052,
+      "end_s": 62.88,
+      "start_s": 62.72,
+      "word": "HOW"
+    },
+    {
+      "confidence": 0.9833680974931968,
+      "end_s": 63.54,
+      "start_s": 63.04,
+      "word": "LUMINOUS"
+    },
+    {
+      "confidence": 0.9961081800791447,
+      "end_s": 63.92,
+      "start_s": 63.64,
+      "word": "THESE"
+    },
+    {
+      "confidence": 0.9940422228592537,
+      "end_s": 64.7,
+      "start_s": 63.98,
+      "word": "CRITICISMS"
+    },
+    {
+      "confidence": 0.9027270128432249,
+      "end_s": 65.1,
+      "start_s": 64.86,
+      "word": "ARE"
+    },
+    {
+      "confidence": 0.9977061036511186,
+      "end_s": 65.76,
+      "start_s": 65.6,
+      "word": "HOW"
+    },
+    {
+      "confidence": 0.951844256476613,
+      "end_s": 66.68,
+      "start_s": 66.1,
+      "word": "DELICATE"
+    },
+    {
+      "confidence": 0.7309187783180451,
+      "end_s": 66.82,
+      "start_s": 66.74,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9925321789643308,
+      "end_s": 67.54,
+      "start_s": 66.86,
+      "word": "EXPRESSION"
+    }
+  ],
+  "pair": {
+    "flawed_recording_id": "test_m_1272__L5",
+    "flaws": [
+      {
+        "flaw_type": "volume_dropoff",
+        "notes": "Smooth gain ramp to -21.60 dB.",
+        "original_end_s": 2.62,
+        "original_start_s": 1.74,
+        "rendered_end_s": 2.62,
+        "rendered_start_s": 1.74,
+        "severity": 0.9,
+        "word_indices": [
+          6,
+          7,
+          8
+        ]
+      },
+      {
+        "flaw_type": "long_pause",
+        "notes": "Inserted same-clip room tone at a 0.080 s natural gap.",
+        "original_end_s": 14.2000625,
+        "original_start_s": 14.2,
+        "rendered_end_s": 16.86,
+        "rendered_start_s": 14.2,
+        "severity": 0.9,
+        "word_indices": [
+          40,
+          41
+        ]
+      },
+      {
+        "flaw_type": "monotone",
+        "notes": "F0 deviations scaled by 0.200000 toward median F0.",
+        "original_end_s": 18.26,
+        "original_start_s": 17.4,
+        "rendered_end_s": 20.92,
+        "rendered_start_s": 20.06,
+        "severity": 0.9,
+        "word_indices": [
+          47,
+          48,
+          49
+        ]
+      },
+      {
+        "flaw_type": "pace_slow",
+        "notes": "PSOLA rate factor 0.595000.",
+        "original_end_s": 20.62,
+        "original_start_s": 19.98,
+        "rendered_end_s": 23.715625,
+        "rendered_start_s": 22.64,
+        "severity": 0.9,
+        "word_indices": [
+          55,
+          56,
+          57
+        ]
+      },
+      {
+        "flaw_type": "long_pause",
+        "notes": "Inserted same-clip room tone at a 0.060 s natural gap.",
+        "original_end_s": 27.360062499999998,
+        "original_start_s": 27.36,
+        "rendered_end_s": 33.115625,
+        "rendered_start_s": 30.455625,
+        "severity": 0.9,
+        "word_indices": [
+          74,
+          75
+        ]
+      },
+      {
+        "flaw_type": "pace_fast",
+        "notes": "PSOLA rate factor 1.720000.",
+        "original_end_s": 32.68,
+        "original_start_s": 32.16,
+        "rendered_end_s": 38.2179375,
+        "rendered_start_s": 37.915625,
+        "severity": 0.9,
+        "word_indices": [
+          85,
+          86,
+          87
+        ]
+      },
+      {
+        "flaw_type": "filler",
+        "notes": "Synthetic hesitation approximated with a pitch-flattened voiced excerpt from this speaker.",
+        "original_end_s": 54.4600625,
+        "original_start_s": 54.46,
+        "rendered_end_s": 60.4729375,
+        "rendered_start_s": 59.9979375,
+        "severity": 0.9,
+        "word_indices": [
+          138
+        ]
+      }
+    ],
+    "ideal_recording_id": "test_m_1272__ideal"
+  },
+  "passage_id": "test_m_1272",
+  "recording": {
+    "audio_path": "data/processed/audio/test_m_1272__L5.flac",
+    "duration_s": 73.7229375,
+    "id": "test_m_1272__L5",
+    "kind": "injected",
+    "license": "CC BY 4.0",
+    "parent_recording_id": "test_m_1272__ideal",
+    "sample_rate": 16000,
+    "severity_level": 5,
+    "source": "LibriSpeech ASR corpus, dev-clean",
+    "speaker_gender": "M",
+    "speaker_id": "1272",
+    "transcript_id": "test_m_1272"
+  },
+  "split": "test",
+  "word_timings": [
+    {
+      "confidence": 0.048902929769160136,
+      "end_s": 0.26,
+      "start_s": 0.02,
+      "word": "MISTER"
+    },
+    {
+      "confidence": 0.9250429366727452,
+      "end_s": 0.68,
+      "start_s": 0.3,
+      "word": "QUILTER"
+    },
+    {
+      "confidence": 0.9963282238024218,
+      "end_s": 0.84,
+      "start_s": 0.76,
+      "word": "IS"
+    },
+    {
+      "confidence": 0.9976824388558161,
+      "end_s": 0.96,
+      "start_s": 0.88,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9901068205221639,
+      "end_s": 1.54,
+      "start_s": 1.02,
+      "word": "APOSTLE"
+    },
+    {
+      "confidence": 0.9985145732305409,
+      "end_s": 1.7,
+      "start_s": 1.62,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9966198216193377,
+      "end_s": 1.82,
+      "start_s": 1.74,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9959373710007486,
+      "end_s": 2.06,
+      "start_s": 1.84,
+      "word": "MIDDLE"
+    },
+    {
+      "confidence": 0.9660903798558962,
+      "end_s": 2.62,
+      "start_s": 2.1,
+      "word": "CLASSES"
+    },
+    {
+      "confidence": 0.9977296739962047,
+      "end_s": 2.9,
+      "start_s": 2.8,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9979362716970429,
+      "end_s": 3.02,
+      "start_s": 2.94,
+      "word": "WE"
+    },
+    {
+      "confidence": 0.9960514315320056,
+      "end_s": 3.16,
+      "start_s": 3.08,
+      "word": "ARE"
+    },
+    {
+      "confidence": 0.9996450579853794,
+      "end_s": 3.48,
+      "start_s": 3.18,
+      "word": "GLAD"
+    },
+    {
+      "confidence": 0.9983794160119358,
+      "end_s": 3.62,
+      "start_s": 3.54,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.5467289623810992,
+      "end_s": 4.04,
+      "start_s": 3.7,
+      "word": "WELCOME"
+    },
+    {
+      "confidence": 0.9983242273267451,
+      "end_s": 4.28,
+      "start_s": 4.12,
+      "word": "HIS"
+    },
+    {
+      "confidence": 0.999393601000063,
+      "end_s": 4.82,
+      "start_s": 4.36,
+      "word": "GOSPEL"
+    },
+    {
+      "confidence": 0.9991114542096068,
+      "end_s": 5.62,
+      "start_s": 5.44,
+      "word": "NOR"
+    },
+    {
+      "confidence": 0.9973330303740273,
+      "end_s": 5.86,
+      "start_s": 5.72,
+      "word": "IS"
+    },
+    {
+      "confidence": 0.12314702151868201,
+      "end_s": 6.2,
+      "start_s": 5.96,
+      "word": "MISTER"
+    },
+    {
+      "confidence": 0.9267316267521281,
+      "end_s": 6.64,
+      "start_s": 6.24,
+      "word": "QUILTER'S"
+    },
+    {
+      "confidence": 0.9949313148524289,
+      "end_s": 7.02,
+      "start_s": 6.74,
+      "word": "MANNER"
+    },
+    {
+      "confidence": 0.9996674676842631,
+      "end_s": 7.38,
+      "start_s": 7.2,
+      "word": "LESS"
+    },
+    {
+      "confidence": 0.9891620912841314,
+      "end_s": 8.1,
+      "start_s": 7.5,
+      "word": "INTERESTING"
+    },
+    {
+      "confidence": 0.998839041971062,
+      "end_s": 8.32,
+      "start_s": 8.16,
+      "word": "THAN"
+    },
+    {
+      "confidence": 0.9987066874988618,
+      "end_s": 8.58,
+      "start_s": 8.42,
+      "word": "HIS"
+    },
+    {
+      "confidence": 0.9932417514395984,
+      "end_s": 9.12,
+      "start_s": 8.78,
+      "word": "MATTER"
+    },
+    {
+      "confidence": 0.9869827485283285,
+      "end_s": 9.7,
+      "start_s": 9.64,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.9334815498671297,
+      "end_s": 10.04,
+      "start_s": 9.78,
+      "word": "TELLS"
+    },
+    {
+      "confidence": 0.9986042808190805,
+      "end_s": 10.26,
+      "start_s": 10.1,
+      "word": "US"
+    },
+    {
+      "confidence": 0.9936854881977968,
+      "end_s": 10.6,
+      "start_s": 10.42,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.9967557367159655,
+      "end_s": 10.82,
+      "start_s": 10.72,
+      "word": "AT"
+    },
+    {
+      "confidence": 0.9260315986174105,
+      "end_s": 11.06,
+      "start_s": 10.88,
+      "word": "THIS"
+    },
+    {
+      "confidence": 0.9994356920885583,
+      "end_s": 11.6,
+      "start_s": 11.18,
+      "word": "FESTIVE"
+    },
+    {
+      "confidence": 0.9959423692343221,
+      "end_s": 12.06,
+      "start_s": 11.68,
+      "word": "SEASON"
+    },
+    {
+      "confidence": 0.9983515200852812,
+      "end_s": 12.22,
+      "start_s": 12.16,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9953946982384495,
+      "end_s": 12.36,
+      "start_s": 12.28,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9687754468156097,
+      "end_s": 12.68,
+      "start_s": 12.44,
+      "word": "YEAR"
+    },
+    {
+      "confidence": 0.9852259100279837,
+      "end_s": 13.46,
+      "start_s": 13.28,
+      "word": "WITH"
+    },
+    {
+      "confidence": 0.38941738940980175,
+      "end_s": 14.06,
+      "start_s": 13.56,
+      "word": "CHRISTMAS"
+    },
+    {
+      "confidence": 0.838080475723127,
+      "end_s": 14.2,
+      "start_s": 14.12,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.15816966640833996,
+      "end_s": 17.2,
+      "start_s": 16.94,
+      "word": "ROAST"
+    },
+    {
+      "confidence": 0.8366442414489872,
+      "end_s": 17.52,
+      "start_s": 17.28,
+      "word": "BEEF"
+    },
+    {
+      "confidence": 0.9516162029495221,
+      "end_s": 17.98,
+      "start_s": 17.68,
+      "word": "LOOMING"
+    },
+    {
+      "confidence": 0.996912993582161,
+      "end_s": 18.36,
+      "start_s": 18.02,
+      "word": "BEFORE"
+    },
+    {
+      "confidence": 0.9983326608644375,
+      "end_s": 18.6,
+      "start_s": 18.42,
+      "word": "US"
+    },
+    {
+      "confidence": 0.5981484404389308,
+      "end_s": 20.02,
+      "start_s": 19.52,
+      "word": "SIMILES"
+    },
+    {
+      "confidence": 0.9847471618504837,
+      "end_s": 20.3,
+      "start_s": 20.06,
+      "word": "DRAWN"
+    },
+    {
+      "confidence": 0.9277197912448669,
+      "end_s": 20.5,
+      "start_s": 20.36,
+      "word": "FROM"
+    },
+    {
+      "confidence": 0.9988913801885372,
+      "end_s": 20.92,
+      "start_s": 20.64,
+      "word": "EATING"
+    },
+    {
+      "confidence": 0.9943930247227658,
+      "end_s": 21.12,
+      "start_s": 21.04,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9959390602762946,
+      "end_s": 21.26,
+      "start_s": 21.16,
+      "word": "ITS"
+    },
+    {
+      "confidence": 0.9893162921475016,
+      "end_s": 21.76,
+      "start_s": 21.34,
+      "word": "RESULTS"
+    },
+    {
+      "confidence": 0.9859926222259432,
+      "end_s": 22.2,
+      "start_s": 21.9,
+      "word": "OCCUR"
+    },
+    {
+      "confidence": 0.9778758644655703,
+      "end_s": 22.56,
+      "start_s": 22.32,
+      "word": "MOST"
+    },
+    {
+      "confidence": 0.9383680251059507,
+      "end_s": 23.1105625,
+      "start_s": 22.64,
+      "word": "READILY"
+    },
+    {
+      "confidence": 0.9968670783807527,
+      "end_s": 23.44675,
+      "start_s": 23.31225,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9955812225801082,
+      "end_s": 23.715625,
+      "start_s": 23.5811875,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9997228330867715,
+      "end_s": 24.075625,
+      "start_s": 23.775625,
+      "word": "MIND"
+    },
+    {
+      "confidence": 0.9979803098754055,
+      "end_s": 24.655625,
+      "start_s": 24.595625,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.9965770181454059,
+      "end_s": 24.875625,
+      "start_s": 24.735625,
+      "word": "HAS"
+    },
+    {
+      "confidence": 0.9970328794459371,
+      "end_s": 25.255625,
+      "start_s": 24.955625,
+      "word": "GRAVE"
+    },
+    {
+      "confidence": 0.16795048983400535,
+      "end_s": 25.695625,
+      "start_s": 25.335625,
+      "word": "DOUBTS"
+    },
+    {
+      "confidence": 0.9361519844513789,
+      "end_s": 26.035625,
+      "start_s": 25.795625,
+      "word": "WHETHER"
+    },
+    {
+      "confidence": 0.9507443862320896,
+      "end_s": 26.395625,
+      "start_s": 26.255625,
+      "word": "SIR"
+    },
+    {
+      "confidence": 0.5131405278395561,
+      "end_s": 26.755625,
+      "start_s": 26.435625,
+      "word": "FREDERICK"
+    },
+    {
+      "confidence": 0.11025282257017881,
+      "end_s": 27.235625,
+      "start_s": 26.835625,
+      "word": "LEIGHTON'S"
+    },
+    {
+      "confidence": 0.9994804672009072,
+      "end_s": 27.555625,
+      "start_s": 27.335625,
+      "word": "WORK"
+    },
+    {
+      "confidence": 0.997249128182375,
+      "end_s": 27.795625,
+      "start_s": 27.655625,
+      "word": "IS"
+    },
+    {
+      "confidence": 0.20986492866678946,
+      "end_s": 28.155625,
+      "start_s": 27.935625,
+      "word": "REALLY"
+    },
+    {
+      "confidence": 0.9994230185958123,
+      "end_s": 28.735625,
+      "start_s": 28.415625,
+      "word": "GREEK"
+    },
+    {
+      "confidence": 0.9359120884861084,
+      "end_s": 29.155625,
+      "start_s": 28.875625,
+      "word": "AFTER"
+    },
+    {
+      "confidence": 0.9884170565654685,
+      "end_s": 29.475625,
+      "start_s": 29.275625,
+      "word": "ALL"
+    },
+    {
+      "confidence": 0.973991177796046,
+      "end_s": 30.275625,
+      "start_s": 30.155625,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9995250095558932,
+      "end_s": 30.455625,
+      "start_s": 30.315625,
+      "word": "CAN"
+    },
+    {
+      "confidence": 0.9923967057155587,
+      "end_s": 33.575625,
+      "start_s": 33.175625,
+      "word": "DISCOVER"
+    },
+    {
+      "confidence": 0.9980736046701444,
+      "end_s": 33.775625,
+      "start_s": 33.675625,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9977407057133642,
+      "end_s": 33.915625,
+      "start_s": 33.815625,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.9995616616869382,
+      "end_s": 34.155625,
+      "start_s": 34.035625,
+      "word": "BUT"
+    },
+    {
+      "confidence": 0.9315389379885957,
+      "end_s": 34.535625,
+      "start_s": 34.275625,
+      "word": "LITTLE"
+    },
+    {
+      "confidence": 0.9944159859947558,
+      "end_s": 34.775625,
+      "start_s": 34.655625,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.5881631508236222,
+      "end_s": 35.395625,
+      "start_s": 35.095625,
+      "word": "ROCKY"
+    },
+    {
+      "confidence": 0.7664456622121743,
+      "end_s": 35.935625,
+      "start_s": 35.575625,
+      "word": "ITHACA"
+    },
+    {
+      "confidence": 0.39586152072687497,
+      "end_s": 37.155625,
+      "start_s": 36.655625,
+      "word": "LINNELL'S"
+    },
+    {
+      "confidence": 0.8952371784257361,
+      "end_s": 37.695625,
+      "start_s": 37.275625,
+      "word": "PICTURES"
+    },
+    {
+      "confidence": 0.8852187441426674,
+      "end_s": 37.997,
+      "start_s": 37.915625,
+      "word": "ARE"
+    },
+    {
+      "confidence": 0.9807181494371748,
+      "end_s": 38.0435,
+      "start_s": 38.031875,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9938049375362886,
+      "end_s": 38.2179375,
+      "start_s": 38.1016875,
+      "word": "SORT"
+    },
+    {
+      "confidence": 0.9371152443253501,
+      "end_s": 38.3179375,
+      "start_s": 38.2579375,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9550835506797537,
+      "end_s": 38.9579375,
+      "start_s": 38.8579375,
+      "word": "UP"
+    },
+    {
+      "confidence": 0.6967253332676094,
+      "end_s": 39.4379375,
+      "start_s": 39.0979375,
+      "word": "GUARDS"
+    },
+    {
+      "confidence": 0.8514672445990761,
+      "end_s": 39.5779375,
+      "start_s": 39.4579375,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.27781156029858284,
+      "end_s": 39.7579375,
+      "start_s": 39.6379375,
+      "word": "AT"
+    },
+    {
+      "confidence": 0.16682361434088916,
+      "end_s": 39.8779375,
+      "start_s": 39.7779375,
+      "word": "EM"
+    },
+    {
+      "confidence": 0.9527664234964389,
+      "end_s": 40.7379375,
+      "start_s": 40.2379375,
+      "word": "PAINTINGS"
+    },
+    {
+      "confidence": 0.9970588142683802,
+      "end_s": 41.3779375,
+      "start_s": 41.2779375,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.935171571168371,
+      "end_s": 41.8579375,
+      "start_s": 41.4179375,
+      "word": "MASON'S"
+    },
+    {
+      "confidence": 0.770719170028872,
+      "end_s": 42.5979375,
+      "start_s": 41.9379375,
+      "word": "EXQUISITE"
+    },
+    {
+      "confidence": 0.0443989200230631,
+      "end_s": 43.0179375,
+      "start_s": 42.6779375,
+      "word": "IDYLLS"
+    },
+    {
+      "confidence": 0.8661395431143075,
+      "end_s": 43.3579375,
+      "start_s": 43.1779375,
+      "word": "ARE"
+    },
+    {
+      "confidence": 0.989499533506101,
+      "end_s": 43.5579375,
+      "start_s": 43.4179375,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.9833610998519001,
+      "end_s": 44.3379375,
+      "start_s": 43.8579375,
+      "word": "NATIONAL"
+    },
+    {
+      "confidence": 0.9906612571422563,
+      "end_s": 44.5579375,
+      "start_s": 44.4579375,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.9803288172437259,
+      "end_s": 44.6379375,
+      "start_s": 44.6179375,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9288900222574831,
+      "end_s": 45.0379375,
+      "start_s": 44.6979375,
+      "word": "JINGO"
+    },
+    {
+      "confidence": 0.9780622823360418,
+      "end_s": 45.6179375,
+      "start_s": 45.2579375,
+      "word": "POEM"
+    },
+    {
+      "confidence": 0.08702713486783133,
+      "end_s": 47.5979375,
+      "start_s": 47.3579375,
+      "word": "MISTER"
+    },
+    {
+      "confidence": 0.6673686228344198,
+      "end_s": 47.9379375,
+      "start_s": 47.6579375,
+      "word": "BIRKET"
+    },
+    {
+      "confidence": 0.894951368380278,
+      "end_s": 48.4979375,
+      "start_s": 47.9979375,
+      "word": "FOSTER'S"
+    },
+    {
+      "confidence": 0.9868301946131641,
+      "end_s": 49.1979375,
+      "start_s": 48.5979375,
+      "word": "LANDSCAPES"
+    },
+    {
+      "confidence": 0.8910275056369175,
+      "end_s": 49.9579375,
+      "start_s": 49.4979375,
+      "word": "SMILE"
+    },
+    {
+      "confidence": 0.97971673441545,
+      "end_s": 50.0779375,
+      "start_s": 49.9979375,
+      "word": "AT"
+    },
+    {
+      "confidence": 0.991131416839316,
+      "end_s": 50.4179375,
+      "start_s": 50.2579375,
+      "word": "ONE"
+    },
+    {
+      "confidence": 0.9420034636940698,
+      "end_s": 50.7779375,
+      "start_s": 50.5379375,
+      "word": "MUCH"
+    },
+    {
+      "confidence": 0.9979113672090465,
+      "end_s": 50.8779375,
+      "start_s": 50.8179375,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9815191117306163,
+      "end_s": 50.9979375,
+      "start_s": 50.8979375,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9992083699452291,
+      "end_s": 51.3379375,
+      "start_s": 51.0579375,
+      "word": "SAME"
+    },
+    {
+      "confidence": 0.9991932184396985,
+      "end_s": 51.5379375,
+      "start_s": 51.3779375,
+      "word": "WAY"
+    },
+    {
+      "confidence": 0.9877735758164373,
+      "end_s": 51.7379375,
+      "start_s": 51.5979375,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.12455269876135147,
+      "end_s": 52.0379375,
+      "start_s": 51.7779375,
+      "word": "MISTER"
+    },
+    {
+      "confidence": 0.9169318886936263,
+      "end_s": 52.5579375,
+      "start_s": 52.1179375,
+      "word": "CARKER"
+    },
+    {
+      "confidence": 0.840031233364752,
+      "end_s": 53.1579375,
+      "start_s": 53.0179375,
+      "word": "USED"
+    },
+    {
+      "confidence": 0.9846470604368267,
+      "end_s": 53.2579375,
+      "start_s": 53.1979375,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9936150204838016,
+      "end_s": 53.6779375,
+      "start_s": 53.3379375,
+      "word": "FLASH"
+    },
+    {
+      "confidence": 0.4690542424624793,
+      "end_s": 53.8179375,
+      "start_s": 53.6979375,
+      "word": "HIS"
+    },
+    {
+      "confidence": 0.9164835440268354,
+      "end_s": 54.3379375,
+      "start_s": 53.9379375,
+      "word": "TEETH"
+    },
+    {
+      "confidence": 0.9587044563559545,
+      "end_s": 55.7379375,
+      "start_s": 55.6379375,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.14842796505619035,
+      "end_s": 56.0179375,
+      "start_s": 55.7779375,
+      "word": "MISTER"
+    },
+    {
+      "confidence": 0.989647710957571,
+      "end_s": 56.2979375,
+      "start_s": 56.0579375,
+      "word": "JOHN"
+    },
+    {
+      "confidence": 0.6430825689555153,
+      "end_s": 56.8179375,
+      "start_s": 56.3779375,
+      "word": "COLLIER"
+    },
+    {
+      "confidence": 0.9975251163351178,
+      "end_s": 57.4379375,
+      "start_s": 57.1979375,
+      "word": "GIVES"
+    },
+    {
+      "confidence": 0.9216574351467749,
+      "end_s": 57.5979375,
+      "start_s": 57.4579375,
+      "word": "HIS"
+    },
+    {
+      "confidence": 0.3695372091873104,
+      "end_s": 57.9179375,
+      "start_s": 57.6779375,
+      "word": "SITTER"
+    },
+    {
+      "confidence": 0.9948389059565994,
+      "end_s": 58.1179375,
+      "start_s": 58.0979375,
+      "word": "A"
+    },
+    {
+      "confidence": 0.7851905224097532,
+      "end_s": 58.7979375,
+      "start_s": 58.2579375,
+      "word": "CHEERFUL"
+    },
+    {
+      "confidence": 0.9958026447556562,
+      "end_s": 59.3179375,
+      "start_s": 58.9379375,
+      "word": "SLAP"
+    },
+    {
+      "confidence": 0.9776504233280287,
+      "end_s": 59.4579375,
+      "start_s": 59.3779375,
+      "word": "ON"
+    },
+    {
+      "confidence": 0.42185319436906005,
+      "end_s": 59.5579375,
+      "start_s": 59.4979375,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9724112760109135,
+      "end_s": 59.9979375,
+      "start_s": 59.6379375,
+      "word": "BACK"
+    },
+    {
+      "confidence": null,
+      "end_s": 60.4729375,
+      "start_s": 59.9979375,
+      "word": "uh"
+    },
+    {
+      "confidence": 0.987812302680526,
+      "end_s": 61.1929375,
+      "start_s": 60.8529375,
+      "word": "BEFORE"
+    },
+    {
+      "confidence": 0.9906645287765913,
+      "end_s": 61.2729375,
+      "start_s": 61.2129375,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.9966203627645773,
+      "end_s": 61.7129375,
+      "start_s": 61.3729375,
+      "word": "SAYS"
+    },
+    {
+      "confidence": 0.9590982244984669,
+      "end_s": 62.0129375,
+      "start_s": 61.8329375,
+      "word": "LIKE"
+    },
+    {
+      "confidence": 0.985036005862605,
+      "end_s": 62.0529375,
+      "start_s": 62.0329375,
+      "word": "A"
+    },
+    {
+      "confidence": 0.2936853549161357,
+      "end_s": 62.9529375,
+      "start_s": 62.3129375,
+      "word": "SHAMPOOER"
+    },
+    {
+      "confidence": 0.7534421832478936,
+      "end_s": 63.0929375,
+      "start_s": 63.0329375,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9564147961428902,
+      "end_s": 63.1729375,
+      "start_s": 63.1529375,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9215103483022151,
+      "end_s": 63.6329375,
+      "start_s": 63.2929375,
+      "word": "TURKISH"
+    },
+    {
+      "confidence": 0.9953159089125339,
+      "end_s": 64.0129375,
+      "start_s": 63.6929375,
+      "word": "BATH"
+    },
+    {
+      "confidence": 0.9970471175416096,
+      "end_s": 64.8529375,
+      "start_s": 64.5929375,
+      "word": "NEXT"
+    },
+    {
+      "confidence": 0.8621452228686046,
+      "end_s": 65.1729375,
+      "start_s": 64.8929375,
+      "word": "MAN"
+    },
+    {
+      "confidence": 0.9936702915428539,
+      "end_s": 65.8729375,
+      "start_s": 65.7929375,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.9938058902778371,
+      "end_s": 65.9929375,
+      "start_s": 65.8929375,
+      "word": "IS"
+    },
+    {
+      "confidence": 0.7304030723749462,
+      "end_s": 66.6529375,
+      "start_s": 66.1529375,
+      "word": "OBVIOUSLY"
+    },
+    {
+      "confidence": 0.9974494911085524,
+      "end_s": 67.5329375,
+      "start_s": 66.8129375,
+      "word": "UNNECESSARY"
+    },
+    {
+      "confidence": 0.9993427260714467,
+      "end_s": 67.7929375,
+      "start_s": 67.6529375,
+      "word": "FOR"
+    },
+    {
+      "confidence": 0.9996621009331118,
+      "end_s": 67.9529375,
+      "start_s": 67.8529375,
+      "word": "US"
+    },
+    {
+      "confidence": 0.9990448763278313,
+      "end_s": 68.0929375,
+      "start_s": 68.0129375,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9599421056507061,
+      "end_s": 68.4729375,
+      "start_s": 68.1929375,
+      "word": "POINT"
+    },
+    {
+      "confidence": 0.9740574057865433,
+      "end_s": 68.6529375,
+      "start_s": 68.5329375,
+      "word": "OUT"
+    },
+    {
+      "confidence": 0.9635155348174052,
+      "end_s": 68.8929375,
+      "start_s": 68.7329375,
+      "word": "HOW"
+    },
+    {
+      "confidence": 0.9833680974931968,
+      "end_s": 69.5529375,
+      "start_s": 69.0529375,
+      "word": "LUMINOUS"
+    },
+    {
+      "confidence": 0.9961081800791447,
+      "end_s": 69.9329375,
+      "start_s": 69.6529375,
+      "word": "THESE"
+    },
+    {
+      "confidence": 0.9940422228592537,
+      "end_s": 70.7129375,
+      "start_s": 69.9929375,
+      "word": "CRITICISMS"
+    },
+    {
+      "confidence": 0.9027270128432249,
+      "end_s": 71.1129375,
+      "start_s": 70.8729375,
+      "word": "ARE"
+    },
+    {
+      "confidence": 0.9977061036511186,
+      "end_s": 71.7729375,
+      "start_s": 71.6129375,
+      "word": "HOW"
+    },
+    {
+      "confidence": 0.951844256476613,
+      "end_s": 72.6929375,
+      "start_s": 72.1129375,
+      "word": "DELICATE"
+    },
+    {
+      "confidence": 0.7309187783180451,
+      "end_s": 72.8329375,
+      "start_s": 72.7529375,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9925321789643308,
+      "end_s": 73.5529375,
+      "start_s": 72.8729375,
+      "word": "EXPRESSION"
+    }
+  ]
+}

@@ -1,0 +1,2016 @@
+{
+  "alignment_quality": null,
+  "control_transform": null,
+  "gender": "M",
+  "original_word_timings": [
+    {
+      "confidence": 0.06364852131408966,
+      "end_s": 0.7,
+      "start_s": 0.02,
+      "word": "KIRKLEATHAM"
+    },
+    {
+      "confidence": 0.09656131759993918,
+      "end_s": 1.32,
+      "start_s": 0.8,
+      "word": "YEAST"
+    },
+    {
+      "confidence": 0.00041845065176560585,
+      "end_s": 2.6,
+      "start_s": 2.02,
+      "word": "SEVENTEEN"
+    },
+    {
+      "confidence": 0.0004202230092038058,
+      "end_s": 3.42,
+      "start_s": 2.76,
+      "word": "SEVENTEEN"
+    },
+    {
+      "confidence": 0.6717732905721048,
+      "end_s": 4.14,
+      "start_s": 4.04,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.7592872457055162,
+      "end_s": 4.46,
+      "start_s": 4.2,
+      "word": "MAKE"
+    },
+    {
+      "confidence": 0.917181110461949,
+      "end_s": 4.82,
+      "start_s": 4.56,
+      "word": "GOOD"
+    },
+    {
+      "confidence": 0.5736738250432807,
+      "end_s": 5.16,
+      "start_s": 4.92,
+      "word": "HOME"
+    },
+    {
+      "confidence": 0.5685135634389336,
+      "end_s": 5.44,
+      "start_s": 5.18,
+      "word": "MADE"
+    },
+    {
+      "confidence": 0.7797141076606263,
+      "end_s": 5.94,
+      "start_s": 5.48,
+      "word": "BREAD"
+    },
+    {
+      "confidence": 0.002869954375751373,
+      "end_s": 7.24,
+      "start_s": 6.66,
+      "word": "SEVENTEEN"
+    },
+    {
+      "confidence": 0.0005248509200773599,
+      "end_s": 7.9,
+      "start_s": 7.32,
+      "word": "EIGHTEEN"
+    },
+    {
+      "confidence": 0.5687783031650464,
+      "end_s": 9.08,
+      "start_s": 8.64,
+      "word": "MODE"
+    },
+    {
+      "confidence": 0.9996993844838961,
+      "end_s": 9.7,
+      "start_s": 9.54,
+      "word": "PUT"
+    },
+    {
+      "confidence": 0.9201700177899105,
+      "end_s": 9.82,
+      "start_s": 9.74,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.5504806311624918,
+      "end_s": 10.32,
+      "start_s": 9.86,
+      "word": "FLOUR"
+    },
+    {
+      "confidence": 0.9991225343347286,
+      "end_s": 10.66,
+      "start_s": 10.5,
+      "word": "INTO"
+    },
+    {
+      "confidence": 0.9979239974695335,
+      "end_s": 10.78,
+      "start_s": 10.76,
+      "word": "A"
+    },
+    {
+      "confidence": 0.8845665278186122,
+      "end_s": 11.28,
+      "start_s": 10.88,
+      "word": "LARGE"
+    },
+    {
+      "confidence": 0.8674438629270079,
+      "end_s": 12.04,
+      "start_s": 11.4,
+      "word": "EARTHENWARE"
+    },
+    {
+      "confidence": 0.2736297710701986,
+      "end_s": 12.46,
+      "start_s": 12.12,
+      "word": "BOWL"
+    },
+    {
+      "confidence": 0.9982806101082586,
+      "end_s": 12.72,
+      "start_s": 12.64,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.9979009089728886,
+      "end_s": 13.02,
+      "start_s": 12.8,
+      "word": "DEEP"
+    },
+    {
+      "confidence": 0.9990456824514712,
+      "end_s": 13.54,
+      "start_s": 13.14,
+      "word": "PAN"
+    },
+    {
+      "confidence": 0.9992680303073752,
+      "end_s": 14.34,
+      "start_s": 14.2,
+      "word": "THEN"
+    },
+    {
+      "confidence": 0.9512816155598978,
+      "end_s": 14.54,
+      "start_s": 14.4,
+      "word": "WITH"
+    },
+    {
+      "confidence": 0.9978206075861558,
+      "end_s": 14.58,
+      "start_s": 14.56,
+      "word": "A"
+    },
+    {
+      "confidence": 0.967804592075863,
+      "end_s": 15.14,
+      "start_s": 14.66,
+      "word": "STRONG"
+    },
+    {
+      "confidence": 0.2135558789663594,
+      "end_s": 15.5,
+      "start_s": 15.22,
+      "word": "METAL"
+    },
+    {
+      "confidence": 0.9982502323638415,
+      "end_s": 15.76,
+      "start_s": 15.66,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.9190782863325988,
+      "end_s": 16.1,
+      "start_s": 15.84,
+      "word": "WOODEN"
+    },
+    {
+      "confidence": 0.949582780990562,
+      "end_s": 16.66,
+      "start_s": 16.22,
+      "word": "SPOON"
+    },
+    {
+      "confidence": 0.9764168041749113,
+      "end_s": 17.2,
+      "start_s": 16.86,
+      "word": "HOLLOW"
+    },
+    {
+      "confidence": 0.9993580613596141,
+      "end_s": 17.42,
+      "start_s": 17.28,
+      "word": "OUT"
+    },
+    {
+      "confidence": 0.9988786042572395,
+      "end_s": 17.56,
+      "start_s": 17.48,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9575263241439659,
+      "end_s": 17.92,
+      "start_s": 17.6,
+      "word": "MIDDLE"
+    },
+    {
+      "confidence": 0.9995708054651699,
+      "end_s": 18.6,
+      "start_s": 18.48,
+      "word": "BUT"
+    },
+    {
+      "confidence": 0.9995306559905703,
+      "end_s": 18.74,
+      "start_s": 18.66,
+      "word": "DO"
+    },
+    {
+      "confidence": 0.9995256736906569,
+      "end_s": 19.02,
+      "start_s": 18.84,
+      "word": "NOT"
+    },
+    {
+      "confidence": 0.9683026533977063,
+      "end_s": 19.38,
+      "start_s": 19.1,
+      "word": "CLEAR"
+    },
+    {
+      "confidence": 0.9896409631792987,
+      "end_s": 19.46,
+      "start_s": 19.4,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.931031536779411,
+      "end_s": 20.14,
+      "start_s": 19.5,
+      "word": "ENTIRELY"
+    },
+    {
+      "confidence": 0.9994654977610303,
+      "end_s": 20.48,
+      "start_s": 20.22,
+      "word": "AWAY"
+    },
+    {
+      "confidence": 0.9996477249255568,
+      "end_s": 20.7,
+      "start_s": 20.56,
+      "word": "FROM"
+    },
+    {
+      "confidence": 0.9837015004339982,
+      "end_s": 20.84,
+      "start_s": 20.74,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9307019859715459,
+      "end_s": 21.2,
+      "start_s": 20.88,
+      "word": "BOTTOM"
+    },
+    {
+      "confidence": 0.9984419150776882,
+      "end_s": 21.32,
+      "start_s": 21.24,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.8842471464810251,
+      "end_s": 21.46,
+      "start_s": 21.36,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9990829191059619,
+      "end_s": 21.94,
+      "start_s": 21.52,
+      "word": "PAN"
+    },
+    {
+      "confidence": 0.9989453603341804,
+      "end_s": 22.82,
+      "start_s": 22.52,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.9993412085298358,
+      "end_s": 23.0,
+      "start_s": 22.92,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9903693106791248,
+      "end_s": 23.24,
+      "start_s": 23.02,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.9997027425080534,
+      "end_s": 23.82,
+      "start_s": 23.34,
+      "word": "CASE"
+    },
+    {
+      "confidence": 0.995331949363424,
+      "end_s": 24.02,
+      "start_s": 23.92,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.3103280553607004,
+      "end_s": 24.7,
+      "start_s": 24.1,
+      "word": "SPONGE"
+    },
+    {
+      "confidence": 0.9958169639199111,
+      "end_s": 24.98,
+      "start_s": 24.88,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.7098420138732174,
+      "end_s": 25.48,
+      "start_s": 25.1,
+      "word": "LEAVEN"
+    },
+    {
+      "confidence": 0.9978157705704769,
+      "end_s": 26.1,
+      "start_s": 25.98,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.9978459207411245,
+      "end_s": 26.22,
+      "start_s": 26.16,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.9662994619912629,
+      "end_s": 26.38,
+      "start_s": 26.26,
+      "word": "WAS"
+    },
+    {
+      "confidence": 0.9230813461096502,
+      "end_s": 26.9,
+      "start_s": 26.46,
+      "word": "FORMERLY"
+    },
+    {
+      "confidence": 0.8948614396987722,
+      "end_s": 27.46,
+      "start_s": 27.0,
+      "word": "TERMED"
+    },
+    {
+      "confidence": 0.9868558646665886,
+      "end_s": 27.96,
+      "start_s": 27.8,
+      "word": "WOULD"
+    },
+    {
+      "confidence": 0.9992924441702009,
+      "end_s": 28.28,
+      "start_s": 28.04,
+      "word": "STICK"
+    },
+    {
+      "confidence": 0.9973399695203755,
+      "end_s": 28.52,
+      "start_s": 28.4,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9974585613700747,
+      "end_s": 28.78,
+      "start_s": 28.64,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.955300636424053,
+      "end_s": 29.52,
+      "start_s": 29.34,
+      "word": "WHICH"
+    },
+    {
+      "confidence": 0.9975756407506848,
+      "end_s": 29.66,
+      "start_s": 29.56,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.9806582666826856,
+      "end_s": 29.88,
+      "start_s": 29.72,
+      "word": "OUGHT"
+    },
+    {
+      "confidence": 0.9134489958846194,
+      "end_s": 30.18,
+      "start_s": 29.96,
+      "word": "NOT"
+    },
+    {
+      "confidence": 0.9960164650630466,
+      "end_s": 30.34,
+      "start_s": 30.26,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9964160623890947,
+      "end_s": 30.52,
+      "start_s": 30.4,
+      "word": "DO"
+    },
+    {
+      "confidence": 0.991300789026122,
+      "end_s": 31.66,
+      "start_s": 31.38,
+      "word": "NEXT"
+    },
+    {
+      "confidence": 0.99827850960864,
+      "end_s": 31.98,
+      "start_s": 31.7,
+      "word": "TAKE"
+    },
+    {
+      "confidence": 0.9565276254986319,
+      "end_s": 32.28,
+      "start_s": 32.08,
+      "word": "EITHER"
+    },
+    {
+      "confidence": 0.9977566375811457,
+      "end_s": 32.36,
+      "start_s": 32.34,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9447406706979447,
+      "end_s": 32.76,
+      "start_s": 32.44,
+      "word": "LARGE"
+    },
+    {
+      "confidence": 0.9782065691234393,
+      "end_s": 33.76,
+      "start_s": 32.84,
+      "word": "TABLESPOONFUL"
+    },
+    {
+      "confidence": 0.9974892147076179,
+      "end_s": 33.88,
+      "start_s": 33.8,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.7281708264118135,
+      "end_s": 34.4,
+      "start_s": 33.96,
+      "word": "BREWER'S"
+    },
+    {
+      "confidence": 0.9762812836035216,
+      "end_s": 34.84,
+      "start_s": 34.46,
+      "word": "YEAST"
+    },
+    {
+      "confidence": 0.9526608750832908,
+      "end_s": 35.08,
+      "start_s": 34.9,
+      "word": "WHICH"
+    },
+    {
+      "confidence": 0.9484868344329941,
+      "end_s": 35.22,
+      "start_s": 35.1,
+      "word": "HAS"
+    },
+    {
+      "confidence": 0.9979294208765489,
+      "end_s": 35.44,
+      "start_s": 35.28,
+      "word": "BEEN"
+    },
+    {
+      "confidence": 0.9979636274332219,
+      "end_s": 35.9,
+      "start_s": 35.52,
+      "word": "RENDERED"
+    },
+    {
+      "confidence": 0.9995285982267352,
+      "end_s": 36.48,
+      "start_s": 36.02,
+      "word": "SOLID"
+    },
+    {
+      "confidence": 0.9993104413626821,
+      "end_s": 36.68,
+      "start_s": 36.54,
+      "word": "BY"
+    },
+    {
+      "confidence": 0.9993156178930341,
+      "end_s": 37.14,
+      "start_s": 36.76,
+      "word": "MIXING"
+    },
+    {
+      "confidence": 0.9983996315197493,
+      "end_s": 37.28,
+      "start_s": 37.2,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.9240080037853711,
+      "end_s": 37.5,
+      "start_s": 37.34,
+      "word": "WITH"
+    },
+    {
+      "confidence": 0.9988982138519394,
+      "end_s": 37.82,
+      "start_s": 37.54,
+      "word": "PLENTY"
+    },
+    {
+      "confidence": 0.997465614897398,
+      "end_s": 37.96,
+      "start_s": 37.9,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9995532452943062,
+      "end_s": 38.32,
+      "start_s": 38.02,
+      "word": "COLD"
+    },
+    {
+      "confidence": 0.9995785812525726,
+      "end_s": 38.76,
+      "start_s": 38.4,
+      "word": "WATER"
+    },
+    {
+      "confidence": 0.9981106271592753,
+      "end_s": 39.62,
+      "start_s": 39.52,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9432354305600201,
+      "end_s": 39.94,
+      "start_s": 39.66,
+      "word": "LETTING"
+    },
+    {
+      "confidence": 0.9984504149529698,
+      "end_s": 40.06,
+      "start_s": 39.98,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.9721459446754419,
+      "end_s": 40.68,
+      "start_s": 40.12,
+      "word": "AFTERWARDS"
+    },
+    {
+      "confidence": 0.995038665946888,
+      "end_s": 41.24,
+      "start_s": 40.8,
+      "word": "STAND"
+    },
+    {
+      "confidence": 0.014927238154854031,
+      "end_s": 41.3,
+      "start_s": 41.26,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9610407591521154,
+      "end_s": 41.74,
+      "start_s": 41.44,
+      "word": "SETTLE"
+    },
+    {
+      "confidence": 0.9973645219498,
+      "end_s": 41.96,
+      "start_s": 41.8,
+      "word": "FOR"
+    },
+    {
+      "confidence": 0.9932715111423914,
+      "end_s": 42.04,
+      "start_s": 42.02,
+      "word": "A"
+    },
+    {
+      "confidence": 0.8709828148313513,
+      "end_s": 42.36,
+      "start_s": 42.14,
+      "word": "DAY"
+    },
+    {
+      "confidence": 0.7607278228316534,
+      "end_s": 42.54,
+      "start_s": 42.44,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.8465337408710312,
+      "end_s": 43.04,
+      "start_s": 42.6,
+      "word": "NIGHT"
+    },
+    {
+      "confidence": 0.9990440323091107,
+      "end_s": 43.74,
+      "start_s": 43.66,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.9450577154982245,
+      "end_s": 44.12,
+      "start_s": 43.8,
+      "word": "NEARLY"
+    },
+    {
+      "confidence": 0.995277024619731,
+      "end_s": 44.28,
+      "start_s": 44.18,
+      "word": "AN"
+    },
+    {
+      "confidence": 0.9078625499672485,
+      "end_s": 44.66,
+      "start_s": 44.34,
+      "word": "OUNCE"
+    },
+    {
+      "confidence": 0.9970630901718768,
+      "end_s": 44.78,
+      "start_s": 44.7,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9960126034578517,
+      "end_s": 45.2,
+      "start_s": 44.84,
+      "word": "GERMAN"
+    },
+    {
+      "confidence": 0.9666786708975025,
+      "end_s": 45.82,
+      "start_s": 45.28,
+      "word": "YEAST"
+    },
+    {
+      "confidence": 0.9997680857263115,
+      "end_s": 46.52,
+      "start_s": 46.36,
+      "word": "PUT"
+    },
+    {
+      "confidence": 0.9986920237136054,
+      "end_s": 46.64,
+      "start_s": 46.54,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.994168298679859,
+      "end_s": 46.9,
+      "start_s": 46.7,
+      "word": "INTO"
+    },
+    {
+      "confidence": 0.9976779622689971,
+      "end_s": 47.0,
+      "start_s": 46.98,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9972303355581521,
+      "end_s": 47.42,
+      "start_s": 47.08,
+      "word": "LARGE"
+    },
+    {
+      "confidence": 0.4853626786231626,
+      "end_s": 47.94,
+      "start_s": 47.52,
+      "word": "BASIN"
+    },
+    {
+      "confidence": 0.9955849753040613,
+      "end_s": 48.1,
+      "start_s": 48.0,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.99691885137408,
+      "end_s": 48.64,
+      "start_s": 48.16,
+      "word": "PROCEED"
+    },
+    {
+      "confidence": 0.9915724915633892,
+      "end_s": 48.78,
+      "start_s": 48.7,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9976432421018127,
+      "end_s": 49.04,
+      "start_s": 48.84,
+      "word": "MIX"
+    },
+    {
+      "confidence": 0.9984529236254789,
+      "end_s": 49.34,
+      "start_s": 49.22,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.9994605779569377,
+      "end_s": 49.7,
+      "start_s": 49.6,
+      "word": "SO"
+    },
+    {
+      "confidence": 0.9977857515815075,
+      "end_s": 49.92,
+      "start_s": 49.8,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.9975922429268764,
+      "end_s": 50.06,
+      "start_s": 49.98,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.986050603227352,
+      "end_s": 50.42,
+      "start_s": 50.16,
+      "word": "SHALL"
+    },
+    {
+      "confidence": 0.9987081044185024,
+      "end_s": 50.56,
+      "start_s": 50.48,
+      "word": "BE"
+    },
+    {
+      "confidence": 0.41723148685661227,
+      "end_s": 50.78,
+      "start_s": 50.68,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.9081053183863174,
+      "end_s": 51.38,
+      "start_s": 50.88,
+      "word": "SMOOTH"
+    },
+    {
+      "confidence": 0.9740922458252432,
+      "end_s": 51.52,
+      "start_s": 51.42,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.9550316281393866,
+      "end_s": 52.0,
+      "start_s": 51.62,
+      "word": "CREAM"
+    },
+    {
+      "confidence": 0.9525922571821703,
+      "end_s": 52.82,
+      "start_s": 52.66,
+      "word": "WITH"
+    },
+    {
+      "confidence": 0.8928607242484312,
+      "end_s": 53.08,
+      "start_s": 52.86,
+      "word": "THREE"
+    },
+    {
+      "confidence": 0.45087848142440523,
+      "end_s": 53.5,
+      "start_s": 53.12,
+      "word": "QUARTERS"
+    },
+    {
+      "confidence": 0.876971009363514,
+      "end_s": 53.92,
+      "start_s": 53.56,
+      "word": "PINT"
+    },
+    {
+      "confidence": 0.996063235113868,
+      "end_s": 54.14,
+      "start_s": 54.06,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9482891378313343,
+      "end_s": 54.52,
+      "start_s": 54.24,
+      "word": "WARM"
+    },
+    {
+      "confidence": 0.9987017491799047,
+      "end_s": 54.86,
+      "start_s": 54.6,
+      "word": "MILK"
+    },
+    {
+      "confidence": 0.7807587782289805,
+      "end_s": 55.02,
+      "start_s": 54.92,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9535123749387117,
+      "end_s": 55.44,
+      "start_s": 55.06,
+      "word": "WATER"
+    },
+    {
+      "confidence": 0.9942881458413907,
+      "end_s": 56.42,
+      "start_s": 56.22,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.9974282040250465,
+      "end_s": 56.72,
+      "start_s": 56.56,
+      "word": "WITH"
+    },
+    {
+      "confidence": 0.99823037166981,
+      "end_s": 57.12,
+      "start_s": 56.82,
+      "word": "WATER"
+    },
+    {
+      "confidence": 0.9973849519548295,
+      "end_s": 57.64,
+      "start_s": 57.28,
+      "word": "ONLY"
+    },
+    {
+      "confidence": 0.923450725669377,
+      "end_s": 58.5,
+      "start_s": 58.32,
+      "word": "THOUGH"
+    },
+    {
+      "confidence": 0.9127739787901724,
+      "end_s": 58.8,
+      "start_s": 58.58,
+      "word": "EVEN"
+    },
+    {
+      "confidence": 0.9965068954745854,
+      "end_s": 58.86,
+      "start_s": 58.84,
+      "word": "A"
+    },
+    {
+      "confidence": 0.999721284677612,
+      "end_s": 59.22,
+      "start_s": 58.96,
+      "word": "VERY"
+    },
+    {
+      "confidence": 0.9544544388508506,
+      "end_s": 59.58,
+      "start_s": 59.32,
+      "word": "LITTLE"
+    },
+    {
+      "confidence": 0.9992615784822092,
+      "end_s": 59.94,
+      "start_s": 59.62,
+      "word": "MILK"
+    },
+    {
+      "confidence": 0.9928509565138408,
+      "end_s": 60.28,
+      "start_s": 60.08,
+      "word": "WILL"
+    },
+    {
+      "confidence": 0.9582434669921857,
+      "end_s": 60.6,
+      "start_s": 60.34,
+      "word": "MUCH"
+    },
+    {
+      "confidence": 0.9425425895517228,
+      "end_s": 61.26,
+      "start_s": 60.66,
+      "word": "IMPROVE"
+    },
+    {
+      "confidence": 0.9379376802896564,
+      "end_s": 61.4,
+      "start_s": 61.3,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9024123460992797,
+      "end_s": 61.8,
+      "start_s": 61.44,
+      "word": "BREAD"
+    }
+  ],
+  "pair": {
+    "flawed_recording_id": "test_m_2078__L5",
+    "flaws": [
+      {
+        "flaw_type": "filler",
+        "notes": "Synthetic hesitation approximated with a pitch-flattened voiced excerpt from this speaker.",
+        "original_end_s": 4.1400625,
+        "original_start_s": 4.14,
+        "rendered_end_s": 4.615,
+        "rendered_start_s": 4.14,
+        "severity": 0.9,
+        "word_indices": [
+          4
+        ]
+      },
+      {
+        "flaw_type": "monotone",
+        "notes": "F0 deviations scaled by 0.200000 toward median F0.",
+        "original_end_s": 10.78,
+        "original_start_s": 9.86,
+        "rendered_end_s": 11.255,
+        "rendered_start_s": 10.335,
+        "severity": 0.9,
+        "word_indices": [
+          15,
+          16,
+          17
+        ]
+      },
+      {
+        "flaw_type": "monotone",
+        "notes": "F0 deviations scaled by 0.200000 toward median F0.",
+        "original_end_s": 19.38,
+        "original_start_s": 18.66,
+        "rendered_end_s": 19.855,
+        "rendered_start_s": 19.135,
+        "severity": 0.9,
+        "word_indices": [
+          37,
+          38,
+          39
+        ]
+      },
+      {
+        "flaw_type": "pace_slow",
+        "notes": "PSOLA rate factor 0.595000.",
+        "original_end_s": 26.1,
+        "original_start_s": 24.88,
+        "rendered_end_s": 27.4054375,
+        "rendered_start_s": 25.355,
+        "severity": 0.9,
+        "word_indices": [
+          55,
+          56,
+          57
+        ]
+      },
+      {
+        "flaw_type": "volume_dropoff",
+        "notes": "Smooth gain ramp to -21.60 dB.",
+        "original_end_s": 31.66,
+        "original_start_s": 30.26,
+        "rendered_end_s": 32.9654375,
+        "rendered_start_s": 31.5654375,
+        "severity": 0.9,
+        "word_indices": [
+          70,
+          71,
+          72
+        ]
+      },
+      {
+        "flaw_type": "pace_fast",
+        "notes": "PSOLA rate factor 1.720000.",
+        "original_end_s": 46.9,
+        "original_start_s": 46.36,
+        "rendered_end_s": 47.979375,
+        "rendered_start_s": 47.6654375,
+        "severity": 0.9,
+        "word_indices": [
+          113,
+          114,
+          115
+        ]
+      },
+      {
+        "flaw_type": "long_pause",
+        "notes": "Inserted same-clip room tone at a 0.040 s natural gap.",
+        "original_end_s": 61.2600625,
+        "original_start_s": 61.26,
+        "rendered_end_s": 64.999375,
+        "rendered_start_s": 62.339375,
+        "severity": 0.9,
+        "word_indices": [
+          154,
+          155
+        ]
+      }
+    ],
+    "ideal_recording_id": "test_m_2078__ideal"
+  },
+  "passage_id": "test_m_2078",
+  "recording": {
+    "audio_path": "data/processed/audio/test_m_2078__L5.flac",
+    "duration_s": 65.629375,
+    "id": "test_m_2078__L5",
+    "kind": "injected",
+    "license": "CC BY 4.0",
+    "parent_recording_id": "test_m_2078__ideal",
+    "sample_rate": 16000,
+    "severity_level": 5,
+    "source": "LibriSpeech ASR corpus, dev-clean",
+    "speaker_gender": "M",
+    "speaker_id": "2078",
+    "transcript_id": "test_m_2078"
+  },
+  "split": "test",
+  "word_timings": [
+    {
+      "confidence": 0.06364852131408966,
+      "end_s": 0.7,
+      "start_s": 0.02,
+      "word": "KIRKLEATHAM"
+    },
+    {
+      "confidence": 0.09656131759993918,
+      "end_s": 1.32,
+      "start_s": 0.8,
+      "word": "YEAST"
+    },
+    {
+      "confidence": 0.00041845065176560585,
+      "end_s": 2.6,
+      "start_s": 2.02,
+      "word": "SEVENTEEN"
+    },
+    {
+      "confidence": 0.0004202230092038058,
+      "end_s": 3.42,
+      "start_s": 2.76,
+      "word": "SEVENTEEN"
+    },
+    {
+      "confidence": 0.6717732905721048,
+      "end_s": 4.14,
+      "start_s": 4.04,
+      "word": "TO"
+    },
+    {
+      "confidence": null,
+      "end_s": 4.615,
+      "start_s": 4.14,
+      "word": "uh"
+    },
+    {
+      "confidence": 0.7592872457055162,
+      "end_s": 4.935,
+      "start_s": 4.675,
+      "word": "MAKE"
+    },
+    {
+      "confidence": 0.917181110461949,
+      "end_s": 5.295,
+      "start_s": 5.035,
+      "word": "GOOD"
+    },
+    {
+      "confidence": 0.5736738250432807,
+      "end_s": 5.635,
+      "start_s": 5.395,
+      "word": "HOME"
+    },
+    {
+      "confidence": 0.5685135634389336,
+      "end_s": 5.915,
+      "start_s": 5.655,
+      "word": "MADE"
+    },
+    {
+      "confidence": 0.7797141076606263,
+      "end_s": 6.415,
+      "start_s": 5.955,
+      "word": "BREAD"
+    },
+    {
+      "confidence": 0.002869954375751373,
+      "end_s": 7.715,
+      "start_s": 7.135,
+      "word": "SEVENTEEN"
+    },
+    {
+      "confidence": 0.0005248509200773599,
+      "end_s": 8.375,
+      "start_s": 7.795,
+      "word": "EIGHTEEN"
+    },
+    {
+      "confidence": 0.5687783031650464,
+      "end_s": 9.555,
+      "start_s": 9.115,
+      "word": "MODE"
+    },
+    {
+      "confidence": 0.9996993844838961,
+      "end_s": 10.175,
+      "start_s": 10.015,
+      "word": "PUT"
+    },
+    {
+      "confidence": 0.9201700177899105,
+      "end_s": 10.295,
+      "start_s": 10.215,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.5504806311624918,
+      "end_s": 10.795,
+      "start_s": 10.335,
+      "word": "FLOUR"
+    },
+    {
+      "confidence": 0.9991225343347286,
+      "end_s": 11.135,
+      "start_s": 10.975,
+      "word": "INTO"
+    },
+    {
+      "confidence": 0.9979239974695335,
+      "end_s": 11.255,
+      "start_s": 11.235,
+      "word": "A"
+    },
+    {
+      "confidence": 0.8845665278186122,
+      "end_s": 11.755,
+      "start_s": 11.355,
+      "word": "LARGE"
+    },
+    {
+      "confidence": 0.8674438629270079,
+      "end_s": 12.515,
+      "start_s": 11.875,
+      "word": "EARTHENWARE"
+    },
+    {
+      "confidence": 0.2736297710701986,
+      "end_s": 12.935,
+      "start_s": 12.595,
+      "word": "BOWL"
+    },
+    {
+      "confidence": 0.9982806101082586,
+      "end_s": 13.195,
+      "start_s": 13.115,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.9979009089728886,
+      "end_s": 13.495,
+      "start_s": 13.275,
+      "word": "DEEP"
+    },
+    {
+      "confidence": 0.9990456824514712,
+      "end_s": 14.015,
+      "start_s": 13.615,
+      "word": "PAN"
+    },
+    {
+      "confidence": 0.9992680303073752,
+      "end_s": 14.815,
+      "start_s": 14.675,
+      "word": "THEN"
+    },
+    {
+      "confidence": 0.9512816155598978,
+      "end_s": 15.015,
+      "start_s": 14.875,
+      "word": "WITH"
+    },
+    {
+      "confidence": 0.9978206075861558,
+      "end_s": 15.055,
+      "start_s": 15.035,
+      "word": "A"
+    },
+    {
+      "confidence": 0.967804592075863,
+      "end_s": 15.615,
+      "start_s": 15.135,
+      "word": "STRONG"
+    },
+    {
+      "confidence": 0.2135558789663594,
+      "end_s": 15.975,
+      "start_s": 15.695,
+      "word": "METAL"
+    },
+    {
+      "confidence": 0.9982502323638415,
+      "end_s": 16.235,
+      "start_s": 16.135,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.9190782863325988,
+      "end_s": 16.575,
+      "start_s": 16.315,
+      "word": "WOODEN"
+    },
+    {
+      "confidence": 0.949582780990562,
+      "end_s": 17.135,
+      "start_s": 16.695,
+      "word": "SPOON"
+    },
+    {
+      "confidence": 0.9764168041749113,
+      "end_s": 17.675,
+      "start_s": 17.335,
+      "word": "HOLLOW"
+    },
+    {
+      "confidence": 0.9993580613596141,
+      "end_s": 17.895,
+      "start_s": 17.755,
+      "word": "OUT"
+    },
+    {
+      "confidence": 0.9988786042572395,
+      "end_s": 18.035,
+      "start_s": 17.955,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9575263241439659,
+      "end_s": 18.395,
+      "start_s": 18.075,
+      "word": "MIDDLE"
+    },
+    {
+      "confidence": 0.9995708054651699,
+      "end_s": 19.075,
+      "start_s": 18.955,
+      "word": "BUT"
+    },
+    {
+      "confidence": 0.9995306559905703,
+      "end_s": 19.215,
+      "start_s": 19.135,
+      "word": "DO"
+    },
+    {
+      "confidence": 0.9995256736906569,
+      "end_s": 19.495,
+      "start_s": 19.315,
+      "word": "NOT"
+    },
+    {
+      "confidence": 0.9683026533977063,
+      "end_s": 19.855,
+      "start_s": 19.575,
+      "word": "CLEAR"
+    },
+    {
+      "confidence": 0.9896409631792987,
+      "end_s": 19.935,
+      "start_s": 19.875,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.931031536779411,
+      "end_s": 20.615,
+      "start_s": 19.975,
+      "word": "ENTIRELY"
+    },
+    {
+      "confidence": 0.9994654977610303,
+      "end_s": 20.955,
+      "start_s": 20.695,
+      "word": "AWAY"
+    },
+    {
+      "confidence": 0.9996477249255568,
+      "end_s": 21.175,
+      "start_s": 21.035,
+      "word": "FROM"
+    },
+    {
+      "confidence": 0.9837015004339982,
+      "end_s": 21.315,
+      "start_s": 21.215,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9307019859715459,
+      "end_s": 21.675,
+      "start_s": 21.355,
+      "word": "BOTTOM"
+    },
+    {
+      "confidence": 0.9984419150776882,
+      "end_s": 21.795,
+      "start_s": 21.715,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.8842471464810251,
+      "end_s": 21.935,
+      "start_s": 21.835,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9990829191059619,
+      "end_s": 22.415,
+      "start_s": 21.995,
+      "word": "PAN"
+    },
+    {
+      "confidence": 0.9989453603341804,
+      "end_s": 23.295,
+      "start_s": 22.995,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.9993412085298358,
+      "end_s": 23.475,
+      "start_s": 23.395,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9903693106791248,
+      "end_s": 23.715,
+      "start_s": 23.495,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.9997027425080534,
+      "end_s": 24.295,
+      "start_s": 23.815,
+      "word": "CASE"
+    },
+    {
+      "confidence": 0.995331949363424,
+      "end_s": 24.495,
+      "start_s": 24.395,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.3103280553607004,
+      "end_s": 25.175,
+      "start_s": 24.575,
+      "word": "SPONGE"
+    },
+    {
+      "confidence": 0.9958169639199111,
+      "end_s": 25.5230625,
+      "start_s": 25.355,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.7098420138732174,
+      "end_s": 26.3634375,
+      "start_s": 25.72475,
+      "word": "LEAVEN"
+    },
+    {
+      "confidence": 0.9978157705704769,
+      "end_s": 27.4054375,
+      "start_s": 27.20375,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.9978459207411245,
+      "end_s": 27.5254375,
+      "start_s": 27.4654375,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.9662994619912629,
+      "end_s": 27.6854375,
+      "start_s": 27.5654375,
+      "word": "WAS"
+    },
+    {
+      "confidence": 0.9230813461096502,
+      "end_s": 28.2054375,
+      "start_s": 27.7654375,
+      "word": "FORMERLY"
+    },
+    {
+      "confidence": 0.8948614396987722,
+      "end_s": 28.7654375,
+      "start_s": 28.3054375,
+      "word": "TERMED"
+    },
+    {
+      "confidence": 0.9868558646665886,
+      "end_s": 29.2654375,
+      "start_s": 29.1054375,
+      "word": "WOULD"
+    },
+    {
+      "confidence": 0.9992924441702009,
+      "end_s": 29.5854375,
+      "start_s": 29.3454375,
+      "word": "STICK"
+    },
+    {
+      "confidence": 0.9973399695203755,
+      "end_s": 29.8254375,
+      "start_s": 29.7054375,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9974585613700747,
+      "end_s": 30.0854375,
+      "start_s": 29.9454375,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.955300636424053,
+      "end_s": 30.8254375,
+      "start_s": 30.6454375,
+      "word": "WHICH"
+    },
+    {
+      "confidence": 0.9975756407506848,
+      "end_s": 30.9654375,
+      "start_s": 30.8654375,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.9806582666826856,
+      "end_s": 31.1854375,
+      "start_s": 31.0254375,
+      "word": "OUGHT"
+    },
+    {
+      "confidence": 0.9134489958846194,
+      "end_s": 31.4854375,
+      "start_s": 31.2654375,
+      "word": "NOT"
+    },
+    {
+      "confidence": 0.9960164650630466,
+      "end_s": 31.6454375,
+      "start_s": 31.5654375,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9964160623890947,
+      "end_s": 31.8254375,
+      "start_s": 31.7054375,
+      "word": "DO"
+    },
+    {
+      "confidence": 0.991300789026122,
+      "end_s": 32.9654375,
+      "start_s": 32.6854375,
+      "word": "NEXT"
+    },
+    {
+      "confidence": 0.99827850960864,
+      "end_s": 33.2854375,
+      "start_s": 33.0054375,
+      "word": "TAKE"
+    },
+    {
+      "confidence": 0.9565276254986319,
+      "end_s": 33.5854375,
+      "start_s": 33.3854375,
+      "word": "EITHER"
+    },
+    {
+      "confidence": 0.9977566375811457,
+      "end_s": 33.6654375,
+      "start_s": 33.6454375,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9447406706979447,
+      "end_s": 34.0654375,
+      "start_s": 33.7454375,
+      "word": "LARGE"
+    },
+    {
+      "confidence": 0.9782065691234393,
+      "end_s": 35.0654375,
+      "start_s": 34.1454375,
+      "word": "TABLESPOONFUL"
+    },
+    {
+      "confidence": 0.9974892147076179,
+      "end_s": 35.1854375,
+      "start_s": 35.1054375,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.7281708264118135,
+      "end_s": 35.7054375,
+      "start_s": 35.2654375,
+      "word": "BREWER'S"
+    },
+    {
+      "confidence": 0.9762812836035216,
+      "end_s": 36.1454375,
+      "start_s": 35.7654375,
+      "word": "YEAST"
+    },
+    {
+      "confidence": 0.9526608750832908,
+      "end_s": 36.3854375,
+      "start_s": 36.2054375,
+      "word": "WHICH"
+    },
+    {
+      "confidence": 0.9484868344329941,
+      "end_s": 36.5254375,
+      "start_s": 36.4054375,
+      "word": "HAS"
+    },
+    {
+      "confidence": 0.9979294208765489,
+      "end_s": 36.7454375,
+      "start_s": 36.5854375,
+      "word": "BEEN"
+    },
+    {
+      "confidence": 0.9979636274332219,
+      "end_s": 37.2054375,
+      "start_s": 36.8254375,
+      "word": "RENDERED"
+    },
+    {
+      "confidence": 0.9995285982267352,
+      "end_s": 37.7854375,
+      "start_s": 37.3254375,
+      "word": "SOLID"
+    },
+    {
+      "confidence": 0.9993104413626821,
+      "end_s": 37.9854375,
+      "start_s": 37.8454375,
+      "word": "BY"
+    },
+    {
+      "confidence": 0.9993156178930341,
+      "end_s": 38.4454375,
+      "start_s": 38.0654375,
+      "word": "MIXING"
+    },
+    {
+      "confidence": 0.9983996315197493,
+      "end_s": 38.5854375,
+      "start_s": 38.5054375,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.9240080037853711,
+      "end_s": 38.8054375,
+      "start_s": 38.6454375,
+      "word": "WITH"
+    },
+    {
+      "confidence": 0.9988982138519394,
+      "end_s": 39.1254375,
+      "start_s": 38.8454375,
+      "word": "PLENTY"
+    },
+    {
+      "confidence": 0.997465614897398,
+      "end_s": 39.2654375,
+      "start_s": 39.2054375,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9995532452943062,
+      "end_s": 39.6254375,
+      "start_s": 39.3254375,
+      "word": "COLD"
+    },
+    {
+      "confidence": 0.9995785812525726,
+      "end_s": 40.0654375,
+      "start_s": 39.7054375,
+      "word": "WATER"
+    },
+    {
+      "confidence": 0.9981106271592753,
+      "end_s": 40.9254375,
+      "start_s": 40.8254375,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9432354305600201,
+      "end_s": 41.2454375,
+      "start_s": 40.9654375,
+      "word": "LETTING"
+    },
+    {
+      "confidence": 0.9984504149529698,
+      "end_s": 41.3654375,
+      "start_s": 41.2854375,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.9721459446754419,
+      "end_s": 41.9854375,
+      "start_s": 41.4254375,
+      "word": "AFTERWARDS"
+    },
+    {
+      "confidence": 0.995038665946888,
+      "end_s": 42.5454375,
+      "start_s": 42.1054375,
+      "word": "STAND"
+    },
+    {
+      "confidence": 0.014927238154854031,
+      "end_s": 42.6054375,
+      "start_s": 42.5654375,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9610407591521154,
+      "end_s": 43.0454375,
+      "start_s": 42.7454375,
+      "word": "SETTLE"
+    },
+    {
+      "confidence": 0.9973645219498,
+      "end_s": 43.2654375,
+      "start_s": 43.1054375,
+      "word": "FOR"
+    },
+    {
+      "confidence": 0.9932715111423914,
+      "end_s": 43.3454375,
+      "start_s": 43.3254375,
+      "word": "A"
+    },
+    {
+      "confidence": 0.8709828148313513,
+      "end_s": 43.6654375,
+      "start_s": 43.4454375,
+      "word": "DAY"
+    },
+    {
+      "confidence": 0.7607278228316534,
+      "end_s": 43.8454375,
+      "start_s": 43.7454375,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.8465337408710312,
+      "end_s": 44.3454375,
+      "start_s": 43.9054375,
+      "word": "NIGHT"
+    },
+    {
+      "confidence": 0.9990440323091107,
+      "end_s": 45.0454375,
+      "start_s": 44.9654375,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.9450577154982245,
+      "end_s": 45.4254375,
+      "start_s": 45.1054375,
+      "word": "NEARLY"
+    },
+    {
+      "confidence": 0.995277024619731,
+      "end_s": 45.5854375,
+      "start_s": 45.4854375,
+      "word": "AN"
+    },
+    {
+      "confidence": 0.9078625499672485,
+      "end_s": 45.9654375,
+      "start_s": 45.6454375,
+      "word": "OUNCE"
+    },
+    {
+      "confidence": 0.9970630901718768,
+      "end_s": 46.0854375,
+      "start_s": 46.0054375,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9960126034578517,
+      "end_s": 46.5054375,
+      "start_s": 46.1454375,
+      "word": "GERMAN"
+    },
+    {
+      "confidence": 0.9666786708975025,
+      "end_s": 47.1254375,
+      "start_s": 46.5854375,
+      "word": "YEAST"
+    },
+    {
+      "confidence": 0.9997680857263115,
+      "end_s": 47.7584375,
+      "start_s": 47.6654375,
+      "word": "PUT"
+    },
+    {
+      "confidence": 0.9986920237136054,
+      "end_s": 47.82825,
+      "start_s": 47.7700625,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.994168298679859,
+      "end_s": 47.979375,
+      "start_s": 47.863125,
+      "word": "INTO"
+    },
+    {
+      "confidence": 0.9976779622689971,
+      "end_s": 48.079375,
+      "start_s": 48.059375,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9972303355581521,
+      "end_s": 48.499375,
+      "start_s": 48.159375,
+      "word": "LARGE"
+    },
+    {
+      "confidence": 0.4853626786231626,
+      "end_s": 49.019375,
+      "start_s": 48.599375,
+      "word": "BASIN"
+    },
+    {
+      "confidence": 0.9955849753040613,
+      "end_s": 49.179375,
+      "start_s": 49.079375,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.99691885137408,
+      "end_s": 49.719375,
+      "start_s": 49.239375,
+      "word": "PROCEED"
+    },
+    {
+      "confidence": 0.9915724915633892,
+      "end_s": 49.859375,
+      "start_s": 49.779375,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9976432421018127,
+      "end_s": 50.119375,
+      "start_s": 49.919375,
+      "word": "MIX"
+    },
+    {
+      "confidence": 0.9984529236254789,
+      "end_s": 50.419375,
+      "start_s": 50.299375,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.9994605779569377,
+      "end_s": 50.779375,
+      "start_s": 50.679375,
+      "word": "SO"
+    },
+    {
+      "confidence": 0.9977857515815075,
+      "end_s": 50.999375,
+      "start_s": 50.879375,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.9975922429268764,
+      "end_s": 51.139375,
+      "start_s": 51.059375,
+      "word": "IT"
+    },
+    {
+      "confidence": 0.986050603227352,
+      "end_s": 51.499375,
+      "start_s": 51.239375,
+      "word": "SHALL"
+    },
+    {
+      "confidence": 0.9987081044185024,
+      "end_s": 51.639375,
+      "start_s": 51.559375,
+      "word": "BE"
+    },
+    {
+      "confidence": 0.41723148685661227,
+      "end_s": 51.859375,
+      "start_s": 51.759375,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.9081053183863174,
+      "end_s": 52.459375,
+      "start_s": 51.959375,
+      "word": "SMOOTH"
+    },
+    {
+      "confidence": 0.9740922458252432,
+      "end_s": 52.599375,
+      "start_s": 52.499375,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.9550316281393866,
+      "end_s": 53.079375,
+      "start_s": 52.699375,
+      "word": "CREAM"
+    },
+    {
+      "confidence": 0.9525922571821703,
+      "end_s": 53.899375,
+      "start_s": 53.739375,
+      "word": "WITH"
+    },
+    {
+      "confidence": 0.8928607242484312,
+      "end_s": 54.159375,
+      "start_s": 53.939375,
+      "word": "THREE"
+    },
+    {
+      "confidence": 0.45087848142440523,
+      "end_s": 54.579375,
+      "start_s": 54.199375,
+      "word": "QUARTERS"
+    },
+    {
+      "confidence": 0.876971009363514,
+      "end_s": 54.999375,
+      "start_s": 54.639375,
+      "word": "PINT"
+    },
+    {
+      "confidence": 0.996063235113868,
+      "end_s": 55.219375,
+      "start_s": 55.139375,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9482891378313343,
+      "end_s": 55.599375,
+      "start_s": 55.319375,
+      "word": "WARM"
+    },
+    {
+      "confidence": 0.9987017491799047,
+      "end_s": 55.939375,
+      "start_s": 55.679375,
+      "word": "MILK"
+    },
+    {
+      "confidence": 0.7807587782289805,
+      "end_s": 56.099375,
+      "start_s": 55.999375,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9535123749387117,
+      "end_s": 56.519375,
+      "start_s": 56.139375,
+      "word": "WATER"
+    },
+    {
+      "confidence": 0.9942881458413907,
+      "end_s": 57.499375,
+      "start_s": 57.299375,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.9974282040250465,
+      "end_s": 57.799375,
+      "start_s": 57.639375,
+      "word": "WITH"
+    },
+    {
+      "confidence": 0.99823037166981,
+      "end_s": 58.199375,
+      "start_s": 57.899375,
+      "word": "WATER"
+    },
+    {
+      "confidence": 0.9973849519548295,
+      "end_s": 58.719375,
+      "start_s": 58.359375,
+      "word": "ONLY"
+    },
+    {
+      "confidence": 0.923450725669377,
+      "end_s": 59.579375,
+      "start_s": 59.399375,
+      "word": "THOUGH"
+    },
+    {
+      "confidence": 0.9127739787901724,
+      "end_s": 59.879375,
+      "start_s": 59.659375,
+      "word": "EVEN"
+    },
+    {
+      "confidence": 0.9965068954745854,
+      "end_s": 59.939375,
+      "start_s": 59.919375,
+      "word": "A"
+    },
+    {
+      "confidence": 0.999721284677612,
+      "end_s": 60.299375,
+      "start_s": 60.039375,
+      "word": "VERY"
+    },
+    {
+      "confidence": 0.9544544388508506,
+      "end_s": 60.659375,
+      "start_s": 60.399375,
+      "word": "LITTLE"
+    },
+    {
+      "confidence": 0.9992615784822092,
+      "end_s": 61.019375,
+      "start_s": 60.699375,
+      "word": "MILK"
+    },
+    {
+      "confidence": 0.9928509565138408,
+      "end_s": 61.359375,
+      "start_s": 61.159375,
+      "word": "WILL"
+    },
+    {
+      "confidence": 0.9582434669921857,
+      "end_s": 61.679375,
+      "start_s": 61.419375,
+      "word": "MUCH"
+    },
+    {
+      "confidence": 0.9425425895517228,
+      "end_s": 62.339375,
+      "start_s": 61.739375,
+      "word": "IMPROVE"
+    },
+    {
+      "confidence": 0.9379376802896564,
+      "end_s": 65.139375,
+      "start_s": 65.039375,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9024123460992797,
+      "end_s": 65.539375,
+      "start_s": 65.179375,
+      "word": "BREAD"
+    }
+  ]
+}

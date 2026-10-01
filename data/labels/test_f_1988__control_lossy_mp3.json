@@ -1,0 +1,2402 @@
+{
+  "alignment_quality": null,
+  "control_transform": "mp3 lossy round trip",
+  "gender": "F",
+  "original_word_timings": [
+    {
+      "confidence": 0.9972174084156125,
+      "end_s": 0.08,
+      "start_s": 0.02,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9969622520377995,
+      "end_s": 0.28,
+      "start_s": 0.12,
+      "word": "TWO"
+    },
+    {
+      "confidence": 0.9889855450689612,
+      "end_s": 0.6,
+      "start_s": 0.36,
+      "word": "STRAY"
+    },
+    {
+      "confidence": 0.8474262346367196,
+      "end_s": 1.12,
+      "start_s": 0.7,
+      "word": "KITTENS"
+    },
+    {
+      "confidence": 0.9864989013879586,
+      "end_s": 1.56,
+      "start_s": 1.16,
+      "word": "GRADUALLY"
+    },
+    {
+      "confidence": 0.9861602238253202,
+      "end_s": 1.78,
+      "start_s": 1.6,
+      "word": "MAKE"
+    },
+    {
+      "confidence": 0.994439392731783,
+      "end_s": 2.2,
+      "start_s": 1.8,
+      "word": "THEMSELVES"
+    },
+    {
+      "confidence": 0.9976274814698868,
+      "end_s": 2.28,
+      "start_s": 2.22,
+      "word": "AT"
+    },
+    {
+      "confidence": 0.9979609055717065,
+      "end_s": 2.54,
+      "start_s": 2.32,
+      "word": "HOME"
+    },
+    {
+      "confidence": 0.9974503927116235,
+      "end_s": 3.38,
+      "start_s": 3.04,
+      "word": "SOMEHOW"
+    },
+    {
+      "confidence": 0.9891798621734499,
+      "end_s": 3.54,
+      "start_s": 3.46,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.998352330790409,
+      "end_s": 3.78,
+      "start_s": 3.6,
+      "word": "OTHER"
+    },
+    {
+      "confidence": 0.9846936135746749,
+      "end_s": 4.42,
+      "start_s": 4.2,
+      "word": "CAT"
+    },
+    {
+      "confidence": 0.9968657716131499,
+      "end_s": 4.58,
+      "start_s": 4.46,
+      "word": "HAS"
+    },
+    {
+      "confidence": 0.9700229119099747,
+      "end_s": 4.88,
+      "start_s": 4.64,
+      "word": "TAUGHT"
+    },
+    {
+      "confidence": 0.9981937431295684,
+      "end_s": 5.06,
+      "start_s": 4.92,
+      "word": "THEM"
+    },
+    {
+      "confidence": 0.9749271197270015,
+      "end_s": 5.24,
+      "start_s": 5.12,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.12536191154611084,
+      "end_s": 5.5,
+      "start_s": 5.28,
+      "word": "HE'S"
+    },
+    {
+      "confidence": 0.9991329725658804,
+      "end_s": 5.6,
+      "start_s": 5.52,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9349514570087625,
+      "end_s": 6.0,
+      "start_s": 5.66,
+      "word": "CHARGE"
+    },
+    {
+      "confidence": 0.9405791609256053,
+      "end_s": 6.2,
+      "start_s": 6.02,
+      "word": "HERE"
+    },
+    {
+      "confidence": 0.9988078226532997,
+      "end_s": 6.64,
+      "start_s": 6.52,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9981196943705873,
+      "end_s": 6.72,
+      "start_s": 6.68,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.983194938604408,
+      "end_s": 6.98,
+      "start_s": 6.8,
+      "word": "JUST"
+    },
+    {
+      "confidence": 0.9972546054180869,
+      "end_s": 7.42,
+      "start_s": 7.04,
+      "word": "CHASES"
+    },
+    {
+      "confidence": 0.9873579608237982,
+      "end_s": 7.6,
+      "start_s": 7.46,
+      "word": "THEM"
+    },
+    {
+      "confidence": 0.9902232977653592,
+      "end_s": 7.78,
+      "start_s": 7.68,
+      "word": "FOR"
+    },
+    {
+      "confidence": 0.941847271718754,
+      "end_s": 8.02,
+      "start_s": 7.84,
+      "word": "FUN"
+    },
+    {
+      "confidence": 0.9848922603946123,
+      "end_s": 8.24,
+      "start_s": 8.1,
+      "word": "NOW"
+    },
+    {
+      "confidence": 0.26148763724601704,
+      "end_s": 8.36,
+      "start_s": 8.28,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.994117709325728,
+      "end_s": 8.68,
+      "start_s": 8.38,
+      "word": "AGAIN"
+    },
+    {
+      "confidence": 0.9983861355336718,
+      "end_s": 8.94,
+      "start_s": 8.84,
+      "word": "WHEN"
+    },
+    {
+      "confidence": 0.4991602183225154,
+      "end_s": 9.1,
+      "start_s": 8.96,
+      "word": "HE'S"
+    },
+    {
+      "confidence": 0.993643573728321,
+      "end_s": 9.28,
+      "start_s": 9.14,
+      "word": "NOT"
+    },
+    {
+      "confidence": 0.8460276312527725,
+      "end_s": 9.52,
+      "start_s": 9.34,
+      "word": "BUSY"
+    },
+    {
+      "confidence": 0.9853854949159091,
+      "end_s": 10.02,
+      "start_s": 9.62,
+      "word": "SLEEPING"
+    },
+    {
+      "confidence": 0.9021503738373486,
+      "end_s": 10.54,
+      "start_s": 10.46,
+      "word": "SHE"
+    },
+    {
+      "confidence": 0.8828833971681987,
+      "end_s": 10.82,
+      "start_s": 10.58,
+      "word": "DOESN'T"
+    },
+    {
+      "confidence": 0.9994785548527597,
+      "end_s": 11.0,
+      "start_s": 10.86,
+      "word": "PICK"
+    },
+    {
+      "confidence": 0.9990333018804729,
+      "end_s": 11.16,
+      "start_s": 11.04,
+      "word": "THEM"
+    },
+    {
+      "confidence": 0.9997142780857511,
+      "end_s": 11.34,
+      "start_s": 11.22,
+      "word": "UP"
+    },
+    {
+      "confidence": 0.9994602675769299,
+      "end_s": 11.86,
+      "start_s": 11.76,
+      "word": "BUT"
+    },
+    {
+      "confidence": 0.9980616776419677,
+      "end_s": 12.06,
+      "start_s": 11.9,
+      "word": "JUST"
+    },
+    {
+      "confidence": 0.9858499682552532,
+      "end_s": 12.36,
+      "start_s": 12.1,
+      "word": "HAVING"
+    },
+    {
+      "confidence": 0.9817520507356124,
+      "end_s": 12.48,
+      "start_s": 12.36,
+      "word": "THEM"
+    },
+    {
+      "confidence": 0.9952911617009244,
+      "end_s": 12.56,
+      "start_s": 12.52,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9870286860468797,
+      "end_s": 12.66,
+      "start_s": 12.58,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9976969790019199,
+      "end_s": 12.94,
+      "start_s": 12.72,
+      "word": "ROOM"
+    },
+    {
+      "confidence": 0.540206272158628,
+      "end_s": 13.18,
+      "start_s": 13.02,
+      "word": "SURE"
+    },
+    {
+      "confidence": 0.8721155211081116,
+      "end_s": 13.42,
+      "start_s": 13.18,
+      "word": "DOESN'T"
+    },
+    {
+      "confidence": 0.9951456428807244,
+      "end_s": 13.6,
+      "start_s": 13.46,
+      "word": "GIVE"
+    },
+    {
+      "confidence": 0.9702391781999471,
+      "end_s": 13.68,
+      "start_s": 13.6,
+      "word": "HER"
+    },
+    {
+      "confidence": 0.008810773895605521,
+      "end_s": 14.04,
+      "start_s": 13.76,
+      "word": "ASTHMA"
+    },
+    {
+      "confidence": 0.8653538616723903,
+      "end_s": 14.54,
+      "start_s": 14.42,
+      "word": "WHEN"
+    },
+    {
+      "confidence": 0.9439739066973069,
+      "end_s": 14.64,
+      "start_s": 14.56,
+      "word": "ARE"
+    },
+    {
+      "confidence": 0.9470127579507748,
+      "end_s": 14.74,
+      "start_s": 14.64,
+      "word": "YOU"
+    },
+    {
+      "confidence": 0.961518989707405,
+      "end_s": 15.02,
+      "start_s": 14.78,
+      "word": "GETTING"
+    },
+    {
+      "confidence": 0.9992332190776297,
+      "end_s": 15.18,
+      "start_s": 15.06,
+      "word": "RID"
+    },
+    {
+      "confidence": 0.9941989188461211,
+      "end_s": 15.26,
+      "start_s": 15.2,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9988816979622431,
+      "end_s": 15.48,
+      "start_s": 15.28,
+      "word": "THESE"
+    },
+    {
+      "confidence": 0.997423411787174,
+      "end_s": 15.92,
+      "start_s": 15.52,
+      "word": "CATS"
+    },
+    {
+      "confidence": 0.23087453213786266,
+      "end_s": 16.22,
+      "start_s": 16.14,
+      "word": "I'M"
+    },
+    {
+      "confidence": 0.9970312893910878,
+      "end_s": 16.46,
+      "start_s": 16.28,
+      "word": "NOT"
+    },
+    {
+      "confidence": 0.9988886859969627,
+      "end_s": 16.96,
+      "start_s": 16.6,
+      "word": "FIXING"
+    },
+    {
+      "confidence": 0.984889890370149,
+      "end_s": 17.04,
+      "start_s": 17.0,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9902780019410593,
+      "end_s": 17.3,
+      "start_s": 17.08,
+      "word": "START"
+    },
+    {
+      "confidence": 0.9888303757326764,
+      "end_s": 17.4,
+      "start_s": 17.34,
+      "word": "AN"
+    },
+    {
+      "confidence": 0.5864464686536419,
+      "end_s": 17.78,
+      "start_s": 17.48,
+      "word": "ANNEX"
+    },
+    {
+      "confidence": 0.12698193065814026,
+      "end_s": 17.92,
+      "start_s": 17.86,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.23454312517546802,
+      "end_s": 18.22,
+      "start_s": 17.96,
+      "word": "KATE'S"
+    },
+    {
+      "confidence": 0.9823234032248346,
+      "end_s": 18.48,
+      "start_s": 18.26,
+      "word": "CAT"
+    },
+    {
+      "confidence": 0.8885541095462028,
+      "end_s": 18.8,
+      "start_s": 18.54,
+      "word": "HOME"
+    },
+    {
+      "confidence": 0.7647152345260354,
+      "end_s": 19.54,
+      "start_s": 19.36,
+      "word": "RIGHT"
+    },
+    {
+      "confidence": 0.8914581058759323,
+      "end_s": 19.78,
+      "start_s": 19.56,
+      "word": "AWAY"
+    },
+    {
+      "confidence": 0.9758500484706523,
+      "end_s": 19.98,
+      "start_s": 19.88,
+      "word": "WHEN"
+    },
+    {
+      "confidence": 0.996825789128058,
+      "end_s": 20.08,
+      "start_s": 20.06,
+      "word": "I"
+    },
+    {
+      "confidence": 0.9994013789870829,
+      "end_s": 20.32,
+      "start_s": 20.14,
+      "word": "BRING"
+    },
+    {
+      "confidence": 0.9899294150145551,
+      "end_s": 20.52,
+      "start_s": 20.36,
+      "word": "HOME"
+    },
+    {
+      "confidence": 0.7989600061551848,
+      "end_s": 20.62,
+      "start_s": 20.54,
+      "word": "MY"
+    },
+    {
+      "confidence": 0.9973022140310734,
+      "end_s": 20.76,
+      "start_s": 20.66,
+      "word": "NEW"
+    },
+    {
+      "confidence": 0.9351844989697475,
+      "end_s": 21.26,
+      "start_s": 20.8,
+      "word": "PROGRAM"
+    },
+    {
+      "confidence": 0.9973969352512365,
+      "end_s": 21.48,
+      "start_s": 21.42,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.9983661638778858,
+      "end_s": 21.82,
+      "start_s": 21.58,
+      "word": "SAYS"
+    },
+    {
+      "confidence": 0.9926809462030876,
+      "end_s": 22.2,
+      "start_s": 22.08,
+      "word": "HOW"
+    },
+    {
+      "confidence": 0.9990968979584919,
+      "end_s": 22.4,
+      "start_s": 22.24,
+      "word": "COME"
+    },
+    {
+      "confidence": 0.13333490815500693,
+      "end_s": 22.56,
+      "start_s": 22.44,
+      "word": "YOU'RE"
+    },
+    {
+      "confidence": 0.9989369790395949,
+      "end_s": 22.86,
+      "start_s": 22.56,
+      "word": "TAKING"
+    },
+    {
+      "confidence": 0.9958568646690759,
+      "end_s": 23.06,
+      "start_s": 22.94,
+      "word": "ONE"
+    },
+    {
+      "confidence": 0.9951437722319211,
+      "end_s": 23.26,
+      "start_s": 23.1,
+      "word": "LESS"
+    },
+    {
+      "confidence": 0.933200137184441,
+      "end_s": 23.6,
+      "start_s": 23.34,
+      "word": "COURSE"
+    },
+    {
+      "confidence": 0.866172072463481,
+      "end_s": 23.78,
+      "start_s": 23.64,
+      "word": "THIS"
+    },
+    {
+      "confidence": 0.13554103715054397,
+      "end_s": 24.04,
+      "start_s": 23.84,
+      "word": "HALF"
+    },
+    {
+      "confidence": 0.9961088311542663,
+      "end_s": 24.6,
+      "start_s": 24.58,
+      "word": "I"
+    },
+    {
+      "confidence": 0.998729997107222,
+      "end_s": 25.02,
+      "start_s": 24.64,
+      "word": "EXPLAIN"
+    },
+    {
+      "confidence": 0.9934279024659892,
+      "end_s": 25.14,
+      "start_s": 25.04,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.33248935554021414,
+      "end_s": 25.28,
+      "start_s": 25.2,
+      "word": "I'M"
+    },
+    {
+      "confidence": 0.9450731470898244,
+      "end_s": 25.6,
+      "start_s": 25.3,
+      "word": "TAKING"
+    },
+    {
+      "confidence": 0.9977050047980391,
+      "end_s": 25.98,
+      "start_s": 25.64,
+      "word": "MUSIC"
+    },
+    {
+      "confidence": 0.9387041393179328,
+      "end_s": 26.3,
+      "start_s": 26.16,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9990000804846332,
+      "end_s": 26.58,
+      "start_s": 26.36,
+      "word": "ALSO"
+    },
+    {
+      "confidence": 0.9838078021941374,
+      "end_s": 27.14,
+      "start_s": 26.66,
+      "word": "BIOLOGY"
+    },
+    {
+      "confidence": 0.7043327429421666,
+      "end_s": 27.6,
+      "start_s": 27.3,
+      "word": "ALGEBRA"
+    },
+    {
+      "confidence": 0.9905581719421491,
+      "end_s": 27.98,
+      "start_s": 27.68,
+      "word": "ENGLISH"
+    },
+    {
+      "confidence": 0.9464089714848561,
+      "end_s": 28.1,
+      "start_s": 28.0,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9341424792508505,
+      "end_s": 28.52,
+      "start_s": 28.14,
+      "word": "FRENCH"
+    },
+    {
+      "confidence": 0.9772723794852575,
+      "end_s": 29.34,
+      "start_s": 28.98,
+      "word": "MUSIC"
+    },
+    {
+      "confidence": 0.8164129127513491,
+      "end_s": 29.92,
+      "start_s": 29.86,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.6163146984780259,
+      "end_s": 30.34,
+      "start_s": 30.0,
+      "word": "SNORTS"
+    },
+    {
+      "confidence": 0.11326116360002181,
+      "end_s": 31.02,
+      "start_s": 30.8,
+      "word": "POP"
+    },
+    {
+      "confidence": 0.39131917419826645,
+      "end_s": 31.2,
+      "start_s": 31.1,
+      "word": "IT'S"
+    },
+    {
+      "confidence": 0.9396835882880555,
+      "end_s": 31.24,
+      "start_s": 31.22,
+      "word": "A"
+    },
+    {
+      "confidence": 0.2215154685047268,
+      "end_s": 31.6,
+      "start_s": 31.3,
+      "word": "COURSE"
+    },
+    {
+      "confidence": 0.9942556244535424,
+      "end_s": 32.14,
+      "start_s": 32.08,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.9598005041269148,
+      "end_s": 32.48,
+      "start_s": 32.2,
+      "word": "DOES"
+    },
+    {
+      "confidence": 0.9893272164678527,
+      "end_s": 33.06,
+      "start_s": 32.96,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.907559055341024,
+      "end_s": 33.24,
+      "start_s": 33.12,
+      "word": "FOR"
+    },
+    {
+      "confidence": 0.9164698923038496,
+      "end_s": 33.66,
+      "start_s": 33.38,
+      "word": "ONCE"
+    },
+    {
+      "confidence": 0.9979211481988249,
+      "end_s": 33.92,
+      "start_s": 33.9,
+      "word": "I"
+    },
+    {
+      "confidence": 0.8662958214443156,
+      "end_s": 34.14,
+      "start_s": 34.0,
+      "word": "WIN"
+    },
+    {
+      "confidence": 0.9953776674644774,
+      "end_s": 34.2,
+      "start_s": 34.18,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9706193295499461,
+      "end_s": 34.64,
+      "start_s": 34.28,
+      "word": "ROUND"
+    },
+    {
+      "confidence": 0.9975905202975822,
+      "end_s": 35.4,
+      "start_s": 35.38,
+      "word": "I"
+    },
+    {
+      "confidence": 0.9935546320390692,
+      "end_s": 35.66,
+      "start_s": 35.46,
+      "word": "KEEP"
+    },
+    {
+      "confidence": 0.9978642266421965,
+      "end_s": 36.0,
+      "start_s": 35.7,
+      "word": "MUSIC"
+    },
+    {
+      "confidence": 0.9958084891683465,
+      "end_s": 36.14,
+      "start_s": 36.06,
+      "word": "FOR"
+    },
+    {
+      "confidence": 0.9800926617516337,
+      "end_s": 36.3,
+      "start_s": 36.16,
+      "word": "THIS"
+    },
+    {
+      "confidence": 0.9457071311536192,
+      "end_s": 36.8,
+      "start_s": 36.34,
+      "word": "SEMESTER"
+    },
+    {
+      "confidence": 0.017799403845153838,
+      "end_s": 37.5,
+      "start_s": 37.4,
+      "word": "I'LL"
+    },
+    {
+      "confidence": 0.17997910160352845,
+      "end_s": 37.54,
+      "start_s": 37.5,
+      "word": "BE"
+    },
+    {
+      "confidence": 0.6975480732353561,
+      "end_s": 37.86,
+      "start_s": 37.64,
+      "word": "LUCKY"
+    },
+    {
+      "confidence": 0.9974901875287588,
+      "end_s": 38.0,
+      "start_s": 37.92,
+      "word": "IF"
+    },
+    {
+      "confidence": 0.9977361073122679,
+      "end_s": 38.12,
+      "start_s": 38.1,
+      "word": "I"
+    },
+    {
+      "confidence": 0.9767110937698423,
+      "end_s": 38.32,
+      "start_s": 38.16,
+      "word": "HAVE"
+    },
+    {
+      "confidence": 0.9962413024272383,
+      "end_s": 38.56,
+      "start_s": 38.36,
+      "word": "TIME"
+    },
+    {
+      "confidence": 0.9748767144853481,
+      "end_s": 38.64,
+      "start_s": 38.58,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.056513214721074394,
+      "end_s": 39.12,
+      "start_s": 38.7,
+      "word": "BREATHE"
+    },
+    {
+      "confidence": 0.9815538460205052,
+      "end_s": 39.96,
+      "start_s": 39.58,
+      "word": "SOMETIMES"
+    },
+    {
+      "confidence": 0.9513027939853783,
+      "end_s": 40.28,
+      "start_s": 39.98,
+      "word": "SCHOOLS"
+    },
+    {
+      "confidence": 0.9991226281122275,
+      "end_s": 40.44,
+      "start_s": 40.36,
+      "word": "DO"
+    },
+    {
+      "confidence": 0.9944246790002567,
+      "end_s": 40.66,
+      "start_s": 40.54,
+      "word": "LET"
+    },
+    {
+      "confidence": 0.9980710577435753,
+      "end_s": 40.98,
+      "start_s": 40.72,
+      "word": "KIDS"
+    },
+    {
+      "confidence": 0.9473204003483454,
+      "end_s": 41.28,
+      "start_s": 41.06,
+      "word": "TAKE"
+    },
+    {
+      "confidence": 0.9915410699401788,
+      "end_s": 41.4,
+      "start_s": 41.38,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9195365628587022,
+      "end_s": 41.7,
+      "start_s": 41.46,
+      "word": "LOT"
+    },
+    {
+      "confidence": 0.9946141659926762,
+      "end_s": 41.8,
+      "start_s": 41.74,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9991500743946873,
+      "end_s": 42.12,
+      "start_s": 41.84,
+      "word": "SOFT"
+    },
+    {
+      "confidence": 0.9714162593833019,
+      "end_s": 42.62,
+      "start_s": 42.18,
+      "word": "COURSES"
+    },
+    {
+      "confidence": 0.9627611836685722,
+      "end_s": 43.16,
+      "start_s": 43.08,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9915042355742943,
+      "end_s": 43.28,
+      "start_s": 43.18,
+      "word": "THEN"
+    },
+    {
+      "confidence": 0.06356892772218965,
+      "end_s": 43.44,
+      "start_s": 43.3,
+      "word": "THEY'RE"
+    },
+    {
+      "confidence": 0.9965790601984708,
+      "end_s": 43.58,
+      "start_s": 43.46,
+      "word": "OUT"
+    },
+    {
+      "confidence": 0.9936750503341927,
+      "end_s": 43.68,
+      "start_s": 43.62,
+      "word": "ON"
+    },
+    {
+      "confidence": 0.9886872576172918,
+      "end_s": 43.74,
+      "start_s": 43.72,
+      "word": "A"
+    },
+    {
+      "confidence": 0.6193100464773595,
+      "end_s": 44.02,
+      "start_s": 43.82,
+      "word": "LIMB"
+    },
+    {
+      "confidence": 0.9979508257863732,
+      "end_s": 44.34,
+      "start_s": 44.08,
+      "word": "LATER"
+    },
+    {
+      "confidence": 0.142515426261792,
+      "end_s": 45.42,
+      "start_s": 45.26,
+      "word": "HUH"
+    },
+    {
+      "confidence": 0.9929937963049247,
+      "end_s": 46.02,
+      "start_s": 45.94,
+      "word": "SO"
+    },
+    {
+      "confidence": 0.8761724993299431,
+      "end_s": 46.5,
+      "start_s": 46.44,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.4640397551459837,
+      "end_s": 46.98,
+      "start_s": 46.56,
+      "word": "CARES"
+    },
+    {
+      "confidence": 0.1329657824088008,
+      "end_s": 48.02,
+      "start_s": 47.86,
+      "word": "HUH"
+    },
+    {
+      "confidence": 0.9447301336087703,
+      "end_s": 49.04,
+      "start_s": 48.58,
+      "word": "BESIDES"
+    },
+    {
+      "confidence": 0.9876581082877752,
+      "end_s": 49.56,
+      "start_s": 49.38,
+      "word": "SAYS"
+    },
+    {
+      "confidence": 0.9308975511686802,
+      "end_s": 49.88,
+      "start_s": 49.64,
+      "word": "TOM"
+    },
+    {
+      "confidence": 0.6166159337526058,
+      "end_s": 50.72,
+      "start_s": 50.56,
+      "word": "HALF"
+    },
+    {
+      "confidence": 0.9912099954665415,
+      "end_s": 50.84,
+      "start_s": 50.76,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9733671985831139,
+      "end_s": 51.14,
+      "start_s": 50.88,
+      "word": "REASON"
+    },
+    {
+      "confidence": 0.9934022452735934,
+      "end_s": 51.28,
+      "start_s": 51.2,
+      "word": "YOU"
+    },
+    {
+      "confidence": 0.9921804729641905,
+      "end_s": 51.38,
+      "start_s": 51.32,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9918408872335779,
+      "end_s": 51.5,
+      "start_s": 51.4,
+      "word": "YOUR"
+    },
+    {
+      "confidence": 0.9341910641415068,
+      "end_s": 51.82,
+      "start_s": 51.54,
+      "word": "FATHER"
+    },
+    {
+      "confidence": 0.992408646461893,
+      "end_s": 52.0,
+      "start_s": 51.9,
+      "word": "ARE"
+    },
+    {
+      "confidence": 0.9987581486200957,
+      "end_s": 52.3,
+      "start_s": 52.06,
+      "word": "ALWAYS"
+    },
+    {
+      "confidence": 0.9138953662596827,
+      "end_s": 52.72,
+      "start_s": 52.36,
+      "word": "BICKERING"
+    },
+    {
+      "confidence": 0.7096962303173607,
+      "end_s": 52.82,
+      "start_s": 52.74,
+      "word": "IS"
+    },
+    {
+      "confidence": 0.9889083535683393,
+      "end_s": 52.94,
+      "start_s": 52.84,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.33060448750331256,
+      "end_s": 53.1,
+      "start_s": 52.98,
+      "word": "YOU'RE"
+    },
+    {
+      "confidence": 0.9987027924625856,
+      "end_s": 53.22,
+      "start_s": 53.14,
+      "word": "SO"
+    },
+    {
+      "confidence": 0.9857836135899545,
+      "end_s": 53.46,
+      "start_s": 53.28,
+      "word": "MUCH"
+    },
+    {
+      "confidence": 0.9985480526158844,
+      "end_s": 53.9,
+      "start_s": 53.48,
+      "word": "ALIKE"
+    },
+    {
+      "confidence": 0.997065741756621,
+      "end_s": 54.54,
+      "start_s": 54.46,
+      "word": "ME"
+    },
+    {
+      "confidence": 0.995244269925318,
+      "end_s": 55.4,
+      "start_s": 55.16,
+      "word": "LIKE"
+    },
+    {
+      "confidence": 0.9982501335936519,
+      "end_s": 55.72,
+      "start_s": 55.44,
+      "word": "HIM"
+    },
+    {
+      "confidence": 0.8451700552192762,
+      "end_s": 57.46,
+      "start_s": 57.16,
+      "word": "SURE"
+    },
+    {
+      "confidence": 0.9897670167103662,
+      "end_s": 58.14,
+      "start_s": 58.06,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.991190817804289,
+      "end_s": 58.38,
+      "start_s": 58.2,
+      "word": "LONG"
+    },
+    {
+      "confidence": 0.9375407559149208,
+      "end_s": 58.48,
+      "start_s": 58.4,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.26242907089373796,
+      "end_s": 58.64,
+      "start_s": 58.48,
+      "word": "THERE'S"
+    },
+    {
+      "confidence": 0.9821537977998392,
+      "end_s": 58.68,
+      "start_s": 58.66,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9582997268599387,
+      "end_s": 58.94,
+      "start_s": 58.74,
+      "word": "BONE"
+    },
+    {
+      "confidence": 0.9950421313433636,
+      "end_s": 59.02,
+      "start_s": 58.96,
+      "word": "ON"
+    },
+    {
+      "confidence": 0.9738283750661566,
+      "end_s": 59.12,
+      "start_s": 59.04,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9734033934810683,
+      "end_s": 59.42,
+      "start_s": 59.14,
+      "word": "FLOOR"
+    },
+    {
+      "confidence": 0.9667077345819425,
+      "end_s": 59.76,
+      "start_s": 59.68,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9841285881050642,
+      "end_s": 59.96,
+      "start_s": 59.82,
+      "word": "TWO"
+    },
+    {
+      "confidence": 0.9529804354057685,
+      "end_s": 60.08,
+      "start_s": 60.0,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.993824445723465,
+      "end_s": 60.26,
+      "start_s": 60.14,
+      "word": "YOU"
+    },
+    {
+      "confidence": 0.9620079878160659,
+      "end_s": 60.62,
+      "start_s": 60.4,
+      "word": "WORRY"
+    },
+    {
+      "confidence": 0.9744246210974459,
+      "end_s": 60.76,
+      "start_s": 60.7,
+      "word": "IT"
+    }
+  ],
+  "pair": null,
+  "passage_id": "test_f_1988",
+  "recording": {
+    "audio_path": "data/processed/audio/test_f_1988__control_lossy_mp3.flac",
+    "duration_s": 60.79,
+    "id": "test_f_1988__control_lossy_mp3",
+    "kind": "control",
+    "license": "CC BY 4.0",
+    "parent_recording_id": "test_f_1988__ideal",
+    "sample_rate": 16000,
+    "severity_level": 0,
+    "source": "LibriSpeech ASR corpus, dev-clean",
+    "speaker_gender": "F",
+    "speaker_id": "1988",
+    "transcript_id": "test_f_1988"
+  },
+  "split": "test",
+  "word_timings": [
+    {
+      "confidence": 0.9972174084156125,
+      "end_s": 0.08,
+      "start_s": 0.02,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9969622520377995,
+      "end_s": 0.28,
+      "start_s": 0.12,
+      "word": "TWO"
+    },
+    {
+      "confidence": 0.9889855450689612,
+      "end_s": 0.6,
+      "start_s": 0.36,
+      "word": "STRAY"
+    },
+    {
+      "confidence": 0.8474262346367196,
+      "end_s": 1.12,
+      "start_s": 0.7,
+      "word": "KITTENS"
+    },
+    {
+      "confidence": 0.9864989013879586,
+      "end_s": 1.56,
+      "start_s": 1.16,
+      "word": "GRADUALLY"
+    },
+    {
+      "confidence": 0.9861602238253202,
+      "end_s": 1.78,
+      "start_s": 1.6,
+      "word": "MAKE"
+    },
+    {
+      "confidence": 0.994439392731783,
+      "end_s": 2.2,
+      "start_s": 1.8,
+      "word": "THEMSELVES"
+    },
+    {
+      "confidence": 0.9976274814698868,
+      "end_s": 2.28,
+      "start_s": 2.22,
+      "word": "AT"
+    },
+    {
+      "confidence": 0.9979609055717065,
+      "end_s": 2.54,
+      "start_s": 2.32,
+      "word": "HOME"
+    },
+    {
+      "confidence": 0.9974503927116235,
+      "end_s": 3.38,
+      "start_s": 3.04,
+      "word": "SOMEHOW"
+    },
+    {
+      "confidence": 0.9891798621734499,
+      "end_s": 3.54,
+      "start_s": 3.46,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.998352330790409,
+      "end_s": 3.78,
+      "start_s": 3.6,
+      "word": "OTHER"
+    },
+    {
+      "confidence": 0.9846936135746749,
+      "end_s": 4.42,
+      "start_s": 4.2,
+      "word": "CAT"
+    },
+    {
+      "confidence": 0.9968657716131499,
+      "end_s": 4.58,
+      "start_s": 4.46,
+      "word": "HAS"
+    },
+    {
+      "confidence": 0.9700229119099747,
+      "end_s": 4.88,
+      "start_s": 4.64,
+      "word": "TAUGHT"
+    },
+    {
+      "confidence": 0.9981937431295684,
+      "end_s": 5.06,
+      "start_s": 4.92,
+      "word": "THEM"
+    },
+    {
+      "confidence": 0.9749271197270015,
+      "end_s": 5.24,
+      "start_s": 5.12,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.12536191154611084,
+      "end_s": 5.5,
+      "start_s": 5.28,
+      "word": "HE'S"
+    },
+    {
+      "confidence": 0.9991329725658804,
+      "end_s": 5.6,
+      "start_s": 5.52,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9349514570087625,
+      "end_s": 6.0,
+      "start_s": 5.66,
+      "word": "CHARGE"
+    },
+    {
+      "confidence": 0.9405791609256053,
+      "end_s": 6.2,
+      "start_s": 6.02,
+      "word": "HERE"
+    },
+    {
+      "confidence": 0.9988078226532997,
+      "end_s": 6.64,
+      "start_s": 6.52,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9981196943705873,
+      "end_s": 6.72,
+      "start_s": 6.68,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.983194938604408,
+      "end_s": 6.98,
+      "start_s": 6.8,
+      "word": "JUST"
+    },
+    {
+      "confidence": 0.9972546054180869,
+      "end_s": 7.42,
+      "start_s": 7.04,
+      "word": "CHASES"
+    },
+    {
+      "confidence": 0.9873579608237982,
+      "end_s": 7.6,
+      "start_s": 7.46,
+      "word": "THEM"
+    },
+    {
+      "confidence": 0.9902232977653592,
+      "end_s": 7.78,
+      "start_s": 7.68,
+      "word": "FOR"
+    },
+    {
+      "confidence": 0.941847271718754,
+      "end_s": 8.02,
+      "start_s": 7.84,
+      "word": "FUN"
+    },
+    {
+      "confidence": 0.9848922603946123,
+      "end_s": 8.24,
+      "start_s": 8.1,
+      "word": "NOW"
+    },
+    {
+      "confidence": 0.26148763724601704,
+      "end_s": 8.36,
+      "start_s": 8.28,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.994117709325728,
+      "end_s": 8.68,
+      "start_s": 8.38,
+      "word": "AGAIN"
+    },
+    {
+      "confidence": 0.9983861355336718,
+      "end_s": 8.94,
+      "start_s": 8.84,
+      "word": "WHEN"
+    },
+    {
+      "confidence": 0.4991602183225154,
+      "end_s": 9.1,
+      "start_s": 8.96,
+      "word": "HE'S"
+    },
+    {
+      "confidence": 0.993643573728321,
+      "end_s": 9.28,
+      "start_s": 9.14,
+      "word": "NOT"
+    },
+    {
+      "confidence": 0.8460276312527725,
+      "end_s": 9.52,
+      "start_s": 9.34,
+      "word": "BUSY"
+    },
+    {
+      "confidence": 0.9853854949159091,
+      "end_s": 10.02,
+      "start_s": 9.62,
+      "word": "SLEEPING"
+    },
+    {
+      "confidence": 0.9021503738373486,
+      "end_s": 10.54,
+      "start_s": 10.46,
+      "word": "SHE"
+    },
+    {
+      "confidence": 0.8828833971681987,
+      "end_s": 10.82,
+      "start_s": 10.58,
+      "word": "DOESN'T"
+    },
+    {
+      "confidence": 0.9994785548527597,
+      "end_s": 11.0,
+      "start_s": 10.86,
+      "word": "PICK"
+    },
+    {
+      "confidence": 0.9990333018804729,
+      "end_s": 11.16,
+      "start_s": 11.04,
+      "word": "THEM"
+    },
+    {
+      "confidence": 0.9997142780857511,
+      "end_s": 11.34,
+      "start_s": 11.22,
+      "word": "UP"
+    },
+    {
+      "confidence": 0.9994602675769299,
+      "end_s": 11.86,
+      "start_s": 11.76,
+      "word": "BUT"
+    },
+    {
+      "confidence": 0.9980616776419677,
+      "end_s": 12.06,
+      "start_s": 11.9,
+      "word": "JUST"
+    },
+    {
+      "confidence": 0.9858499682552532,
+      "end_s": 12.36,
+      "start_s": 12.1,
+      "word": "HAVING"
+    },
+    {
+      "confidence": 0.9817520507356124,
+      "end_s": 12.48,
+      "start_s": 12.36,
+      "word": "THEM"
+    },
+    {
+      "confidence": 0.9952911617009244,
+      "end_s": 12.56,
+      "start_s": 12.52,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9870286860468797,
+      "end_s": 12.66,
+      "start_s": 12.58,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9976969790019199,
+      "end_s": 12.94,
+      "start_s": 12.72,
+      "word": "ROOM"
+    },
+    {
+      "confidence": 0.540206272158628,
+      "end_s": 13.18,
+      "start_s": 13.02,
+      "word": "SURE"
+    },
+    {
+      "confidence": 0.8721155211081116,
+      "end_s": 13.42,
+      "start_s": 13.18,
+      "word": "DOESN'T"
+    },
+    {
+      "confidence": 0.9951456428807244,
+      "end_s": 13.6,
+      "start_s": 13.46,
+      "word": "GIVE"
+    },
+    {
+      "confidence": 0.9702391781999471,
+      "end_s": 13.68,
+      "start_s": 13.6,
+      "word": "HER"
+    },
+    {
+      "confidence": 0.008810773895605521,
+      "end_s": 14.04,
+      "start_s": 13.76,
+      "word": "ASTHMA"
+    },
+    {
+      "confidence": 0.8653538616723903,
+      "end_s": 14.54,
+      "start_s": 14.42,
+      "word": "WHEN"
+    },
+    {
+      "confidence": 0.9439739066973069,
+      "end_s": 14.64,
+      "start_s": 14.56,
+      "word": "ARE"
+    },
+    {
+      "confidence": 0.9470127579507748,
+      "end_s": 14.74,
+      "start_s": 14.64,
+      "word": "YOU"
+    },
+    {
+      "confidence": 0.961518989707405,
+      "end_s": 15.02,
+      "start_s": 14.78,
+      "word": "GETTING"
+    },
+    {
+      "confidence": 0.9992332190776297,
+      "end_s": 15.18,
+      "start_s": 15.06,
+      "word": "RID"
+    },
+    {
+      "confidence": 0.9941989188461211,
+      "end_s": 15.26,
+      "start_s": 15.2,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9988816979622431,
+      "end_s": 15.48,
+      "start_s": 15.28,
+      "word": "THESE"
+    },
+    {
+      "confidence": 0.997423411787174,
+      "end_s": 15.92,
+      "start_s": 15.52,
+      "word": "CATS"
+    },
+    {
+      "confidence": 0.23087453213786266,
+      "end_s": 16.22,
+      "start_s": 16.14,
+      "word": "I'M"
+    },
+    {
+      "confidence": 0.9970312893910878,
+      "end_s": 16.46,
+      "start_s": 16.28,
+      "word": "NOT"
+    },
+    {
+      "confidence": 0.9988886859969627,
+      "end_s": 16.96,
+      "start_s": 16.6,
+      "word": "FIXING"
+    },
+    {
+      "confidence": 0.984889890370149,
+      "end_s": 17.04,
+      "start_s": 17.0,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9902780019410593,
+      "end_s": 17.3,
+      "start_s": 17.08,
+      "word": "START"
+    },
+    {
+      "confidence": 0.9888303757326764,
+      "end_s": 17.4,
+      "start_s": 17.34,
+      "word": "AN"
+    },
+    {
+      "confidence": 0.5864464686536419,
+      "end_s": 17.78,
+      "start_s": 17.48,
+      "word": "ANNEX"
+    },
+    {
+      "confidence": 0.12698193065814026,
+      "end_s": 17.92,
+      "start_s": 17.86,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.23454312517546802,
+      "end_s": 18.22,
+      "start_s": 17.96,
+      "word": "KATE'S"
+    },
+    {
+      "confidence": 0.9823234032248346,
+      "end_s": 18.48,
+      "start_s": 18.26,
+      "word": "CAT"
+    },
+    {
+      "confidence": 0.8885541095462028,
+      "end_s": 18.8,
+      "start_s": 18.54,
+      "word": "HOME"
+    },
+    {
+      "confidence": 0.7647152345260354,
+      "end_s": 19.54,
+      "start_s": 19.36,
+      "word": "RIGHT"
+    },
+    {
+      "confidence": 0.8914581058759323,
+      "end_s": 19.78,
+      "start_s": 19.56,
+      "word": "AWAY"
+    },
+    {
+      "confidence": 0.9758500484706523,
+      "end_s": 19.98,
+      "start_s": 19.88,
+      "word": "WHEN"
+    },
+    {
+      "confidence": 0.996825789128058,
+      "end_s": 20.08,
+      "start_s": 20.06,
+      "word": "I"
+    },
+    {
+      "confidence": 0.9994013789870829,
+      "end_s": 20.32,
+      "start_s": 20.14,
+      "word": "BRING"
+    },
+    {
+      "confidence": 0.9899294150145551,
+      "end_s": 20.52,
+      "start_s": 20.36,
+      "word": "HOME"
+    },
+    {
+      "confidence": 0.7989600061551848,
+      "end_s": 20.62,
+      "start_s": 20.54,
+      "word": "MY"
+    },
+    {
+      "confidence": 0.9973022140310734,
+      "end_s": 20.76,
+      "start_s": 20.66,
+      "word": "NEW"
+    },
+    {
+      "confidence": 0.9351844989697475,
+      "end_s": 21.26,
+      "start_s": 20.8,
+      "word": "PROGRAM"
+    },
+    {
+      "confidence": 0.9973969352512365,
+      "end_s": 21.48,
+      "start_s": 21.42,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.9983661638778858,
+      "end_s": 21.82,
+      "start_s": 21.58,
+      "word": "SAYS"
+    },
+    {
+      "confidence": 0.9926809462030876,
+      "end_s": 22.2,
+      "start_s": 22.08,
+      "word": "HOW"
+    },
+    {
+      "confidence": 0.9990968979584919,
+      "end_s": 22.4,
+      "start_s": 22.24,
+      "word": "COME"
+    },
+    {
+      "confidence": 0.13333490815500693,
+      "end_s": 22.56,
+      "start_s": 22.44,
+      "word": "YOU'RE"
+    },
+    {
+      "confidence": 0.9989369790395949,
+      "end_s": 22.86,
+      "start_s": 22.56,
+      "word": "TAKING"
+    },
+    {
+      "confidence": 0.9958568646690759,
+      "end_s": 23.06,
+      "start_s": 22.94,
+      "word": "ONE"
+    },
+    {
+      "confidence": 0.9951437722319211,
+      "end_s": 23.26,
+      "start_s": 23.1,
+      "word": "LESS"
+    },
+    {
+      "confidence": 0.933200137184441,
+      "end_s": 23.6,
+      "start_s": 23.34,
+      "word": "COURSE"
+    },
+    {
+      "confidence": 0.866172072463481,
+      "end_s": 23.78,
+      "start_s": 23.64,
+      "word": "THIS"
+    },
+    {
+      "confidence": 0.13554103715054397,
+      "end_s": 24.04,
+      "start_s": 23.84,
+      "word": "HALF"
+    },
+    {
+      "confidence": 0.9961088311542663,
+      "end_s": 24.6,
+      "start_s": 24.58,
+      "word": "I"
+    },
+    {
+      "confidence": 0.998729997107222,
+      "end_s": 25.02,
+      "start_s": 24.64,
+      "word": "EXPLAIN"
+    },
+    {
+      "confidence": 0.9934279024659892,
+      "end_s": 25.14,
+      "start_s": 25.04,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.33248935554021414,
+      "end_s": 25.28,
+      "start_s": 25.2,
+      "word": "I'M"
+    },
+    {
+      "confidence": 0.9450731470898244,
+      "end_s": 25.6,
+      "start_s": 25.3,
+      "word": "TAKING"
+    },
+    {
+      "confidence": 0.9977050047980391,
+      "end_s": 25.98,
+      "start_s": 25.64,
+      "word": "MUSIC"
+    },
+    {
+      "confidence": 0.9387041393179328,
+      "end_s": 26.3,
+      "start_s": 26.16,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9990000804846332,
+      "end_s": 26.58,
+      "start_s": 26.36,
+      "word": "ALSO"
+    },
+    {
+      "confidence": 0.9838078021941374,
+      "end_s": 27.14,
+      "start_s": 26.66,
+      "word": "BIOLOGY"
+    },
+    {
+      "confidence": 0.7043327429421666,
+      "end_s": 27.6,
+      "start_s": 27.3,
+      "word": "ALGEBRA"
+    },
+    {
+      "confidence": 0.9905581719421491,
+      "end_s": 27.98,
+      "start_s": 27.68,
+      "word": "ENGLISH"
+    },
+    {
+      "confidence": 0.9464089714848561,
+      "end_s": 28.1,
+      "start_s": 28.0,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9341424792508505,
+      "end_s": 28.52,
+      "start_s": 28.14,
+      "word": "FRENCH"
+    },
+    {
+      "confidence": 0.9772723794852575,
+      "end_s": 29.34,
+      "start_s": 28.98,
+      "word": "MUSIC"
+    },
+    {
+      "confidence": 0.8164129127513491,
+      "end_s": 29.92,
+      "start_s": 29.86,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.6163146984780259,
+      "end_s": 30.34,
+      "start_s": 30.0,
+      "word": "SNORTS"
+    },
+    {
+      "confidence": 0.11326116360002181,
+      "end_s": 31.02,
+      "start_s": 30.8,
+      "word": "POP"
+    },
+    {
+      "confidence": 0.39131917419826645,
+      "end_s": 31.2,
+      "start_s": 31.1,
+      "word": "IT'S"
+    },
+    {
+      "confidence": 0.9396835882880555,
+      "end_s": 31.24,
+      "start_s": 31.22,
+      "word": "A"
+    },
+    {
+      "confidence": 0.2215154685047268,
+      "end_s": 31.6,
+      "start_s": 31.3,
+      "word": "COURSE"
+    },
+    {
+      "confidence": 0.9942556244535424,
+      "end_s": 32.14,
+      "start_s": 32.08,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.9598005041269148,
+      "end_s": 32.48,
+      "start_s": 32.2,
+      "word": "DOES"
+    },
+    {
+      "confidence": 0.9893272164678527,
+      "end_s": 33.06,
+      "start_s": 32.96,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.907559055341024,
+      "end_s": 33.24,
+      "start_s": 33.12,
+      "word": "FOR"
+    },
+    {
+      "confidence": 0.9164698923038496,
+      "end_s": 33.66,
+      "start_s": 33.38,
+      "word": "ONCE"
+    },
+    {
+      "confidence": 0.9979211481988249,
+      "end_s": 33.92,
+      "start_s": 33.9,
+      "word": "I"
+    },
+    {
+      "confidence": 0.8662958214443156,
+      "end_s": 34.14,
+      "start_s": 34.0,
+      "word": "WIN"
+    },
+    {
+      "confidence": 0.9953776674644774,
+      "end_s": 34.2,
+      "start_s": 34.18,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9706193295499461,
+      "end_s": 34.64,
+      "start_s": 34.28,
+      "word": "ROUND"
+    },
+    {
+      "confidence": 0.9975905202975822,
+      "end_s": 35.4,
+      "start_s": 35.38,
+      "word": "I"
+    },
+    {
+      "confidence": 0.9935546320390692,
+      "end_s": 35.66,
+      "start_s": 35.46,
+      "word": "KEEP"
+    },
+    {
+      "confidence": 0.9978642266421965,
+      "end_s": 36.0,
+      "start_s": 35.7,
+      "word": "MUSIC"
+    },
+    {
+      "confidence": 0.9958084891683465,
+      "end_s": 36.14,
+      "start_s": 36.06,
+      "word": "FOR"
+    },
+    {
+      "confidence": 0.9800926617516337,
+      "end_s": 36.3,
+      "start_s": 36.16,
+      "word": "THIS"
+    },
+    {
+      "confidence": 0.9457071311536192,
+      "end_s": 36.8,
+      "start_s": 36.34,
+      "word": "SEMESTER"
+    },
+    {
+      "confidence": 0.017799403845153838,
+      "end_s": 37.5,
+      "start_s": 37.4,
+      "word": "I'LL"
+    },
+    {
+      "confidence": 0.17997910160352845,
+      "end_s": 37.54,
+      "start_s": 37.5,
+      "word": "BE"
+    },
+    {
+      "confidence": 0.6975480732353561,
+      "end_s": 37.86,
+      "start_s": 37.64,
+      "word": "LUCKY"
+    },
+    {
+      "confidence": 0.9974901875287588,
+      "end_s": 38.0,
+      "start_s": 37.92,
+      "word": "IF"
+    },
+    {
+      "confidence": 0.9977361073122679,
+      "end_s": 38.12,
+      "start_s": 38.1,
+      "word": "I"
+    },
+    {
+      "confidence": 0.9767110937698423,
+      "end_s": 38.32,
+      "start_s": 38.16,
+      "word": "HAVE"
+    },
+    {
+      "confidence": 0.9962413024272383,
+      "end_s": 38.56,
+      "start_s": 38.36,
+      "word": "TIME"
+    },
+    {
+      "confidence": 0.9748767144853481,
+      "end_s": 38.64,
+      "start_s": 38.58,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.056513214721074394,
+      "end_s": 39.12,
+      "start_s": 38.7,
+      "word": "BREATHE"
+    },
+    {
+      "confidence": 0.9815538460205052,
+      "end_s": 39.96,
+      "start_s": 39.58,
+      "word": "SOMETIMES"
+    },
+    {
+      "confidence": 0.9513027939853783,
+      "end_s": 40.28,
+      "start_s": 39.98,
+      "word": "SCHOOLS"
+    },
+    {
+      "confidence": 0.9991226281122275,
+      "end_s": 40.44,
+      "start_s": 40.36,
+      "word": "DO"
+    },
+    {
+      "confidence": 0.9944246790002567,
+      "end_s": 40.66,
+      "start_s": 40.54,
+      "word": "LET"
+    },
+    {
+      "confidence": 0.9980710577435753,
+      "end_s": 40.98,
+      "start_s": 40.72,
+      "word": "KIDS"
+    },
+    {
+      "confidence": 0.9473204003483454,
+      "end_s": 41.28,
+      "start_s": 41.06,
+      "word": "TAKE"
+    },
+    {
+      "confidence": 0.9915410699401788,
+      "end_s": 41.4,
+      "start_s": 41.38,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9195365628587022,
+      "end_s": 41.7,
+      "start_s": 41.46,
+      "word": "LOT"
+    },
+    {
+      "confidence": 0.9946141659926762,
+      "end_s": 41.8,
+      "start_s": 41.74,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9991500743946873,
+      "end_s": 42.12,
+      "start_s": 41.84,
+      "word": "SOFT"
+    },
+    {
+      "confidence": 0.9714162593833019,
+      "end_s": 42.62,
+      "start_s": 42.18,
+      "word": "COURSES"
+    },
+    {
+      "confidence": 0.9627611836685722,
+      "end_s": 43.16,
+      "start_s": 43.08,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9915042355742943,
+      "end_s": 43.28,
+      "start_s": 43.18,
+      "word": "THEN"
+    },
+    {
+      "confidence": 0.06356892772218965,
+      "end_s": 43.44,
+      "start_s": 43.3,
+      "word": "THEY'RE"
+    },
+    {
+      "confidence": 0.9965790601984708,
+      "end_s": 43.58,
+      "start_s": 43.46,
+      "word": "OUT"
+    },
+    {
+      "confidence": 0.9936750503341927,
+      "end_s": 43.68,
+      "start_s": 43.62,
+      "word": "ON"
+    },
+    {
+      "confidence": 0.9886872576172918,
+      "end_s": 43.74,
+      "start_s": 43.72,
+      "word": "A"
+    },
+    {
+      "confidence": 0.6193100464773595,
+      "end_s": 44.02,
+      "start_s": 43.82,
+      "word": "LIMB"
+    },
+    {
+      "confidence": 0.9979508257863732,
+      "end_s": 44.34,
+      "start_s": 44.08,
+      "word": "LATER"
+    },
+    {
+      "confidence": 0.142515426261792,
+      "end_s": 45.42,
+      "start_s": 45.26,
+      "word": "HUH"
+    },
+    {
+      "confidence": 0.9929937963049247,
+      "end_s": 46.02,
+      "start_s": 45.94,
+      "word": "SO"
+    },
+    {
+      "confidence": 0.8761724993299431,
+      "end_s": 46.5,
+      "start_s": 46.44,
+      "word": "HE"
+    },
+    {
+      "confidence": 0.4640397551459837,
+      "end_s": 46.98,
+      "start_s": 46.56,
+      "word": "CARES"
+    },
+    {
+      "confidence": 0.1329657824088008,
+      "end_s": 48.02,
+      "start_s": 47.86,
+      "word": "HUH"
+    },
+    {
+      "confidence": 0.9447301336087703,
+      "end_s": 49.04,
+      "start_s": 48.58,
+      "word": "BESIDES"
+    },
+    {
+      "confidence": 0.9876581082877752,
+      "end_s": 49.56,
+      "start_s": 49.38,
+      "word": "SAYS"
+    },
+    {
+      "confidence": 0.9308975511686802,
+      "end_s": 49.88,
+      "start_s": 49.64,
+      "word": "TOM"
+    },
+    {
+      "confidence": 0.6166159337526058,
+      "end_s": 50.72,
+      "start_s": 50.56,
+      "word": "HALF"
+    },
+    {
+      "confidence": 0.9912099954665415,
+      "end_s": 50.84,
+      "start_s": 50.76,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9733671985831139,
+      "end_s": 51.14,
+      "start_s": 50.88,
+      "word": "REASON"
+    },
+    {
+      "confidence": 0.9934022452735934,
+      "end_s": 51.28,
+      "start_s": 51.2,
+      "word": "YOU"
+    },
+    {
+      "confidence": 0.9921804729641905,
+      "end_s": 51.38,
+      "start_s": 51.32,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9918408872335779,
+      "end_s": 51.5,
+      "start_s": 51.4,
+      "word": "YOUR"
+    },
+    {
+      "confidence": 0.9341910641415068,
+      "end_s": 51.82,
+      "start_s": 51.54,
+      "word": "FATHER"
+    },
+    {
+      "confidence": 0.992408646461893,
+      "end_s": 52.0,
+      "start_s": 51.9,
+      "word": "ARE"
+    },
+    {
+      "confidence": 0.9987581486200957,
+      "end_s": 52.3,
+      "start_s": 52.06,
+      "word": "ALWAYS"
+    },
+    {
+      "confidence": 0.9138953662596827,
+      "end_s": 52.72,
+      "start_s": 52.36,
+      "word": "BICKERING"
+    },
+    {
+      "confidence": 0.7096962303173607,
+      "end_s": 52.82,
+      "start_s": 52.74,
+      "word": "IS"
+    },
+    {
+      "confidence": 0.9889083535683393,
+      "end_s": 52.94,
+      "start_s": 52.84,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.33060448750331256,
+      "end_s": 53.1,
+      "start_s": 52.98,
+      "word": "YOU'RE"
+    },
+    {
+      "confidence": 0.9987027924625856,
+      "end_s": 53.22,
+      "start_s": 53.14,
+      "word": "SO"
+    },
+    {
+      "confidence": 0.9857836135899545,
+      "end_s": 53.46,
+      "start_s": 53.28,
+      "word": "MUCH"
+    },
+    {
+      "confidence": 0.9985480526158844,
+      "end_s": 53.9,
+      "start_s": 53.48,
+      "word": "ALIKE"
+    },
+    {
+      "confidence": 0.997065741756621,
+      "end_s": 54.54,
+      "start_s": 54.46,
+      "word": "ME"
+    },
+    {
+      "confidence": 0.995244269925318,
+      "end_s": 55.4,
+      "start_s": 55.16,
+      "word": "LIKE"
+    },
+    {
+      "confidence": 0.9982501335936519,
+      "end_s": 55.72,
+      "start_s": 55.44,
+      "word": "HIM"
+    },
+    {
+      "confidence": 0.8451700552192762,
+      "end_s": 57.46,
+      "start_s": 57.16,
+      "word": "SURE"
+    },
+    {
+      "confidence": 0.9897670167103662,
+      "end_s": 58.14,
+      "start_s": 58.06,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.991190817804289,
+      "end_s": 58.38,
+      "start_s": 58.2,
+      "word": "LONG"
+    },
+    {
+      "confidence": 0.9375407559149208,
+      "end_s": 58.48,
+      "start_s": 58.4,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.26242907089373796,
+      "end_s": 58.64,
+      "start_s": 58.48,
+      "word": "THERE'S"
+    },
+    {
+      "confidence": 0.9821537977998392,
+      "end_s": 58.68,
+      "start_s": 58.66,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9582997268599387,
+      "end_s": 58.94,
+      "start_s": 58.74,
+      "word": "BONE"
+    },
+    {
+      "confidence": 0.9950421313433636,
+      "end_s": 59.02,
+      "start_s": 58.96,
+      "word": "ON"
+    },
+    {
+      "confidence": 0.9738283750661566,
+      "end_s": 59.12,
+      "start_s": 59.04,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9734033934810683,
+      "end_s": 59.42,
+      "start_s": 59.14,
+      "word": "FLOOR"
+    },
+    {
+      "confidence": 0.9667077345819425,
+      "end_s": 59.76,
+      "start_s": 59.68,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9841285881050642,
+      "end_s": 59.96,
+      "start_s": 59.82,
+      "word": "TWO"
+    },
+    {
+      "confidence": 0.9529804354057685,
+      "end_s": 60.08,
+      "start_s": 60.0,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.993824445723465,
+      "end_s": 60.26,
+      "start_s": 60.14,
+      "word": "YOU"
+    },
+    {
+      "confidence": 0.9620079878160659,
+      "end_s": 60.62,
+      "start_s": 60.4,
+      "word": "WORRY"
+    },
+    {
+      "confidence": 0.9744246210974459,
+      "end_s": 60.76,
+      "start_s": 60.7,
+      "word": "IT"
+    }
+  ]
+}

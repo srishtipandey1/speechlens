@@ -1,0 +1,2147 @@
+{
+  "alignment_quality": null,
+  "control_transform": null,
+  "gender": "M",
+  "original_word_timings": [
+    {
+      "confidence": 0.4871134018651304,
+      "end_s": 0.58,
+      "start_s": 0.04,
+      "word": "ASPARAGUS"
+    },
+    {
+      "confidence": 0.32710405356667466,
+      "end_s": 0.98,
+      "start_s": 0.64,
+      "word": "SALAD"
+    },
+    {
+      "confidence": 0.9928371956363979,
+      "end_s": 2.2,
+      "start_s": 2.02,
+      "word": "COOK"
+    },
+    {
+      "confidence": 0.8740170559561747,
+      "end_s": 2.32,
+      "start_s": 2.24,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.6508571122732211,
+      "end_s": 2.96,
+      "start_s": 2.38,
+      "word": "ASPARAGUS"
+    },
+    {
+      "confidence": 0.9961686850537476,
+      "end_s": 3.16,
+      "start_s": 3.08,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.7064711794755948,
+      "end_s": 3.56,
+      "start_s": 3.22,
+      "word": "SALTED"
+    },
+    {
+      "confidence": 0.9531162717228645,
+      "end_s": 3.9,
+      "start_s": 3.6,
+      "word": "WATER"
+    },
+    {
+      "confidence": 0.9610391389012231,
+      "end_s": 4.56,
+      "start_s": 4.22,
+      "word": "DRAIN"
+    },
+    {
+      "confidence": 0.9969223470003451,
+      "end_s": 4.82,
+      "start_s": 4.7,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9289288878042044,
+      "end_s": 5.14,
+      "start_s": 4.88,
+      "word": "CHILL"
+    },
+    {
+      "confidence": 0.8815186004400402,
+      "end_s": 6.26,
+      "start_s": 5.98,
+      "word": "BIRDS"
+    },
+    {
+      "confidence": 0.9934153983262766,
+      "end_s": 6.6,
+      "start_s": 6.34,
+      "word": "NEST"
+    },
+    {
+      "confidence": 0.7328412253289449,
+      "end_s": 7.1,
+      "start_s": 6.76,
+      "word": "SALAD"
+    },
+    {
+      "confidence": 0.9916588207184021,
+      "end_s": 8.4,
+      "start_s": 8.22,
+      "word": "HAVE"
+    },
+    {
+      "confidence": 0.9693682031149536,
+      "end_s": 8.7,
+      "start_s": 8.46,
+      "word": "READY"
+    },
+    {
+      "confidence": 0.9984210793158053,
+      "end_s": 8.94,
+      "start_s": 8.84,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.999819672700208,
+      "end_s": 9.14,
+      "start_s": 9.0,
+      "word": "MANY"
+    },
+    {
+      "confidence": 0.9962577629782003,
+      "end_s": 9.48,
+      "start_s": 9.22,
+      "word": "CRISP"
+    },
+    {
+      "confidence": 0.7545132002206986,
+      "end_s": 9.86,
+      "start_s": 9.58,
+      "word": "LEAVES"
+    },
+    {
+      "confidence": 0.9989145543033287,
+      "end_s": 10.0,
+      "start_s": 9.92,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.11657565834932508,
+      "end_s": 10.38,
+      "start_s": 10.06,
+      "word": "LETTUCE"
+    },
+    {
+      "confidence": 0.9989156366634039,
+      "end_s": 10.58,
+      "start_s": 10.48,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.9996994862003058,
+      "end_s": 10.76,
+      "start_s": 10.64,
+      "word": "MAY"
+    },
+    {
+      "confidence": 0.9995079914991559,
+      "end_s": 10.86,
+      "start_s": 10.8,
+      "word": "BE"
+    },
+    {
+      "confidence": 0.9603949983671739,
+      "end_s": 11.46,
+      "start_s": 10.94,
+      "word": "REQUIRED"
+    },
+    {
+      "confidence": 0.9993617186297138,
+      "end_s": 11.62,
+      "start_s": 11.56,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9981495544604716,
+      "end_s": 11.86,
+      "start_s": 11.68,
+      "word": "MAKE"
+    },
+    {
+      "confidence": 0.9947027734838693,
+      "end_s": 11.9,
+      "start_s": 11.88,
+      "word": "A"
+    },
+    {
+      "confidence": 0.8720184109510088,
+      "end_s": 12.26,
+      "start_s": 11.96,
+      "word": "DAINTY"
+    },
+    {
+      "confidence": 0.9830789382907063,
+      "end_s": 12.52,
+      "start_s": 12.34,
+      "word": "LITTLE"
+    },
+    {
+      "confidence": 0.8969484893278526,
+      "end_s": 12.82,
+      "start_s": 12.56,
+      "word": "NEST"
+    },
+    {
+      "confidence": 0.9992539367789325,
+      "end_s": 13.0,
+      "start_s": 12.9,
+      "word": "FOR"
+    },
+    {
+      "confidence": 0.999831502609663,
+      "end_s": 13.22,
+      "start_s": 13.08,
+      "word": "EACH"
+    },
+    {
+      "confidence": 0.9987441601078392,
+      "end_s": 13.6,
+      "start_s": 13.26,
+      "word": "PERSON"
+    },
+    {
+      "confidence": 0.9893817534606337,
+      "end_s": 14.62,
+      "start_s": 14.28,
+      "word": "SERVE"
+    },
+    {
+      "confidence": 0.9444191586645809,
+      "end_s": 14.78,
+      "start_s": 14.66,
+      "word": "WITH"
+    },
+    {
+      "confidence": 0.9995729889665078,
+      "end_s": 15.04,
+      "start_s": 14.8,
+      "word": "FRENCH"
+    },
+    {
+      "confidence": 0.9952305370189004,
+      "end_s": 15.48,
+      "start_s": 15.08,
+      "word": "DRESSING"
+    },
+    {
+      "confidence": 0.9971201086789108,
+      "end_s": 15.78,
+      "start_s": 15.56,
+      "word": "HIDDEN"
+    },
+    {
+      "confidence": 0.9577214723389909,
+      "end_s": 16.04,
+      "start_s": 15.86,
+      "word": "UNDER"
+    },
+    {
+      "confidence": 0.9939320178652827,
+      "end_s": 16.14,
+      "start_s": 16.06,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.8871338460779863,
+      "end_s": 16.46,
+      "start_s": 16.18,
+      "word": "LEAVES"
+    },
+    {
+      "confidence": 0.9990512800828726,
+      "end_s": 16.56,
+      "start_s": 16.5,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9970092551091464,
+      "end_s": 16.64,
+      "start_s": 16.58,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9993227341409534,
+      "end_s": 16.96,
+      "start_s": 16.68,
+      "word": "NEST"
+    },
+    {
+      "confidence": 0.9453060101443216,
+      "end_s": 17.9,
+      "start_s": 17.54,
+      "word": "CABBAGE"
+    },
+    {
+      "confidence": 0.7885545670374847,
+      "end_s": 18.28,
+      "start_s": 17.94,
+      "word": "SALAD"
+    },
+    {
+      "confidence": 0.9510244414010277,
+      "end_s": 19.5,
+      "start_s": 19.2,
+      "word": "CHOP"
+    },
+    {
+      "confidence": 0.9986883945108579,
+      "end_s": 19.72,
+      "start_s": 19.64,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.95716692049642,
+      "end_s": 20.06,
+      "start_s": 19.8,
+      "word": "SHAVE"
+    },
+    {
+      "confidence": 0.9375590682434508,
+      "end_s": 20.48,
+      "start_s": 20.12,
+      "word": "FINE"
+    },
+    {
+      "confidence": 0.9664086498061059,
+      "end_s": 21.02,
+      "start_s": 20.8,
+      "word": "HALF"
+    },
+    {
+      "confidence": 0.9930694975680888,
+      "end_s": 21.16,
+      "start_s": 21.14,
+      "word": "A"
+    },
+    {
+      "confidence": 0.995048788164195,
+      "end_s": 21.58,
+      "start_s": 21.24,
+      "word": "MEDIUM"
+    },
+    {
+      "confidence": 0.7728163026721789,
+      "end_s": 21.94,
+      "start_s": 21.64,
+      "word": "SIZE"
+    },
+    {
+      "confidence": 0.9340825897766936,
+      "end_s": 22.14,
+      "start_s": 21.98,
+      "word": "HEAD"
+    },
+    {
+      "confidence": 0.9984648204290791,
+      "end_s": 22.22,
+      "start_s": 22.16,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9397626238070217,
+      "end_s": 22.7,
+      "start_s": 22.28,
+      "word": "CABBAGE"
+    },
+    {
+      "confidence": 0.9481913318135651,
+      "end_s": 22.9,
+      "start_s": 22.8,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.9966434492010637,
+      "end_s": 23.02,
+      "start_s": 22.92,
+      "word": "HAS"
+    },
+    {
+      "confidence": 0.9056303862538062,
+      "end_s": 23.18,
+      "start_s": 23.04,
+      "word": "BEEN"
+    },
+    {
+      "confidence": 0.999700787979479,
+      "end_s": 23.44,
+      "start_s": 23.24,
+      "word": "LEFT"
+    },
+    {
+      "confidence": 0.9991759303696383,
+      "end_s": 23.6,
+      "start_s": 23.52,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9993811086314784,
+      "end_s": 23.9,
+      "start_s": 23.66,
+      "word": "COLD"
+    },
+    {
+      "confidence": 0.9522816749602048,
+      "end_s": 24.24,
+      "start_s": 23.96,
+      "word": "WATER"
+    },
+    {
+      "confidence": 0.9118660447196484,
+      "end_s": 24.58,
+      "start_s": 24.32,
+      "word": "UNTIL"
+    },
+    {
+      "confidence": 0.9979065250484528,
+      "end_s": 25.0,
+      "start_s": 24.64,
+      "word": "CRISP"
+    },
+    {
+      "confidence": 0.9976151055002513,
+      "end_s": 25.36,
+      "start_s": 25.22,
+      "word": "THEN"
+    },
+    {
+      "confidence": 0.9419464304545351,
+      "end_s": 25.78,
+      "start_s": 25.44,
+      "word": "DRAIN"
+    },
+    {
+      "confidence": 0.07579650940999501,
+      "end_s": 26.92,
+      "start_s": 26.8,
+      "word": "ADD"
+    },
+    {
+      "confidence": 0.8842014706927944,
+      "end_s": 27.12,
+      "start_s": 26.98,
+      "word": "TWO"
+    },
+    {
+      "confidence": 0.9607450577050147,
+      "end_s": 27.72,
+      "start_s": 27.14,
+      "word": "TABLESPOONS"
+    },
+    {
+      "confidence": 0.9991357860505582,
+      "end_s": 27.98,
+      "start_s": 27.82,
+      "word": "THICK"
+    },
+    {
+      "confidence": 0.42642868635526504,
+      "end_s": 28.32,
+      "start_s": 28.08,
+      "word": "SOUR"
+    },
+    {
+      "confidence": 0.9785323930370852,
+      "end_s": 28.72,
+      "start_s": 28.38,
+      "word": "CREAM"
+    },
+    {
+      "confidence": 0.8619089220641716,
+      "end_s": 29.3,
+      "start_s": 29.16,
+      "word": "TWO"
+    },
+    {
+      "confidence": 0.9672839198041596,
+      "end_s": 29.94,
+      "start_s": 29.34,
+      "word": "TABLESPOONS"
+    },
+    {
+      "confidence": 0.40013662438878594,
+      "end_s": 30.32,
+      "start_s": 30.04,
+      "word": "SUGAR"
+    },
+    {
+      "confidence": 0.9988271656358407,
+      "end_s": 30.84,
+      "start_s": 30.82,
+      "word": "A"
+    },
+    {
+      "confidence": 0.7720233217802545,
+      "end_s": 31.26,
+      "start_s": 30.9,
+      "word": "SPRINKLE"
+    },
+    {
+      "confidence": 0.9940463664598773,
+      "end_s": 31.34,
+      "start_s": 31.28,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9144558690941919,
+      "end_s": 31.82,
+      "start_s": 31.4,
+      "word": "MUSTARD"
+    },
+    {
+      "confidence": 0.9962685660673394,
+      "end_s": 32.18,
+      "start_s": 32.08,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9390746120878294,
+      "end_s": 32.42,
+      "start_s": 32.24,
+      "word": "HALF"
+    },
+    {
+      "confidence": 0.8584461241115295,
+      "end_s": 32.7,
+      "start_s": 32.52,
+      "word": "CUP"
+    },
+    {
+      "confidence": 0.9931263977736894,
+      "end_s": 32.86,
+      "start_s": 32.78,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.7378561451727661,
+      "end_s": 33.24,
+      "start_s": 32.9,
+      "word": "VINEGAR"
+    },
+    {
+      "confidence": 0.9873764750397748,
+      "end_s": 34.3,
+      "start_s": 34.12,
+      "word": "BEAT"
+    },
+    {
+      "confidence": 0.9994593113965135,
+      "end_s": 34.64,
+      "start_s": 34.4,
+      "word": "UNTIL"
+    },
+    {
+      "confidence": 0.2455552599848096,
+      "end_s": 35.04,
+      "start_s": 34.72,
+      "word": "THOROUGHLY"
+    },
+    {
+      "confidence": 0.9988671303145393,
+      "end_s": 35.44,
+      "start_s": 35.12,
+      "word": "MIXED"
+    },
+    {
+      "confidence": 0.4670783260462014,
+      "end_s": 36.0,
+      "start_s": 35.76,
+      "word": "POUR"
+    },
+    {
+      "confidence": 0.9852521565368969,
+      "end_s": 36.3,
+      "start_s": 36.12,
+      "word": "OVER"
+    },
+    {
+      "confidence": 0.9986409618209338,
+      "end_s": 36.4,
+      "start_s": 36.32,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9885140150099394,
+      "end_s": 36.86,
+      "start_s": 36.42,
+      "word": "CABBAGE"
+    },
+    {
+      "confidence": 0.9536557652911102,
+      "end_s": 37.06,
+      "start_s": 36.96,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9675194030660923,
+      "end_s": 37.4,
+      "start_s": 37.12,
+      "word": "TOSS"
+    },
+    {
+      "confidence": 0.9875428382456125,
+      "end_s": 37.82,
+      "start_s": 37.5,
+      "word": "LIGHTLY"
+    },
+    {
+      "confidence": 0.9923813563470792,
+      "end_s": 38.16,
+      "start_s": 37.92,
+      "word": "UNTIL"
+    },
+    {
+      "confidence": 0.9695606183302558,
+      "end_s": 38.8,
+      "start_s": 38.28,
+      "word": "UNIFORMLY"
+    },
+    {
+      "confidence": 0.9428424019334722,
+      "end_s": 39.3,
+      "start_s": 38.9,
+      "word": "SEASONED"
+    },
+    {
+      "confidence": 0.18380456570510584,
+      "end_s": 40.52,
+      "start_s": 39.9,
+      "word": "CAULIFLOWER"
+    },
+    {
+      "confidence": 0.22627859352013174,
+      "end_s": 41.24,
+      "start_s": 40.6,
+      "word": "MAYONNAISE"
+    },
+    {
+      "confidence": 0.9992758693316058,
+      "end_s": 42.44,
+      "start_s": 42.22,
+      "word": "TAKE"
+    },
+    {
+      "confidence": 0.9952041498321408,
+      "end_s": 42.88,
+      "start_s": 42.54,
+      "word": "COLD"
+    },
+    {
+      "confidence": 0.9558935829378333,
+      "end_s": 43.3,
+      "start_s": 42.98,
+      "word": "BOILED"
+    },
+    {
+      "confidence": 0.17256238272283442,
+      "end_s": 43.98,
+      "start_s": 43.38,
+      "word": "CAULIFLOWER"
+    },
+    {
+      "confidence": 0.9179451923509793,
+      "end_s": 44.56,
+      "start_s": 44.3,
+      "word": "BREAK"
+    },
+    {
+      "confidence": 0.922818014538267,
+      "end_s": 44.74,
+      "start_s": 44.6,
+      "word": "INTO"
+    },
+    {
+      "confidence": 0.9996378738649795,
+      "end_s": 45.3,
+      "start_s": 44.78,
+      "word": "BRANCHES"
+    },
+    {
+      "confidence": 0.9970625211414406,
+      "end_s": 45.8,
+      "start_s": 45.52,
+      "word": "ADDING"
+    },
+    {
+      "confidence": 0.823730597507981,
+      "end_s": 46.24,
+      "start_s": 45.92,
+      "word": "SALT"
+    },
+    {
+      "confidence": 0.7267842663984707,
+      "end_s": 46.94,
+      "start_s": 46.66,
+      "word": "PEPPER"
+    },
+    {
+      "confidence": 0.9972421396701381,
+      "end_s": 47.22,
+      "start_s": 47.1,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.6862111964037749,
+      "end_s": 47.6,
+      "start_s": 47.28,
+      "word": "VINEGAR"
+    },
+    {
+      "confidence": 0.9965257586630115,
+      "end_s": 47.76,
+      "start_s": 47.68,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.99574767335578,
+      "end_s": 48.16,
+      "start_s": 47.84,
+      "word": "SEASON"
+    },
+    {
+      "confidence": 0.9903074556803824,
+      "end_s": 49.76,
+      "start_s": 49.32,
+      "word": "SURROUND"
+    },
+    {
+      "confidence": 0.9973275195380604,
+      "end_s": 49.9,
+      "start_s": 49.8,
+      "word": "WITH"
+    },
+    {
+      "confidence": 0.9873027569010819,
+      "end_s": 49.94,
+      "start_s": 49.92,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9978575918621186,
+      "end_s": 50.38,
+      "start_s": 49.98,
+      "word": "GARNISH"
+    },
+    {
+      "confidence": 0.9984697714522988,
+      "end_s": 50.52,
+      "start_s": 50.46,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9871782267466149,
+      "end_s": 50.82,
+      "start_s": 50.58,
+      "word": "COOKED"
+    },
+    {
+      "confidence": 0.9314625609672391,
+      "end_s": 50.96,
+      "start_s": 50.86,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.5759952215378228,
+      "end_s": 51.24,
+      "start_s": 50.98,
+      "word": "DICED"
+    },
+    {
+      "confidence": 0.6985752857401657,
+      "end_s": 51.68,
+      "start_s": 51.3,
+      "word": "CARROTS"
+    },
+    {
+      "confidence": 0.44687690161444915,
+      "end_s": 52.42,
+      "start_s": 52.0,
+      "word": "TURNIPS"
+    },
+    {
+      "confidence": 0.9990631511362523,
+      "end_s": 52.96,
+      "start_s": 52.72,
+      "word": "GREEN"
+    },
+    {
+      "confidence": 0.6106774853623113,
+      "end_s": 53.36,
+      "start_s": 53.02,
+      "word": "PEAS"
+    },
+    {
+      "confidence": 0.48457025203401843,
+      "end_s": 54.22,
+      "start_s": 54.04,
+      "word": "POUR"
+    },
+    {
+      "confidence": 0.21868468870531382,
+      "end_s": 54.82,
+      "start_s": 54.28,
+      "word": "MAYONNAISE"
+    },
+    {
+      "confidence": 0.8978053468006564,
+      "end_s": 55.16,
+      "start_s": 54.94,
+      "word": "OVER"
+    },
+    {
+      "confidence": 0.8422733117517791,
+      "end_s": 55.46,
+      "start_s": 55.26,
+      "word": "ALL"
+    },
+    {
+      "confidence": 0.9932016633529469,
+      "end_s": 56.0,
+      "start_s": 55.76,
+      "word": "CHILL"
+    },
+    {
+      "confidence": 0.9758970093506705,
+      "end_s": 56.26,
+      "start_s": 56.14,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9016687876340053,
+      "end_s": 56.64,
+      "start_s": 56.32,
+      "word": "SERVE"
+    },
+    {
+      "confidence": 0.6708762736515432,
+      "end_s": 57.66,
+      "start_s": 57.3,
+      "word": "CELERY"
+    },
+    {
+      "confidence": 0.9964118648521474,
+      "end_s": 57.98,
+      "start_s": 57.84,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9767923954630905,
+      "end_s": 58.26,
+      "start_s": 58.08,
+      "word": "NUT"
+    },
+    {
+      "confidence": 0.6502567432753724,
+      "end_s": 58.76,
+      "start_s": 58.4,
+      "word": "SALAD"
+    },
+    {
+      "confidence": 0.9099541746982069,
+      "end_s": 59.86,
+      "start_s": 59.7,
+      "word": "CUT"
+    },
+    {
+      "confidence": 0.6005089320005206,
+      "end_s": 60.2,
+      "start_s": 59.98,
+      "word": "ENOUGH"
+    },
+    {
+      "confidence": 0.7437382342915689,
+      "end_s": 60.6,
+      "start_s": 60.26,
+      "word": "CELERY"
+    },
+    {
+      "confidence": 0.6995430612256283,
+      "end_s": 61.06,
+      "start_s": 60.72,
+      "word": "FINE"
+    },
+    {
+      "confidence": 0.9595681716663165,
+      "end_s": 61.18,
+      "start_s": 61.1,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.979145291627173,
+      "end_s": 61.5,
+      "start_s": 61.22,
+      "word": "MEASURE"
+    },
+    {
+      "confidence": 0.9856208304354428,
+      "end_s": 61.7,
+      "start_s": 61.54,
+      "word": "TWO"
+    },
+    {
+      "confidence": 0.9904896732139952,
+      "end_s": 62.14,
+      "start_s": 61.76,
+      "word": "CUPS"
+    },
+    {
+      "confidence": 0.033062275124161315,
+      "end_s": 62.82,
+      "start_s": 62.68,
+      "word": "ADD"
+    },
+    {
+      "confidence": 0.999171633773341,
+      "end_s": 63.08,
+      "start_s": 62.94,
+      "word": "ONE"
+    },
+    {
+      "confidence": 0.9930339662355683,
+      "end_s": 63.34,
+      "start_s": 63.12,
+      "word": "CUP"
+    },
+    {
+      "confidence": 0.9975136366954346,
+      "end_s": 63.54,
+      "start_s": 63.46,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.46231111337233566,
+      "end_s": 63.94,
+      "start_s": 63.62,
+      "word": "FINELY"
+    },
+    {
+      "confidence": 0.8018613220484884,
+      "end_s": 64.34,
+      "start_s": 63.98,
+      "word": "SHREDDED"
+    },
+    {
+      "confidence": 0.999213423021708,
+      "end_s": 64.5,
+      "start_s": 64.42,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.99221506471304,
+      "end_s": 64.86,
+      "start_s": 64.56,
+      "word": "SHAVED"
+    },
+    {
+      "confidence": 0.9385438491898649,
+      "end_s": 65.36,
+      "start_s": 64.9,
+      "word": "CABBAGE"
+    },
+    {
+      "confidence": 0.9404073339758149,
+      "end_s": 65.88,
+      "start_s": 65.76,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9947661658428044,
+      "end_s": 66.12,
+      "start_s": 66.0,
+      "word": "ONE"
+    },
+    {
+      "confidence": 0.08383786826359378,
+      "end_s": 66.24,
+      "start_s": 66.16,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9952477137073599,
+      "end_s": 66.44,
+      "start_s": 66.32,
+      "word": "ONE"
+    },
+    {
+      "confidence": 0.701591393430425,
+      "end_s": 66.68,
+      "start_s": 66.48,
+      "word": "HALF"
+    },
+    {
+      "confidence": 0.9859806495471813,
+      "end_s": 67.1,
+      "start_s": 66.8,
+      "word": "CUPS"
+    },
+    {
+      "confidence": 0.9977269671971224,
+      "end_s": 67.28,
+      "start_s": 67.22,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.8892880271565506,
+      "end_s": 67.7,
+      "start_s": 67.34,
+      "word": "WALNUT"
+    },
+    {
+      "confidence": 0.5634764533811125,
+      "end_s": 68.02,
+      "start_s": 67.76,
+      "word": "MEATS"
+    },
+    {
+      "confidence": 0.9916769766499655,
+      "end_s": 68.52,
+      "start_s": 68.2,
+      "word": "BROKEN"
+    },
+    {
+      "confidence": 0.9986644969548811,
+      "end_s": 68.62,
+      "start_s": 68.56,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.984766853621543,
+      "end_s": 68.9,
+      "start_s": 68.68,
+      "word": "SMALL"
+    },
+    {
+      "confidence": 0.9725577634034873,
+      "end_s": 69.32,
+      "start_s": 68.96,
+      "word": "PIECES"
+    },
+    {
+      "confidence": 0.999429623487002,
+      "end_s": 69.6,
+      "start_s": 69.48,
+      "word": "BUT"
+    },
+    {
+      "confidence": 0.9993399991905252,
+      "end_s": 69.84,
+      "start_s": 69.68,
+      "word": "NOT"
+    },
+    {
+      "confidence": 0.57801424040466,
+      "end_s": 70.32,
+      "start_s": 69.96,
+      "word": "CHOPPED"
+    }
+  ],
+  "pair": {
+    "flawed_recording_id": "dev_m_652__L2",
+    "flaws": [
+      {
+        "flaw_type": "pace_slow",
+        "notes": "PSOLA rate factor 0.842500.",
+        "original_end_s": 61.06,
+        "original_start_s": 59.98,
+        "rendered_end_s": 61.261875,
+        "rendered_start_s": 59.98,
+        "severity": 0.35,
+        "word_indices": [
+          142,
+          143,
+          144
+        ]
+      },
+      {
+        "flaw_type": "monotone",
+        "notes": "F0 deviations scaled by 0.731667 toward median F0.",
+        "original_end_s": 67.1,
+        "original_start_s": 66.32,
+        "rendered_end_s": 67.301875,
+        "rendered_start_s": 66.521875,
+        "severity": 0.35,
+        "word_indices": [
+          161,
+          162,
+          163
+        ]
+      }
+    ],
+    "ideal_recording_id": "dev_m_652__ideal"
+  },
+  "passage_id": "dev_m_652",
+  "recording": {
+    "audio_path": "data/processed/audio/dev_m_652__L2.flac",
+    "duration_s": 70.636875,
+    "id": "dev_m_652__L2",
+    "kind": "injected",
+    "license": "CC BY 4.0",
+    "parent_recording_id": "dev_m_652__ideal",
+    "sample_rate": 16000,
+    "severity_level": 2,
+    "source": "LibriSpeech ASR corpus, dev-clean",
+    "speaker_gender": "M",
+    "speaker_id": "652",
+    "transcript_id": "dev_m_652"
+  },
+  "split": "dev",
+  "word_timings": [
+    {
+      "confidence": 0.4871134018651304,
+      "end_s": 0.58,
+      "start_s": 0.04,
+      "word": "ASPARAGUS"
+    },
+    {
+      "confidence": 0.32710405356667466,
+      "end_s": 0.98,
+      "start_s": 0.64,
+      "word": "SALAD"
+    },
+    {
+      "confidence": 0.9928371956363979,
+      "end_s": 2.2,
+      "start_s": 2.02,
+      "word": "COOK"
+    },
+    {
+      "confidence": 0.8740170559561747,
+      "end_s": 2.32,
+      "start_s": 2.24,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.6508571122732211,
+      "end_s": 2.96,
+      "start_s": 2.38,
+      "word": "ASPARAGUS"
+    },
+    {
+      "confidence": 0.9961686850537476,
+      "end_s": 3.16,
+      "start_s": 3.08,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.7064711794755948,
+      "end_s": 3.56,
+      "start_s": 3.22,
+      "word": "SALTED"
+    },
+    {
+      "confidence": 0.9531162717228645,
+      "end_s": 3.9,
+      "start_s": 3.6,
+      "word": "WATER"
+    },
+    {
+      "confidence": 0.9610391389012231,
+      "end_s": 4.56,
+      "start_s": 4.22,
+      "word": "DRAIN"
+    },
+    {
+      "confidence": 0.9969223470003451,
+      "end_s": 4.82,
+      "start_s": 4.7,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9289288878042044,
+      "end_s": 5.14,
+      "start_s": 4.88,
+      "word": "CHILL"
+    },
+    {
+      "confidence": 0.8815186004400402,
+      "end_s": 6.26,
+      "start_s": 5.98,
+      "word": "BIRDS"
+    },
+    {
+      "confidence": 0.9934153983262766,
+      "end_s": 6.6,
+      "start_s": 6.34,
+      "word": "NEST"
+    },
+    {
+      "confidence": 0.7328412253289449,
+      "end_s": 7.1,
+      "start_s": 6.76,
+      "word": "SALAD"
+    },
+    {
+      "confidence": 0.9916588207184021,
+      "end_s": 8.4,
+      "start_s": 8.22,
+      "word": "HAVE"
+    },
+    {
+      "confidence": 0.9693682031149536,
+      "end_s": 8.7,
+      "start_s": 8.46,
+      "word": "READY"
+    },
+    {
+      "confidence": 0.9984210793158053,
+      "end_s": 8.94,
+      "start_s": 8.84,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.999819672700208,
+      "end_s": 9.14,
+      "start_s": 9.0,
+      "word": "MANY"
+    },
+    {
+      "confidence": 0.9962577629782003,
+      "end_s": 9.48,
+      "start_s": 9.22,
+      "word": "CRISP"
+    },
+    {
+      "confidence": 0.7545132002206986,
+      "end_s": 9.86,
+      "start_s": 9.58,
+      "word": "LEAVES"
+    },
+    {
+      "confidence": 0.9989145543033287,
+      "end_s": 10.0,
+      "start_s": 9.92,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.11657565834932508,
+      "end_s": 10.38,
+      "start_s": 10.06,
+      "word": "LETTUCE"
+    },
+    {
+      "confidence": 0.9989156366634039,
+      "end_s": 10.58,
+      "start_s": 10.48,
+      "word": "AS"
+    },
+    {
+      "confidence": 0.9996994862003058,
+      "end_s": 10.76,
+      "start_s": 10.64,
+      "word": "MAY"
+    },
+    {
+      "confidence": 0.9995079914991559,
+      "end_s": 10.86,
+      "start_s": 10.8,
+      "word": "BE"
+    },
+    {
+      "confidence": 0.9603949983671739,
+      "end_s": 11.46,
+      "start_s": 10.94,
+      "word": "REQUIRED"
+    },
+    {
+      "confidence": 0.9993617186297138,
+      "end_s": 11.62,
+      "start_s": 11.56,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.9981495544604716,
+      "end_s": 11.86,
+      "start_s": 11.68,
+      "word": "MAKE"
+    },
+    {
+      "confidence": 0.9947027734838693,
+      "end_s": 11.9,
+      "start_s": 11.88,
+      "word": "A"
+    },
+    {
+      "confidence": 0.8720184109510088,
+      "end_s": 12.26,
+      "start_s": 11.96,
+      "word": "DAINTY"
+    },
+    {
+      "confidence": 0.9830789382907063,
+      "end_s": 12.52,
+      "start_s": 12.34,
+      "word": "LITTLE"
+    },
+    {
+      "confidence": 0.8969484893278526,
+      "end_s": 12.82,
+      "start_s": 12.56,
+      "word": "NEST"
+    },
+    {
+      "confidence": 0.9992539367789325,
+      "end_s": 13.0,
+      "start_s": 12.9,
+      "word": "FOR"
+    },
+    {
+      "confidence": 0.999831502609663,
+      "end_s": 13.22,
+      "start_s": 13.08,
+      "word": "EACH"
+    },
+    {
+      "confidence": 0.9987441601078392,
+      "end_s": 13.6,
+      "start_s": 13.26,
+      "word": "PERSON"
+    },
+    {
+      "confidence": 0.9893817534606337,
+      "end_s": 14.62,
+      "start_s": 14.28,
+      "word": "SERVE"
+    },
+    {
+      "confidence": 0.9444191586645809,
+      "end_s": 14.78,
+      "start_s": 14.66,
+      "word": "WITH"
+    },
+    {
+      "confidence": 0.9995729889665078,
+      "end_s": 15.04,
+      "start_s": 14.8,
+      "word": "FRENCH"
+    },
+    {
+      "confidence": 0.9952305370189004,
+      "end_s": 15.48,
+      "start_s": 15.08,
+      "word": "DRESSING"
+    },
+    {
+      "confidence": 0.9971201086789108,
+      "end_s": 15.78,
+      "start_s": 15.56,
+      "word": "HIDDEN"
+    },
+    {
+      "confidence": 0.9577214723389909,
+      "end_s": 16.04,
+      "start_s": 15.86,
+      "word": "UNDER"
+    },
+    {
+      "confidence": 0.9939320178652827,
+      "end_s": 16.14,
+      "start_s": 16.06,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.8871338460779863,
+      "end_s": 16.46,
+      "start_s": 16.18,
+      "word": "LEAVES"
+    },
+    {
+      "confidence": 0.9990512800828726,
+      "end_s": 16.56,
+      "start_s": 16.5,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9970092551091464,
+      "end_s": 16.64,
+      "start_s": 16.58,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9993227341409534,
+      "end_s": 16.96,
+      "start_s": 16.68,
+      "word": "NEST"
+    },
+    {
+      "confidence": 0.9453060101443216,
+      "end_s": 17.9,
+      "start_s": 17.54,
+      "word": "CABBAGE"
+    },
+    {
+      "confidence": 0.7885545670374847,
+      "end_s": 18.28,
+      "start_s": 17.94,
+      "word": "SALAD"
+    },
+    {
+      "confidence": 0.9510244414010277,
+      "end_s": 19.5,
+      "start_s": 19.2,
+      "word": "CHOP"
+    },
+    {
+      "confidence": 0.9986883945108579,
+      "end_s": 19.72,
+      "start_s": 19.64,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.95716692049642,
+      "end_s": 20.06,
+      "start_s": 19.8,
+      "word": "SHAVE"
+    },
+    {
+      "confidence": 0.9375590682434508,
+      "end_s": 20.48,
+      "start_s": 20.12,
+      "word": "FINE"
+    },
+    {
+      "confidence": 0.9664086498061059,
+      "end_s": 21.02,
+      "start_s": 20.8,
+      "word": "HALF"
+    },
+    {
+      "confidence": 0.9930694975680888,
+      "end_s": 21.16,
+      "start_s": 21.14,
+      "word": "A"
+    },
+    {
+      "confidence": 0.995048788164195,
+      "end_s": 21.58,
+      "start_s": 21.24,
+      "word": "MEDIUM"
+    },
+    {
+      "confidence": 0.7728163026721789,
+      "end_s": 21.94,
+      "start_s": 21.64,
+      "word": "SIZE"
+    },
+    {
+      "confidence": 0.9340825897766936,
+      "end_s": 22.14,
+      "start_s": 21.98,
+      "word": "HEAD"
+    },
+    {
+      "confidence": 0.9984648204290791,
+      "end_s": 22.22,
+      "start_s": 22.16,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9397626238070217,
+      "end_s": 22.7,
+      "start_s": 22.28,
+      "word": "CABBAGE"
+    },
+    {
+      "confidence": 0.9481913318135651,
+      "end_s": 22.9,
+      "start_s": 22.8,
+      "word": "THAT"
+    },
+    {
+      "confidence": 0.9966434492010637,
+      "end_s": 23.02,
+      "start_s": 22.92,
+      "word": "HAS"
+    },
+    {
+      "confidence": 0.9056303862538062,
+      "end_s": 23.18,
+      "start_s": 23.04,
+      "word": "BEEN"
+    },
+    {
+      "confidence": 0.999700787979479,
+      "end_s": 23.44,
+      "start_s": 23.24,
+      "word": "LEFT"
+    },
+    {
+      "confidence": 0.9991759303696383,
+      "end_s": 23.6,
+      "start_s": 23.52,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.9993811086314784,
+      "end_s": 23.9,
+      "start_s": 23.66,
+      "word": "COLD"
+    },
+    {
+      "confidence": 0.9522816749602048,
+      "end_s": 24.24,
+      "start_s": 23.96,
+      "word": "WATER"
+    },
+    {
+      "confidence": 0.9118660447196484,
+      "end_s": 24.58,
+      "start_s": 24.32,
+      "word": "UNTIL"
+    },
+    {
+      "confidence": 0.9979065250484528,
+      "end_s": 25.0,
+      "start_s": 24.64,
+      "word": "CRISP"
+    },
+    {
+      "confidence": 0.9976151055002513,
+      "end_s": 25.36,
+      "start_s": 25.22,
+      "word": "THEN"
+    },
+    {
+      "confidence": 0.9419464304545351,
+      "end_s": 25.78,
+      "start_s": 25.44,
+      "word": "DRAIN"
+    },
+    {
+      "confidence": 0.07579650940999501,
+      "end_s": 26.92,
+      "start_s": 26.8,
+      "word": "ADD"
+    },
+    {
+      "confidence": 0.8842014706927944,
+      "end_s": 27.12,
+      "start_s": 26.98,
+      "word": "TWO"
+    },
+    {
+      "confidence": 0.9607450577050147,
+      "end_s": 27.72,
+      "start_s": 27.14,
+      "word": "TABLESPOONS"
+    },
+    {
+      "confidence": 0.9991357860505582,
+      "end_s": 27.98,
+      "start_s": 27.82,
+      "word": "THICK"
+    },
+    {
+      "confidence": 0.42642868635526504,
+      "end_s": 28.32,
+      "start_s": 28.08,
+      "word": "SOUR"
+    },
+    {
+      "confidence": 0.9785323930370852,
+      "end_s": 28.72,
+      "start_s": 28.38,
+      "word": "CREAM"
+    },
+    {
+      "confidence": 0.8619089220641716,
+      "end_s": 29.3,
+      "start_s": 29.16,
+      "word": "TWO"
+    },
+    {
+      "confidence": 0.9672839198041596,
+      "end_s": 29.94,
+      "start_s": 29.34,
+      "word": "TABLESPOONS"
+    },
+    {
+      "confidence": 0.40013662438878594,
+      "end_s": 30.32,
+      "start_s": 30.04,
+      "word": "SUGAR"
+    },
+    {
+      "confidence": 0.9988271656358407,
+      "end_s": 30.84,
+      "start_s": 30.82,
+      "word": "A"
+    },
+    {
+      "confidence": 0.7720233217802545,
+      "end_s": 31.26,
+      "start_s": 30.9,
+      "word": "SPRINKLE"
+    },
+    {
+      "confidence": 0.9940463664598773,
+      "end_s": 31.34,
+      "start_s": 31.28,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9144558690941919,
+      "end_s": 31.82,
+      "start_s": 31.4,
+      "word": "MUSTARD"
+    },
+    {
+      "confidence": 0.9962685660673394,
+      "end_s": 32.18,
+      "start_s": 32.08,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9390746120878294,
+      "end_s": 32.42,
+      "start_s": 32.24,
+      "word": "HALF"
+    },
+    {
+      "confidence": 0.8584461241115295,
+      "end_s": 32.7,
+      "start_s": 32.52,
+      "word": "CUP"
+    },
+    {
+      "confidence": 0.9931263977736894,
+      "end_s": 32.86,
+      "start_s": 32.78,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.7378561451727661,
+      "end_s": 33.24,
+      "start_s": 32.9,
+      "word": "VINEGAR"
+    },
+    {
+      "confidence": 0.9873764750397748,
+      "end_s": 34.3,
+      "start_s": 34.12,
+      "word": "BEAT"
+    },
+    {
+      "confidence": 0.9994593113965135,
+      "end_s": 34.64,
+      "start_s": 34.4,
+      "word": "UNTIL"
+    },
+    {
+      "confidence": 0.2455552599848096,
+      "end_s": 35.04,
+      "start_s": 34.72,
+      "word": "THOROUGHLY"
+    },
+    {
+      "confidence": 0.9988671303145393,
+      "end_s": 35.44,
+      "start_s": 35.12,
+      "word": "MIXED"
+    },
+    {
+      "confidence": 0.4670783260462014,
+      "end_s": 36.0,
+      "start_s": 35.76,
+      "word": "POUR"
+    },
+    {
+      "confidence": 0.9852521565368969,
+      "end_s": 36.3,
+      "start_s": 36.12,
+      "word": "OVER"
+    },
+    {
+      "confidence": 0.9986409618209338,
+      "end_s": 36.4,
+      "start_s": 36.32,
+      "word": "THE"
+    },
+    {
+      "confidence": 0.9885140150099394,
+      "end_s": 36.86,
+      "start_s": 36.42,
+      "word": "CABBAGE"
+    },
+    {
+      "confidence": 0.9536557652911102,
+      "end_s": 37.06,
+      "start_s": 36.96,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9675194030660923,
+      "end_s": 37.4,
+      "start_s": 37.12,
+      "word": "TOSS"
+    },
+    {
+      "confidence": 0.9875428382456125,
+      "end_s": 37.82,
+      "start_s": 37.5,
+      "word": "LIGHTLY"
+    },
+    {
+      "confidence": 0.9923813563470792,
+      "end_s": 38.16,
+      "start_s": 37.92,
+      "word": "UNTIL"
+    },
+    {
+      "confidence": 0.9695606183302558,
+      "end_s": 38.8,
+      "start_s": 38.28,
+      "word": "UNIFORMLY"
+    },
+    {
+      "confidence": 0.9428424019334722,
+      "end_s": 39.3,
+      "start_s": 38.9,
+      "word": "SEASONED"
+    },
+    {
+      "confidence": 0.18380456570510584,
+      "end_s": 40.52,
+      "start_s": 39.9,
+      "word": "CAULIFLOWER"
+    },
+    {
+      "confidence": 0.22627859352013174,
+      "end_s": 41.24,
+      "start_s": 40.6,
+      "word": "MAYONNAISE"
+    },
+    {
+      "confidence": 0.9992758693316058,
+      "end_s": 42.44,
+      "start_s": 42.22,
+      "word": "TAKE"
+    },
+    {
+      "confidence": 0.9952041498321408,
+      "end_s": 42.88,
+      "start_s": 42.54,
+      "word": "COLD"
+    },
+    {
+      "confidence": 0.9558935829378333,
+      "end_s": 43.3,
+      "start_s": 42.98,
+      "word": "BOILED"
+    },
+    {
+      "confidence": 0.17256238272283442,
+      "end_s": 43.98,
+      "start_s": 43.38,
+      "word": "CAULIFLOWER"
+    },
+    {
+      "confidence": 0.9179451923509793,
+      "end_s": 44.56,
+      "start_s": 44.3,
+      "word": "BREAK"
+    },
+    {
+      "confidence": 0.922818014538267,
+      "end_s": 44.74,
+      "start_s": 44.6,
+      "word": "INTO"
+    },
+    {
+      "confidence": 0.9996378738649795,
+      "end_s": 45.3,
+      "start_s": 44.78,
+      "word": "BRANCHES"
+    },
+    {
+      "confidence": 0.9970625211414406,
+      "end_s": 45.8,
+      "start_s": 45.52,
+      "word": "ADDING"
+    },
+    {
+      "confidence": 0.823730597507981,
+      "end_s": 46.24,
+      "start_s": 45.92,
+      "word": "SALT"
+    },
+    {
+      "confidence": 0.7267842663984707,
+      "end_s": 46.94,
+      "start_s": 46.66,
+      "word": "PEPPER"
+    },
+    {
+      "confidence": 0.9972421396701381,
+      "end_s": 47.22,
+      "start_s": 47.1,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.6862111964037749,
+      "end_s": 47.6,
+      "start_s": 47.28,
+      "word": "VINEGAR"
+    },
+    {
+      "confidence": 0.9965257586630115,
+      "end_s": 47.76,
+      "start_s": 47.68,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.99574767335578,
+      "end_s": 48.16,
+      "start_s": 47.84,
+      "word": "SEASON"
+    },
+    {
+      "confidence": 0.9903074556803824,
+      "end_s": 49.76,
+      "start_s": 49.32,
+      "word": "SURROUND"
+    },
+    {
+      "confidence": 0.9973275195380604,
+      "end_s": 49.9,
+      "start_s": 49.8,
+      "word": "WITH"
+    },
+    {
+      "confidence": 0.9873027569010819,
+      "end_s": 49.94,
+      "start_s": 49.92,
+      "word": "A"
+    },
+    {
+      "confidence": 0.9978575918621186,
+      "end_s": 50.38,
+      "start_s": 49.98,
+      "word": "GARNISH"
+    },
+    {
+      "confidence": 0.9984697714522988,
+      "end_s": 50.52,
+      "start_s": 50.46,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.9871782267466149,
+      "end_s": 50.82,
+      "start_s": 50.58,
+      "word": "COOKED"
+    },
+    {
+      "confidence": 0.9314625609672391,
+      "end_s": 50.96,
+      "start_s": 50.86,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.5759952215378228,
+      "end_s": 51.24,
+      "start_s": 50.98,
+      "word": "DICED"
+    },
+    {
+      "confidence": 0.6985752857401657,
+      "end_s": 51.68,
+      "start_s": 51.3,
+      "word": "CARROTS"
+    },
+    {
+      "confidence": 0.44687690161444915,
+      "end_s": 52.42,
+      "start_s": 52.0,
+      "word": "TURNIPS"
+    },
+    {
+      "confidence": 0.9990631511362523,
+      "end_s": 52.96,
+      "start_s": 52.72,
+      "word": "GREEN"
+    },
+    {
+      "confidence": 0.6106774853623113,
+      "end_s": 53.36,
+      "start_s": 53.02,
+      "word": "PEAS"
+    },
+    {
+      "confidence": 0.48457025203401843,
+      "end_s": 54.22,
+      "start_s": 54.04,
+      "word": "POUR"
+    },
+    {
+      "confidence": 0.21868468870531382,
+      "end_s": 54.82,
+      "start_s": 54.28,
+      "word": "MAYONNAISE"
+    },
+    {
+      "confidence": 0.8978053468006564,
+      "end_s": 55.16,
+      "start_s": 54.94,
+      "word": "OVER"
+    },
+    {
+      "confidence": 0.8422733117517791,
+      "end_s": 55.46,
+      "start_s": 55.26,
+      "word": "ALL"
+    },
+    {
+      "confidence": 0.9932016633529469,
+      "end_s": 56.0,
+      "start_s": 55.76,
+      "word": "CHILL"
+    },
+    {
+      "confidence": 0.9758970093506705,
+      "end_s": 56.26,
+      "start_s": 56.14,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9016687876340053,
+      "end_s": 56.64,
+      "start_s": 56.32,
+      "word": "SERVE"
+    },
+    {
+      "confidence": 0.6708762736515432,
+      "end_s": 57.66,
+      "start_s": 57.3,
+      "word": "CELERY"
+    },
+    {
+      "confidence": 0.9964118648521474,
+      "end_s": 57.98,
+      "start_s": 57.84,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9767923954630905,
+      "end_s": 58.26,
+      "start_s": 58.08,
+      "word": "NUT"
+    },
+    {
+      "confidence": 0.6502567432753724,
+      "end_s": 58.76,
+      "start_s": 58.4,
+      "word": "SALAD"
+    },
+    {
+      "confidence": 0.9099541746982069,
+      "end_s": 59.86,
+      "start_s": 59.7,
+      "word": "CUT"
+    },
+    {
+      "confidence": 0.6005089320005206,
+      "end_s": 60.241125,
+      "start_s": 59.98,
+      "word": "ENOUGH"
+    },
+    {
+      "confidence": 0.7437382342915689,
+      "end_s": 60.715875,
+      "start_s": 60.3123125,
+      "word": "CELERY"
+    },
+    {
+      "confidence": 0.6995430612256283,
+      "end_s": 61.261875,
+      "start_s": 60.8583125,
+      "word": "FINE"
+    },
+    {
+      "confidence": 0.9595681716663165,
+      "end_s": 61.381875,
+      "start_s": 61.301875,
+      "word": "TO"
+    },
+    {
+      "confidence": 0.979145291627173,
+      "end_s": 61.701875,
+      "start_s": 61.421875,
+      "word": "MEASURE"
+    },
+    {
+      "confidence": 0.9856208304354428,
+      "end_s": 61.901875,
+      "start_s": 61.741875,
+      "word": "TWO"
+    },
+    {
+      "confidence": 0.9904896732139952,
+      "end_s": 62.341875,
+      "start_s": 61.961875,
+      "word": "CUPS"
+    },
+    {
+      "confidence": 0.033062275124161315,
+      "end_s": 63.021875,
+      "start_s": 62.881875,
+      "word": "ADD"
+    },
+    {
+      "confidence": 0.999171633773341,
+      "end_s": 63.281875,
+      "start_s": 63.141875,
+      "word": "ONE"
+    },
+    {
+      "confidence": 0.9930339662355683,
+      "end_s": 63.541875,
+      "start_s": 63.321875,
+      "word": "CUP"
+    },
+    {
+      "confidence": 0.9975136366954346,
+      "end_s": 63.741875,
+      "start_s": 63.661875,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.46231111337233566,
+      "end_s": 64.141875,
+      "start_s": 63.821875,
+      "word": "FINELY"
+    },
+    {
+      "confidence": 0.8018613220484884,
+      "end_s": 64.541875,
+      "start_s": 64.181875,
+      "word": "SHREDDED"
+    },
+    {
+      "confidence": 0.999213423021708,
+      "end_s": 64.701875,
+      "start_s": 64.621875,
+      "word": "OR"
+    },
+    {
+      "confidence": 0.99221506471304,
+      "end_s": 65.061875,
+      "start_s": 64.761875,
+      "word": "SHAVED"
+    },
+    {
+      "confidence": 0.9385438491898649,
+      "end_s": 65.561875,
+      "start_s": 65.101875,
+      "word": "CABBAGE"
+    },
+    {
+      "confidence": 0.9404073339758149,
+      "end_s": 66.081875,
+      "start_s": 65.961875,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9947661658428044,
+      "end_s": 66.321875,
+      "start_s": 66.201875,
+      "word": "ONE"
+    },
+    {
+      "confidence": 0.08383786826359378,
+      "end_s": 66.441875,
+      "start_s": 66.361875,
+      "word": "AND"
+    },
+    {
+      "confidence": 0.9952477137073599,
+      "end_s": 66.641875,
+      "start_s": 66.521875,
+      "word": "ONE"
+    },
+    {
+      "confidence": 0.701591393430425,
+      "end_s": 66.881875,
+      "start_s": 66.681875,
+      "word": "HALF"
+    },
+    {
+      "confidence": 0.9859806495471813,
+      "end_s": 67.301875,
+      "start_s": 67.001875,
+      "word": "CUPS"
+    },
+    {
+      "confidence": 0.9977269671971224,
+      "end_s": 67.481875,
+      "start_s": 67.421875,
+      "word": "OF"
+    },
+    {
+      "confidence": 0.8892880271565506,
+      "end_s": 67.901875,
+      "start_s": 67.541875,
+      "word": "WALNUT"
+    },
+    {
+      "confidence": 0.5634764533811125,
+      "end_s": 68.221875,
+      "start_s": 67.961875,
+      "word": "MEATS"
+    },
+    {
+      "confidence": 0.9916769766499655,
+      "end_s": 68.721875,
+      "start_s": 68.401875,
+      "word": "BROKEN"
+    },
+    {
+      "confidence": 0.9986644969548811,
+      "end_s": 68.821875,
+      "start_s": 68.761875,
+      "word": "IN"
+    },
+    {
+      "confidence": 0.984766853621543,
+      "end_s": 69.101875,
+      "start_s": 68.881875,
+      "word": "SMALL"
+    },
+    {
+      "confidence": 0.9725577634034873,
+      "end_s": 69.521875,
+      "start_s": 69.161875,
+      "word": "PIECES"
+    },
+    {
+      "confidence": 0.999429623487002,
+      "end_s": 69.801875,
+      "start_s": 69.681875,
+      "word": "BUT"
+    },
+    {
+      "confidence": 0.9993399991905252,
+      "end_s": 70.041875,
+      "start_s": 69.881875,
+      "word": "NOT"
+    },
+    {
+      "confidence": 0.57801424040466,
+      "end_s": 70.521875,
+      "start_s": 70.161875,
+      "word": "CHOPPED"
+    }
+  ]
+}
