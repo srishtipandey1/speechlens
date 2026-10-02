@@ -1,0 +1,11 @@
+mode,severity_level,actual,matched,recall
+paired,L1,8,2,0.25
+paired,L2,16,1,0.0625
+paired,L3,24,8,0.3333333333333333
+paired,L4,40,16,0.4
+paired,L5,56,29,0.5178571428571429
+reference_free,L1,8,2,0.25
+reference_free,L2,16,1,0.0625
+reference_free,L3,24,8,0.3333333333333333
+reference_free,L4,40,10,0.25
+reference_free,L5,56,15,0.26785714285714285

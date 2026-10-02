@@ -1,0 +1,33 @@
+frame_smoothing_s: 0.05
+enter_threshold: 6.0
+exit_threshold: 1.0
+minimum_duration_s: 0.18
+merge_gap_s: 0.12
+boundary_tolerance_s: 0.2
+low_alignment_confidence: 0.3
+low_confidence_penalty: 0.5
+robust_scale_floor: 0.15
+paired_rate_scale: 0.25
+paired_intensity_scale_db: 2.5
+paired_pitch_scale_semitones: 3.0
+monotone_score_scale: 0.25
+pause_score_scale_s: 0.3
+minimum_pause_excess_s: 0.45
+natural_pause_threshold_s: 0.45
+severity_scale: 5.0
+repeat_score_strength: 25.0
+repeat_sequence_max_words: 3
+explicit_filler_strength: 25.0
+nonlexical_voiced_strength: 2.0
+filler_frame_fraction: 0.75
+filler_tokens:
+- uh
+- um
+- erm
+- hmm
+classification:
+  repeat_score: 0.9
+  pause_excess_s: 0.45
+  rate_z: 1.5
+  monotone_f0_std_ratio: 0.45
+  intensity_drop_z: 1.5

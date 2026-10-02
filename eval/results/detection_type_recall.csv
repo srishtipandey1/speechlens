@@ -1,0 +1,15 @@
+mode,flaw_type,actual,matched,recall
+paired,pace_fast,20,0,0.0
+paired,pace_slow,20,0,0.0
+paired,long_pause,21,16,0.7619047619047619
+paired,monotone,22,0,0.0
+paired,volume_dropoff,23,2,0.08695652173913043
+paired,filler,18,18,1.0
+paired,stumble_repeat,20,17,0.85
+reference_free,pace_fast,20,0,0.0
+reference_free,pace_slow,20,0,0.0
+reference_free,long_pause,21,0,0.0
+reference_free,monotone,22,0,0.0
+reference_free,volume_dropoff,23,0,0.0
+reference_free,filler,18,18,1.0
+reference_free,stumble_repeat,20,17,0.85

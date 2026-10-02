@@ -41,6 +41,11 @@ def run_task(task: str) -> None:
             [sys.executable, "-m", "scripts.make_dataset"],
             check=True,
         )
+    elif task == "eval":
+        subprocess.run(
+            [sys.executable, "-m", "scripts.eval_detection"],
+            check=True,
+        )
     else:
         print("not implemented yet")
 

@@ -1,0 +1,209 @@
+[
+  {
+    "confidence": 0.9923469205236409,
+    "end_s": 29.78,
+    "expected_numeric": 0.0,
+    "expected_value": "below the configured repeat threshold",
+    "formula": "acoustic repeated-word similarity score",
+    "observed_numeric": 1.0,
+    "observed_value": "1.00 repeat score",
+    "recording_id": "dev_f_1462__L1",
+    "rendered_text": "00:29.2-00:29.8 'ALEXANDER MAINHALL': the repeated-word similarity score was 1.00, so a word sequence was repeated. Pause briefly, then continue without repeating the previous word.",
+    "sentence": "00:29.2-00:29.8 'ALEXANDER MAINHALL': the repeated-word similarity score was 1.00, so a word sequence was repeated.",
+    "severity": 1.0,
+    "start_s": 29.16,
+    "suggestion": "Pause briefly, then continue without repeating the previous word.",
+    "type": "stumble_repeat",
+    "words": [
+      "ALEXANDER",
+      "MAINHALL"
+    ],
+    "z_score_or_ratio": 1.0
+  },
+  {
+    "confidence": 0.9951665353630152,
+    "end_s": 26.5575,
+    "expected_numeric": 0.0,
+    "expected_value": "no non-lexical voiced segment",
+    "formula": "duration of speech-active voiced frames outside aligned words",
+    "observed_numeric": 0.39750000000000085,
+    "observed_value": "0.40 s non-lexical voiced segment",
+    "recording_id": "dev_f_1462__L2",
+    "rendered_text": "00:26.2-00:26.6 'SHE uh HAD': a voiced non-lexical segment lasted 0.40 s, so a filler interrupted the phrase. Replace the filler sound with a brief, intentional pause.",
+    "sentence": "00:26.2-00:26.6 'SHE uh HAD': a voiced non-lexical segment lasted 0.40 s, so a filler interrupted the phrase.",
+    "severity": 1.0,
+    "start_s": 26.16,
+    "suggestion": "Replace the filler sound with a brief, intentional pause.",
+    "type": "filler",
+    "words": [
+      "SHE",
+      "uh",
+      "HAD"
+    ],
+    "z_score_or_ratio": 0.39750000000000085
+  },
+  {
+    "confidence": 0.9957628195865421,
+    "end_s": 18.04,
+    "expected_numeric": 0.0,
+    "expected_value": "no excess pause",
+    "formula": "participant_pause_s - ideal_pause_s",
+    "observed_numeric": 1.9800000000000004,
+    "observed_value": "1.98 s excess pause",
+    "recording_id": "dev_f_1462__L4",
+    "rendered_text": "00:15.7-00:18.0 'AND': 1.98 s beyond the expected pause, so the delivery stalled here. Reduce the pause and continue smoothly into the next phrase.",
+    "sentence": "00:15.7-00:18.0 'AND': 1.98 s beyond the expected pause, so the delivery stalled here.",
+    "severity": 1.0,
+    "start_s": 15.74,
+    "suggestion": "Reduce the pause and continue smoothly into the next phrase.",
+    "type": "long_pause",
+    "words": [
+      "AND"
+    ],
+    "z_score_or_ratio": 1.9800000000000004
+  },
+  {
+    "confidence": 0.9977006229387025,
+    "end_s": 21.9504375,
+    "expected_numeric": 0.0,
+    "expected_value": "no excess pause",
+    "formula": "participant_pause_s - ideal_pause_s",
+    "observed_numeric": 2.6599999999999966,
+    "observed_value": "2.66 s excess pause",
+    "recording_id": "dev_f_1462__L5",
+    "rendered_text": "00:19.2-00:22.0 'TO': 2.66 s beyond the expected pause, so the delivery stalled here. Reduce the pause and continue smoothly into the next phrase.",
+    "sentence": "00:19.2-00:22.0 'TO': 2.66 s beyond the expected pause, so the delivery stalled here.",
+    "severity": 1.0,
+    "start_s": 19.1904375,
+    "suggestion": "Reduce the pause and continue smoothly into the next phrase.",
+    "type": "long_pause",
+    "words": [
+      "TO"
+    ],
+    "z_score_or_ratio": 2.6599999999999966
+  },
+  {
+    "confidence": 0.7175640951578037,
+    "end_s": 39.1304375,
+    "expected_numeric": 0.0,
+    "expected_value": "no excess pause",
+    "formula": "participant_pause_s - ideal_pause_s",
+    "observed_numeric": 2.6600000000000037,
+    "observed_value": "2.66 s excess pause",
+    "recording_id": "dev_f_1462__L5",
+    "rendered_text": "00:36.4-00:39.1 'RUBBED': 2.66 s beyond the expected pause, so the delivery stalled here. Reduce the pause and continue smoothly into the next phrase.",
+    "sentence": "00:36.4-00:39.1 'RUBBED': 2.66 s beyond the expected pause, so the delivery stalled here.",
+    "severity": 1.0,
+    "start_s": 36.4104375,
+    "suggestion": "Reduce the pause and continue smoothly into the next phrase.",
+    "type": "long_pause",
+    "words": [
+      "RUBBED"
+    ],
+    "z_score_or_ratio": 2.6600000000000037
+  },
+  {
+    "confidence": 1.0,
+    "end_s": 55.8073125,
+    "expected_numeric": 0.0,
+    "expected_value": "no non-lexical voiced segment",
+    "formula": "duration of speech-active voiced frames outside aligned words",
+    "observed_numeric": 0.5549999999999997,
+    "observed_value": "0.55 s non-lexical voiced segment",
+    "recording_id": "dev_f_1462__L5",
+    "rendered_text": "00:55.3-00:55.8 'uh': a voiced non-lexical segment lasted 0.55 s, so a filler interrupted the phrase. Replace the filler sound with a brief, intentional pause.",
+    "sentence": "00:55.3-00:55.8 'uh': a voiced non-lexical segment lasted 0.55 s, so a filler interrupted the phrase.",
+    "severity": 1.0,
+    "start_s": 55.2523125,
+    "suggestion": "Replace the filler sound with a brief, intentional pause.",
+    "type": "filler",
+    "words": [
+      "uh"
+    ],
+    "z_score_or_ratio": 0.5549999999999997
+  },
+  {
+    "confidence": 1.0,
+    "end_s": 58.9873125,
+    "expected_numeric": 0.0,
+    "expected_value": "below the configured repeat threshold",
+    "formula": "acoustic repeated-word similarity score",
+    "observed_numeric": 1.0,
+    "observed_value": "1.00 repeat score",
+    "recording_id": "dev_f_1462__L5",
+    "rendered_text": "00:58.6-00:59.0 'STAGE': the repeated-word similarity score was 1.00, so a word sequence was repeated. Pause briefly, then continue without repeating the previous word.",
+    "sentence": "00:58.6-00:59.0 'STAGE': the repeated-word similarity score was 1.00, so a word sequence was repeated.",
+    "severity": 1.0,
+    "start_s": 58.5673125,
+    "suggestion": "Pause briefly, then continue without repeating the previous word.",
+    "type": "stumble_repeat",
+    "words": [
+      "STAGE"
+    ],
+    "z_score_or_ratio": 1.0
+  },
+  {
+    "confidence": 1.0,
+    "end_s": 61.2383125,
+    "expected_numeric": 0.0,
+    "expected_value": "below the configured repeat threshold",
+    "formula": "acoustic repeated-word similarity score",
+    "observed_numeric": 1.0,
+    "observed_value": "1.00 repeat score",
+    "recording_id": "dev_f_1462__L5",
+    "rendered_text": "01:00.8-01:01.2 'STAGE': the repeated-word similarity score was 1.00, so a word sequence was repeated. Pause briefly, then continue without repeating the previous word.",
+    "sentence": "01:00.8-01:01.2 'STAGE': the repeated-word similarity score was 1.00, so a word sequence was repeated.",
+    "severity": 1.0,
+    "start_s": 60.8183125,
+    "suggestion": "Pause briefly, then continue without repeating the previous word.",
+    "type": "stumble_repeat",
+    "words": [
+      "STAGE"
+    ],
+    "z_score_or_ratio": 1.0
+  },
+  {
+    "confidence": 0.9999334818977093,
+    "end_s": 26.12,
+    "expected_numeric": 0.0,
+    "expected_value": "below the configured repeat threshold",
+    "formula": "acoustic repeated-word similarity score",
+    "observed_numeric": 1.0,
+    "observed_value": "1.00 repeat score",
+    "recording_id": "dev_f_1673__L3",
+    "rendered_text": "00:25.6-00:26.1 'THE ZEAL OR': the repeated-word similarity score was 1.00, so a word sequence was repeated. Pause briefly, then continue without repeating the previous word.",
+    "sentence": "00:25.6-00:26.1 'THE ZEAL OR': the repeated-word similarity score was 1.00, so a word sequence was repeated.",
+    "severity": 1.0,
+    "start_s": 25.58,
+    "suggestion": "Pause briefly, then continue without repeating the previous word.",
+    "type": "stumble_repeat",
+    "words": [
+      "THE",
+      "ZEAL",
+      "OR"
+    ],
+    "z_score_or_ratio": 1.0
+  },
+  {
+    "confidence": 0.9963993592572802,
+    "end_s": 56.16,
+    "expected_numeric": 0.0,
+    "expected_value": "below the configured repeat threshold",
+    "formula": "acoustic repeated-word similarity score",
+    "observed_numeric": 1.0,
+    "observed_value": "1.00 repeat score",
+    "recording_id": "dev_f_1673__L3",
+    "rendered_text": "00:55.7-00:56.2 'AND ALTHOUGH THE': the repeated-word similarity score was 1.00, so a word sequence was repeated. Pause briefly, then continue without repeating the previous word.",
+    "sentence": "00:55.7-00:56.2 'AND ALTHOUGH THE': the repeated-word similarity score was 1.00, so a word sequence was repeated.",
+    "severity": 1.0,
+    "start_s": 55.68,
+    "suggestion": "Pause briefly, then continue without repeating the previous word.",
+    "type": "stumble_repeat",
+    "words": [
+      "AND",
+      "ALTHOUGH",
+      "THE"
+    ],
+    "z_score_or_ratio": 1.0
+  }
+]
