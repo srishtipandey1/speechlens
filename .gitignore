@@ -15,3 +15,5 @@ data/processed/demo/
 .DS_Store
 data/processed/
 .speechlens_cache/
+
+eval/results/*.log

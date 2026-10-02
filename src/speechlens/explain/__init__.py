@@ -37,18 +37,23 @@ def explanation_record(region: Mapping) -> dict:
 	words = [str(word) for word in region.get("words", [])]
 	features = region.get("features", {})
 	if flaw_type in {"pace_fast", "pace_slow"}:
-		observed = float(region.get("observed_rate_sps", 0.0))
-		expected = float(region.get("expected_rate_sps", 0.0))
-		z_value = float(features.get("rate_z", 0.0))
-		formula = "log(observed_rate_sps / expected_rate_sps) / paired_rate_scale"
-		observed_value = f"{observed:.1f} syllables/s"
-		expected_value = f"{expected:.1f} syllables/s"
-		causal = (
-			f"{observed:.1f} syllables/s vs {expected:.1f} expected "
-			f"(z={z_value:+.1f})"
-		)
+		if "rate_ratio" in features:
+			observed = float(features["rate_ratio"])
+			expected = 1.0
+			z_or_ratio = observed
+			formula = "local participant/ideal word-duration ratio / passage-wide rate ratio"
+			observed_value = f"{observed:.2f} normalized duration ratio"
+			expected_value = "1.00 normalized ideal duration"
+			causal = f"the normalized local duration ratio was {observed:.2f} vs 1.00 expected"
+		else:
+			observed = float(region.get("observed_rate_sps", 0.0))
+			expected = float(region.get("expected_rate_sps", 0.0))
+			z_or_ratio = float(features.get("rate_z", 0.0))
+			formula = "log(observed_rate_sps / expected_rate_sps) / paired_rate_scale"
+			observed_value = f"{observed:.1f} syllables/s"
+			expected_value = f"{expected:.1f} syllables/s"
+			causal = f"{observed:.1f} syllables/s vs {expected:.1f} expected (z={z_or_ratio:+.1f})"
 		consequence = "this section was rushed" if flaw_type == "pace_fast" else "this section was drawn out"
-		z_or_ratio: float = z_value
 	elif flaw_type == "long_pause":
 		observed = float(features.get("pause_excess_s", 0.0))
 		expected = 0.0
@@ -68,18 +73,20 @@ def explanation_record(region: Mapping) -> dict:
 		causal = f"pitch variation was {observed:.2f}x the ideal"
 		consequence = "the phrase sounded comparatively monotone"
 	elif flaw_type == "volume_dropoff":
-		observed = float(region.get("observed_intensity_db", 0.0)) - float(
-			region.get("expected_intensity_db", 0.0)
-		)
+		observed = float(features.get(
+			"intensity_drop_db",
+			float(region.get("observed_intensity_db", 0.0))
+			- float(region.get("expected_intensity_db", 0.0)),
+		))
 		expected = 0.0
-		z_or_ratio = float(features.get("intensity_z", 0.0))
-		formula = "participant_median_intensity_db - ideal_median_intensity_db"
-		observed_value = f"{observed:+.1f} dB relative to the ideal"
-		expected_value = "0.0 dB relative to the ideal"
-		causal = f"intensity was {observed:+.1f} dB relative to the ideal"
+		z_or_ratio = observed
+		formula = "first-word speech level dB - last-word speech level dB"
+		observed_value = f"{observed:.1f} dB downward level change"
+		expected_value = "0.0 dB downward change"
+		causal = f"speech level fell by {observed:.1f} dB across the window"
 		consequence = "the phrase lost vocal presence"
 	elif flaw_type in {"filler", "stumble_repeat"}:
-		observed = float(features.get("repeat_score", 0.0))
+		observed = float(features.get("score", features.get("repeat_score", 0.0)))
 		if flaw_type == "filler":
 			observed = max(end_s - start_s, 0.0)
 			expected = 0.0

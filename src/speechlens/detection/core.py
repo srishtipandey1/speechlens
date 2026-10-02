@@ -583,102 +583,10 @@ def detect_deviation_regions(
     word_timings: Sequence[WordTiming],
     config: Mapping,
 ) -> list[dict]:
-    """Smooth a deviation table and return snapped, explainable regions."""
-    if deviation_table.empty:
-        return []
-    table = deviation_table.sort_values("time_s", kind="stable").reset_index(drop=True)
-    times = table["time_s"].to_numpy(dtype=np.float64)
-    scores = table["deviation"].fillna(0.0).to_numpy(dtype=np.float64)
-    frame_step_s = float(np.median(np.diff(times))) if len(times) > 1 else 0.01
-    smoothing_frames = max(
-        1, round(float(config["frame_smoothing_s"]) / frame_step_s)
-    )
-    kernel = np.ones(smoothing_frames, dtype=np.float64) / smoothing_frames
-    smoothed = np.convolve(scores, kernel, mode="same")
-    ranges = hysteresis_regions(
-        smoothed,
-        times,
-        float(config["enter_threshold"]),
-        float(config["exit_threshold"]),
-        float(config["minimum_duration_s"]),
-        float(config["merge_gap_s"]),
-    )
-    boundaries = [
-        boundary
-        for timing in word_timings
-        for boundary in (timing.start_s, timing.end_s)
-    ]
-    results: list[dict] = []
-    low_confidence_threshold = float(config["low_alignment_confidence"])
-    confidence_penalty = float(config["low_confidence_penalty"])
-    classification_thresholds = config["classification"]
-    for raw_start, raw_end in ranges:
-        start_s, end_s = snap_interval_to_words(
-            raw_start,
-            raw_end,
-            boundaries,
-            float(config["boundary_tolerance_s"]),
-        )
-        region_mask = (times >= raw_start) & (times < raw_end)
-        region_rows = table.loc[region_mask]
-        if region_rows.empty:
-            continue
-        confidence_values = region_rows["alignment_confidence"].to_numpy(dtype=np.float64)
-        if confidence_values.size:
-            mean_alignment = float(np.clip(np.mean(confidence_values), 0.0, 1.0))
-            low_fraction = float(np.mean(confidence_values < low_confidence_threshold))
-            confidence = mean_alignment * max(0.0, 1.0 - confidence_penalty * low_fraction)
-        else:
-            confidence = 1.0
-        rate_z = float(region_rows["rate_z"].median())
-        intensity_z = float(region_rows["intensity_z"].median())
-        f0_std_ratio = float(region_rows["f0_std_ratio"].median())
-        pause_excess_s = float(region_rows["pause_excess_s"].max())
-        repeat_score = float(region_rows["repeat_score"].max())
-        explicit_filler = bool(region_rows["explicit_filler"].any())
-        unassigned_fraction = float(region_rows["nonlexical_voiced"].mean())
-        nonlexical_voiced = explicit_filler or (
-            unassigned_fraction >= float(config["filler_frame_fraction"])
-            and pause_excess_s < float(classification_thresholds["pause_excess_s"])
-        )
-        rule_row = {
-            "rate_z": rate_z,
-            "intensity_z": intensity_z,
-            "f0_std_ratio": f0_std_ratio,
-            "pause_excess_s": pause_excess_s,
-            "repeat_score": repeat_score,
-            "nonlexical_voiced": nonlexical_voiced,
-        }
-        flaw_type = classify_feature_row(rule_row, classification_thresholds)
-        selected_words = [
-            index
-            for index, timing in enumerate(word_timings)
-            if timing.end_s >= raw_start and timing.start_s <= raw_end
-        ]
-        words = [word_timings[index].word for index in selected_words]
-        max_deviation = float(region_rows["deviation"].max())
-        results.append(
-            {
-                "start_s": start_s,
-                "end_s": end_s,
-                "raw_start_s": raw_start,
-                "raw_end_s": raw_end,
-                "words": words,
-                "word_indices": selected_words,
-                "type": flaw_type,
-                "features": rule_row,
-                "observed_rate_sps": float(region_rows["observed_rate_sps"].median()),
-                "expected_rate_sps": float(region_rows["expected_rate_sps"].median()),
-                "observed_intensity_db": float(region_rows["observed_intensity_db"].median()),
-                "expected_intensity_db": float(region_rows["expected_intensity_db"].median()),
-                "observed_f0_std": float(region_rows["observed_f0_std"].median()),
-                "expected_f0_std": float(region_rows["expected_f0_std"].median()),
-                "max_deviation": max_deviation,
-                "severity": float(np.clip(max_deviation / float(config["severity_scale"]), 0.0, 1.0)),
-                "confidence": float(np.clip(confidence, 0.0, 1.0)),
-            }
-        )
-    return results
+    """Compatibility wrapper using independent thresholds for every type."""
+    from speechlens.detection.measurements import detect_typed_regions
+
+    return detect_typed_regions(deviation_table, word_timings, config)
 
 
 def hysteresis_regions(

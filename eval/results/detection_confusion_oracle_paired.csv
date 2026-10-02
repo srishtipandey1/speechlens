@@ -1,0 +1,8 @@
+,pace_fast,pace_slow,long_pause,monotone,volume_dropoff,filler,stumble_repeat
+pace_fast,15,0,0,0,0,0,2
+pace_slow,0,7,0,0,0,0,10
+long_pause,0,0,21,0,0,0,0
+monotone,0,0,0,2,0,0,12
+volume_dropoff,0,0,0,0,11,0,11
+filler,0,0,0,0,0,18,0
+stumble_repeat,0,0,0,0,0,0,14

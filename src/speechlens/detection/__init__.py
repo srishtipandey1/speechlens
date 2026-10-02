@@ -1,15 +1,13 @@
 """Flaw detection components."""
 
-from speechlens.detection.core import (
-	detect_deviation_regions,
-	fit_reference_free,
-	paired_deviation_table,
-	reference_free_deviation_table,
+from speechlens.detection.measurements import (
+    build_typed_deviation_table,
+    detect_typed_regions,
+    fit_reference_free,
 )
 
 __all__ = [
-	"detect_deviation_regions",
-	"fit_reference_free",
-	"paired_deviation_table",
-	"reference_free_deviation_table",
+    "build_typed_deviation_table",
+    "detect_typed_regions",
+    "fit_reference_free",
 ]
