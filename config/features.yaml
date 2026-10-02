@@ -1,0 +1,27 @@
+sample_rate_hz: 16000
+hop_s: 0.01
+frame_length_s: 0.025
+n_fft: 512
+mfcc_count: 13
+mel_bands: 40
+mfcc_delta_width: 9
+energy_epsilon: 1.0e-8
+speech_activity_threshold_dbfs: -45.0
+praat:
+  pitch_floor_hz: 75.0
+  pitch_ceiling_hz: 600.0
+  intensity_minimum_pitch_hz: 75.0
+  harmonicity_minimum_pitch_hz: 75.0
+  harmonicity_silence_threshold: 0.1
+  harmonicity_periods_per_window: 1.0
+octave_correction:
+  target_semitones: 12.0
+  tolerance_semitones: 2.0
+  neighbor_tolerance_semitones: 2.0
+pause_minimum_duration_s: 0.15
+syllable_peak_prominence_db: 2.5
+syllable_peak_minimum_distance_s: 0.08
+modulation_bands_hz:
+  energy_syllable_rate: [3.0, 6.0]
+  f0_monotone: [0.5, 3.0]
+normalization_reference_hz: 1.0
