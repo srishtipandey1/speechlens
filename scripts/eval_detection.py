@@ -7,6 +7,7 @@ import hashlib
 import json
 import pickle
 from collections import Counter, defaultdict
+from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any
 
@@ -21,11 +22,13 @@ import yaml
 
 from speechlens.alignment.align import align
 from speechlens.detection.core import load_detection_config
+from speechlens.detection.asr import cached_inserted_word_spans
 from speechlens.detection.measurements import (
     DETECTOR_TYPES,
     build_typed_deviation_table,
     detect_typed_regions,
     fit_reference_free,
+    normalize_token,
 )
 from speechlens.explain import explanation_record
 from speechlens.features import FeatureBundle, extract_recording_features
@@ -74,6 +77,32 @@ def _cached_forced_alignment(
             separators=(",", ":"),
         )
         + "\n",
+        encoding="utf-8",
+    )
+    return timings
+
+
+def _cached_plain_alignment(
+    audio: np.ndarray,
+    transcript: str,
+    cache_dir: Path,
+) -> list[WordTiming]:
+    """Forced-align the unmodified transcript and cache the exact word timings."""
+    waveform = np.ascontiguousarray(audio, dtype=np.float32)
+    digest = hashlib.sha256(b"plain\0" + waveform.tobytes() + transcript.encode("utf-8")).hexdigest()
+    path = cache_dir / f"plain_{digest}.json"
+    if path.is_file():
+        values = json.loads(path.read_text(encoding="utf-8"))
+        return [WordTiming.model_validate(item) for item in values]
+    timings = align(waveform, transcript)
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(
+            [item.model_dump(mode="json") for item in timings],
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ) + "\n",
         encoding="utf-8",
     )
     return timings
@@ -165,11 +194,25 @@ def _load_dev_entries(project_root: Path, config: dict) -> list[dict]:
             raise ValueError(f"expected mono 16 kHz DEV audio: {recording_id}")
 
         oracle_timings = [WordTiming.model_validate(item) for item in sidecar["word_timings"]]
-        realistic_timings = _cached_forced_alignment(
+        realistic_timings = _cached_plain_alignment(
             audio,
             transcript,
             cache_dir,
-            int(config["wildcard_words_per_slot"]),
+        )
+        wildcard_timings = _cached_forced_alignment(
+            audio, transcript, cache_dir, int(config["wildcard_words_per_slot"])
+        )
+        stumble_intervals = (
+            cached_inserted_word_spans(
+                audio,
+                transcript,
+                project_root / ".speechlens_cache" / "detection_asr",
+                project_root / ".speechlens_cache" / "asr_torch_hub",
+                float(config["asr"]["chunk_duration_s"]),
+                float(config["asr"]["overlap_s"]),
+            )
+            if row["kind"] != "ideal"
+            else []
         )
         timing_bundles: dict[str, dict] = {}
         for source, timings in (
@@ -197,6 +240,8 @@ def _load_dev_entries(project_root: Path, config: dict) -> list[dict]:
             "sidecar": sidecar,
             "transcript": transcript,
             "timing_bundles": timing_bundles,
+            "wildcard_timings": wildcard_timings,
+            "stumble_intervals": stumble_intervals,
             "ideal_recording_id": (
                 pair["ideal_recording_id"] if pair else
                 sidecar["recording"].get("parent_recording_id") or recording_id
@@ -265,20 +310,165 @@ def _control_group(entry: dict) -> str | None:
     return None
 
 
-def _fit_references(entries: list[dict]) -> dict[str, dict]:
-    references = {}
-    for source in TIMING_SOURCES:
-        ideal_records = [
-            {
-                "bundle": entry["timing_bundles"][source]["bundle"],
-                "timings": entry["timing_bundles"][source]["timings"],
-                "transcript": entry["transcript"],
-            }
-            for entry in entries
-            if entry["manifest"]["kind"] == "ideal"
+def _fit_references_leave_one_passage_out(
+    entries: list[dict], source: str, window_sizes: list[int]
+) -> dict[str, dict]:
+    """Fit one DEV-IDEAL reference per held-out passage, excluding that passage."""
+    ideal_entries = [entry for entry in entries if entry["manifest"]["kind"] == "ideal"]
+    passage_ids = sorted({str(entry["manifest"]["passage_id"]) for entry in ideal_entries})
+    if len(passage_ids) < 2:
+        raise ValueError("leave-one-passage-out references require at least two DEV IDEAL passages")
+    references: dict[str, dict] = {}
+    for held_out in passage_ids:
+        fit_entries = [
+            entry for entry in ideal_entries
+            if str(entry["manifest"]["passage_id"]) != held_out
         ]
-        references[source] = fit_reference_free(ideal_records)
+        reference = fit_reference_free(
+            [
+                {
+                    "bundle": entry["timing_bundles"][source]["bundle"],
+                    "timings": entry["timing_bundles"][source]["timings"],
+                    "transcript": entry["transcript"],
+                }
+                for entry in fit_entries
+            ],
+            window_sizes,
+        )
+        reference["fit_passage_ids"] = sorted(
+            str(entry["manifest"]["passage_id"]) for entry in fit_entries
+        )
+        reference["held_out_passage_id"] = held_out
+        references[held_out] = reference
     return references
+
+
+def _alignment_boundary_differences(entries: list[dict]) -> list[dict]:
+    """Compare matched plain and wildcard word boundaries for DEV IDEALs."""
+    differences: list[dict] = []
+    for entry in entries:
+        if entry["manifest"]["kind"] != "ideal":
+            continue
+        plain = entry["timing_bundles"]["realistic"]["timings"]
+        wildcard = entry["wildcard_timings"]
+        plain_lexical = [item for item in plain if item.word.strip() != "*"]
+        wildcard_lexical = [item for item in wildcard if item.word.strip() != "*"]
+        matcher = SequenceMatcher(
+            a=[normalize_token(item.word) for item in plain_lexical],
+            b=[normalize_token(item.word) for item in wildcard_lexical],
+            autojunk=False,
+        )
+        for plain_start, wildcard_start, size in matcher.get_matching_blocks():
+            for offset in range(size):
+                plain_word = plain_lexical[plain_start + offset]
+                wildcard_word = wildcard_lexical[wildcard_start + offset]
+                differences.append({
+                    "recording_id": entry["manifest"]["recording_id"],
+                    "word": plain_word.word,
+                    "start_boundary_abs_difference_ms": abs(
+                        plain_word.start_s - wildcard_word.start_s
+                    ) * 1000.0,
+                    "end_boundary_abs_difference_ms": abs(
+                        plain_word.end_s - wildcard_word.end_s
+                    ) * 1000.0,
+                    "duration_abs_difference_ms": abs(
+                        (plain_word.end_s - plain_word.start_s)
+                        - (wildcard_word.end_s - wildcard_word.start_s)
+                    ) * 1000.0,
+                })
+    return differences
+
+
+def _ideal_score_distributions(entries: list[dict], tables: dict) -> list[dict]:
+    """Summarize per-type frame scores pooled over DEV IDEAL recordings."""
+    ideal_ids = [
+        entry["manifest"]["recording_id"]
+        for entry in entries
+        if entry["manifest"]["kind"] == "ideal"
+    ]
+    rows: list[dict] = []
+    for source in TIMING_SOURCES:
+        for mode in MODES:
+            for flaw_type in DETECTOR_TYPES:
+                values = np.concatenate([
+                    tables[source][mode][recording_id][f"score_{flaw_type}"].to_numpy(dtype=np.float64)
+                    for recording_id in ideal_ids
+                ])
+                rows.append({
+                    "timing_source": source,
+                    "mode": mode,
+                    "flaw_type": flaw_type,
+                    "frames": int(values.size),
+                    "p50": float(np.percentile(values, 50)),
+                    "p90": float(np.percentile(values, 90)),
+                    "p99": float(np.percentile(values, 99)),
+                    "max": float(np.max(values)) if values.size else 0.0,
+                })
+    return rows
+
+
+def _run_pre_tuning_diagnostics(
+    entries: list[dict], tables: dict, config: dict
+) -> list[dict]:
+    """Write alignment/score diagnostics and enforce zero paired IDEAL regions."""
+    boundary_rows = _alignment_boundary_differences(entries)
+    boundary_values = [
+        value
+        for row in boundary_rows
+        for value in (
+            row["start_boundary_abs_difference_ms"],
+            row["end_boundary_abs_difference_ms"],
+        )
+    ]
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    _write_csv(RESULTS_DIR / "alignment_plain_vs_wildcard_dev_ideal.csv", boundary_rows)
+    if boundary_values:
+        print(
+            "Plain/wildcard DEV IDEAL median absolute boundary difference: "
+            f"{float(np.median(boundary_values)):.2f} ms",
+            flush=True,
+        )
+    score_rows = _ideal_score_distributions(entries, tables)
+    _write_csv(RESULTS_DIR / "detection_ideal_score_distributions.csv", score_rows)
+    for row in score_rows:
+        print(
+            f"IDEAL scores {row['timing_source']}/{row['mode']}/{row['flaw_type']}: "
+            f"p50={row['p50']:.6g} p90={row['p90']:.6g} "
+            f"p99={row['p99']:.6g} max={row['max']:.6g}",
+            flush=True,
+        )
+
+    diagnostic_rows: list[dict] = []
+    paired, _, _, paired_controls, paired_predictions = _evaluate_variant(
+        "paired", "realistic", entries, tables["realistic"]["paired"],
+        config, False,
+    )
+    ideal_false_regions = {
+        entry["manifest"]["recording_id"]: paired_predictions[entry["manifest"]["recording_id"]]
+        for entry in entries
+        if entry["manifest"]["kind"] == "ideal"
+        and paired_predictions[entry["manifest"]["recording_id"]]
+    }
+    if ideal_false_regions:
+        raise RuntimeError(
+            "paired IDEAL self-comparison produced regions before tuning: "
+            + ", ".join(sorted(ideal_false_regions))
+        )
+    diagnostic_rows.extend(paired_controls)
+
+    reference_free, _, _, reference_controls, _ = _evaluate_variant(
+        "reference_free", "realistic", entries, tables["realistic"]["reference_free"],
+        config, False,
+    )
+    diagnostic_rows.extend(reference_controls)
+    _write_csv(RESULTS_DIR / "detection_pre_tuning_control_rates.csv", diagnostic_rows)
+    print(
+        "Pre-tuning DEV IDEAL/control false regions per minute: "
+        f"paired={paired['false_regions_per_minute_all_controls_and_ideals']:.3f}, "
+        f"reference_free={reference_free['false_regions_per_minute_all_controls_and_ideals']:.3f}",
+        flush=True,
+    )
+    return diagnostic_rows
 
 
 def _prepare_tables(entries: list[dict], config: dict, references: dict[str, dict]) -> dict:
@@ -291,10 +481,11 @@ def _prepare_tables(entries: list[dict], config: dict, references: dict[str, dic
         for source in TIMING_SOURCES:
             participant = entry["timing_bundles"][source]
             ideal_data = ideal["timing_bundles"][source]
+            reference = references[source][str(row["passage_id"])]
             cache_root = PROJECT_ROOT / ".speechlens_cache" / "detection_tables"
             print(f"Preparing {source} tables {entry_index}/{len(entries)}: {recording_id}", flush=True)
             shared_key = {
-                "cache_version": "typed-frame-table-v1",
+                "cache_version": "plain-alignment-typed-frame-table-v2",
                 "recording_id": recording_id,
                 "ideal_recording_id": entry["ideal_recording_id"],
                 "timing_source": source,
@@ -303,12 +494,13 @@ def _prepare_tables(entries: list[dict], config: dict, references: dict[str, dic
                 "ideal_timings": [timing.model_dump(mode="json") for timing in ideal_data["timings"]],
                 "measurement_config": config["measurements"],
                 "wildcard_spans": participant["wildcard_spans"],
+                "stumble_intervals": entry["stumble_intervals"],
             }
             for mode in MODES:
                 cache_material = {
                     **shared_key,
                     "mode": mode,
-                    "reference": references[source] if mode == "reference_free" else None,
+                    "reference": reference if mode == "reference_free" else None,
                 }
                 cache_hash = hashlib.sha256(
                     json.dumps(cache_material, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -322,12 +514,13 @@ def _prepare_tables(entries: list[dict], config: dict, references: dict[str, dic
                     table = build_typed_deviation_table(
                         participant["bundle"], participant["timings"], entry["transcript"], config,
                         ideal_bundle=ideal_data["bundle"], ideal_timings=ideal_data["timings"],
-                        wildcard_spans=participant["wildcard_spans"],
+                        stumble_intervals=entry["stumble_intervals"],
                     )
                 else:
                     table = build_typed_deviation_table(
                         participant["bundle"], participant["timings"], entry["transcript"], config,
-                        reference=references[source], wildcard_spans=participant["wildcard_spans"],
+                        reference=reference,
+                        stumble_intervals=entry["stumble_intervals"],
                     )
                 cache_root.mkdir(parents=True, exist_ok=True)
                 with cache_path.open("wb") as cache_file:
@@ -432,13 +625,29 @@ def _evaluate_variant(
     summary["false_regions_per_minute_all_controls_and_ideals"] = sum(controls.values()) / max(sum(minutes.values()), 1e-12)
     types = []
     for flaw_type in DETECTOR_TYPES:
-        counts = type_counts[flaw_type]
-        precision, recall, f1 = _prf(counts["tp"], counts["fp"], counts["fn"])
-        types.append({
-            "mode": mode, "timing_source": source, "flaw_type": flaw_type,
-            "tp": counts["tp"], "fp": counts["fp"], "fn": counts["fn"],
-            "precision": precision, "recall": recall, "f1": f1,
-        })
+        for threshold in IOU_THRESHOLDS:
+            typed_tp = typed_fp = typed_fn = 0
+            for entry in entries:
+                recording_id = entry["manifest"]["recording_id"]
+                predicted = [
+                    region for region in predictions[recording_id]
+                    if region["type"] == flaw_type
+                ]
+                actual = [
+                    region for region in entry["ground_truth"]
+                    if region["type"] == flaw_type
+                ]
+                matches = _match_regions(predicted, actual, threshold)
+                typed_tp += len(matches)
+                typed_fp += len(predicted) - len({match[0] for match in matches})
+                typed_fn += len(actual) - len({match[1] for match in matches})
+            precision, recall, f1 = _prf(typed_tp, typed_fp, typed_fn)
+            types.append({
+                "mode": mode, "timing_source": source, "flaw_type": flaw_type,
+                "iou_threshold": threshold,
+                "tp": typed_tp, "fp": typed_fp, "fn": typed_fn,
+                "precision": precision, "recall": recall, "f1": f1,
+            })
     severity = [
         {
             "mode": mode, "timing_source": source, "severity_level": f"L{level}",
@@ -476,12 +685,23 @@ def _write_csv(path: Path, rows: list[dict]) -> None:
 
 
 def _tune_thresholds(entries: list[dict], tables: dict, config: dict) -> tuple[dict, list[dict]]:
-    """Tune one detector at a time on realistic timings with all detectors active."""
+    """Tune only thresholds that meet their share and enforce the combined budget."""
     from copy import deepcopy
 
     realistic = tables["realistic"]
     budget = float(config["evaluation"]["false_region_budget_per_minute"])
+    type_budget = float(config["evaluation"]["false_region_budget_per_type_per_minute"])
     tuning_rows: list[dict] = []
+    baseline_thresholds = {
+        flaw_type: {
+            "enter": float(config["detectors"][flaw_type]["enter_threshold"]),
+            "exit": float(config["detectors"][flaw_type]["exit_threshold"]),
+        }
+        for flaw_type in DETECTOR_TYPES
+    }
+    for flaw_type in DETECTOR_TYPES:
+        config["detectors"][flaw_type]["enabled"] = True
+        config["detectors"][flaw_type].pop("disabled_reason", None)
 
     current_predictions = {
         mode: {
@@ -501,6 +721,7 @@ def _tune_thresholds(entries: list[dict], tables: dict, config: dict) -> tuple[d
         target_tp = target_fp = target_fn = 0
         all_tp = all_fp = all_fn = 0
         false_regions = 0
+        target_false_regions = 0
         control_minutes = 0.0
         for entry in entries:
             recording_id = entry["manifest"]["recording_id"]
@@ -516,29 +737,62 @@ def _tune_thresholds(entries: list[dict], tables: dict, config: dict) -> tuple[d
             target_tp += len(typed_matches)
             target_fp += len(predicted_target) - len({match[0] for match in typed_matches})
             target_fn += len(actual_target) - len({match[1] for match in typed_matches})
-            group = _control_group(entry)
-            if group is not None:
+            if _control_group(entry) is not None:
                 false_regions += len(predicted)
+                target_false_regions += len(predicted_target)
                 control_minutes += float(entry["manifest"]["duration_s"]) / 60.0
         type_f1 = _prf(target_tp, target_fp, target_fn)[2]
         overall_f1 = _prf(all_tp, all_fp, all_fn)[2]
-        false_rate = false_regions / max(control_minutes, 1e-12)
-        return type_f1, overall_f1, false_rate, float(false_regions)
+        return (
+            type_f1,
+            overall_f1,
+            false_regions / max(control_minutes, 1e-12),
+            target_false_regions / max(control_minutes, 1e-12),
+        )
 
-    baseline = deepcopy(config)
+    def combined_control_rate(mode_predictions: dict[str, list[dict]]) -> float:
+        false_regions = 0
+        control_minutes = 0.0
+        for entry in entries:
+            if _control_group(entry) is None:
+                continue
+            recording_id = entry["manifest"]["recording_id"]
+            false_regions += len(mode_predictions[recording_id])
+            control_minutes += float(entry["manifest"]["duration_s"]) / 60.0
+        return false_regions / max(control_minutes, 1e-12)
+
+    baseline_type_f1 = {
+        mode: {
+            flaw_type: measure_predictions(current_predictions[mode], flaw_type)[0]
+            for flaw_type in DETECTOR_TYPES
+        }
+        for mode in MODES
+    }
+
     for flaw_type in DETECTOR_TYPES:
         before_metrics = {
             mode: measure_predictions(current_predictions[mode], flaw_type)
             for mode in MODES
         }
         before_fp = max(metrics[2] for metrics in before_metrics.values())
+        score_column = f"score_{flaw_type}"
+        maximum_observed_score = max(
+            float(realistic[mode][entry["manifest"]["recording_id"]][score_column].max())
+            for mode in MODES
+            for entry in entries
+        )
+        thresholds = sorted({
+            float(value) for value in config["tuning_candidates"][flaw_type]
+        } | {float(np.nextafter(maximum_observed_score, np.inf))})
+        config["tuning_candidates"][flaw_type] = thresholds
         best_score = -1.0
         best_thresholds = None
         best_predictions = None
-        for threshold in config["tuning_candidates"][flaw_type]:
+        for threshold in thresholds:
             print(f"Tuning {flaw_type}: enter_threshold={float(threshold):g}", flush=True)
             candidate = deepcopy(config)
             detector = candidate["detectors"][flaw_type]
+            detector["enabled"] = True
             detector["enter_threshold"] = float(threshold)
             detector["exit_threshold"] = min(
                 float(detector["exit_threshold"]), float(threshold) * 0.5
@@ -568,8 +822,8 @@ def _tune_thresholds(entries: list[dict], tables: dict, config: dict) -> tuple[d
                 for mode in MODES
             }
             score = float(np.mean([metrics[mode][0] for mode in MODES]))
-            pooled_fp = max(metrics[mode][2] for mode in MODES)
-            budget_met = pooled_fp <= budget
+            worst_type_fp = max(metrics[mode][3] for mode in MODES)
+            share_met = worst_type_fp <= type_budget
             tuning_rows.append({
                 "stage": "candidate", "flaw_type": flaw_type,
                 "enter_threshold": float(threshold),
@@ -577,43 +831,119 @@ def _tune_thresholds(entries: list[dict], tables: dict, config: dict) -> tuple[d
                 "paired_f1_iou_0_3": metrics["paired"][1],
                 "reference_free_f1_iou_0_3": metrics["reference_free"][1],
                 "mean_target_type_f1": score,
-                "worst_mode_combined_fp_per_minute": pooled_fp,
-                "budget_per_minute": budget, "budget_met": budget_met,
+                "worst_mode_combined_fp_per_minute": max(metrics[mode][2] for mode in MODES),
+                "worst_mode_type_fp_per_minute": worst_type_fp,
+                "type_budget_per_minute": type_budget,
+                "combined_budget_per_minute": budget,
+                "budget_met": share_met,
             })
-            if budget_met and score > best_score:
+            print(
+                f"  {flaw_type} type-FP/min paired={metrics['paired'][3]:.3f} "
+                f"reference_free={metrics['reference_free'][3]:.3f} share_met={share_met}",
+                flush=True,
+            )
+            if share_met and score > 0.0 and score > best_score:
                 best_score = score
                 best_thresholds = (detector["enter_threshold"], detector["exit_threshold"])
                 best_predictions = candidate_predictions
-        if best_thresholds is not None:
+
+        if best_thresholds is None:
+            enabled = False
+            disabled_reason = (
+                f"No configured DEV-only threshold met the per-type false-region "
+                f"budget of {type_budget:.3f}/minute with positive target F1 in both modes."
+            )
+            config["detectors"][flaw_type]["enabled"] = False
+            config["detectors"][flaw_type]["disabled_reason"] = disabled_reason
+            for mode in MODES:
+                for recording_id, regions in current_predictions[mode].items():
+                    current_predictions[mode][recording_id] = [
+                        region for region in regions if region["type"] != flaw_type
+                    ]
+        else:
+            enabled = True
+            disabled_reason = ""
+            config["detectors"][flaw_type]["enabled"] = True
+            config["detectors"][flaw_type].pop("disabled_reason", None)
             config["detectors"][flaw_type]["enter_threshold"] = best_thresholds[0]
             config["detectors"][flaw_type]["exit_threshold"] = best_thresholds[1]
             current_predictions = best_predictions
+
         after_metrics = {
             mode: measure_predictions(current_predictions[mode], flaw_type)
             for mode in MODES
         }
-        after_fp = max(metrics[2] for metrics in after_metrics.values())
-        after_score = float(np.mean([metrics[0] for metrics in after_metrics.values()]))
         tuning_rows.append({
             "stage": "before_after", "flaw_type": flaw_type,
-            "enter_threshold_before": baseline["detectors"][flaw_type]["enter_threshold"],
-            "exit_threshold_before": baseline["detectors"][flaw_type]["exit_threshold"],
+            "enter_threshold_before": baseline_thresholds[flaw_type]["enter"],
+            "exit_threshold_before": baseline_thresholds[flaw_type]["exit"],
             "enter_threshold_after": config["detectors"][flaw_type]["enter_threshold"],
             "exit_threshold_after": config["detectors"][flaw_type]["exit_threshold"],
-            "paired_f1_before": next(row["f1"] for row in _evaluate_variant(
-                "paired", "realistic", entries, realistic["paired"], baseline, False
-            )[1] if row["flaw_type"] == flaw_type),
-            "reference_free_f1_before": next(row["f1"] for row in _evaluate_variant(
-                "reference_free", "realistic", entries, realistic["reference_free"], baseline, False
-            )[1] if row["flaw_type"] == flaw_type),
-            "paired_f1_after": after_metrics["paired"][1],
-            "reference_free_f1_after": after_metrics["reference_free"][1],
-            "mean_target_type_f1_after": after_score,
-            "combined_fp_per_minute_before": before_fp,
-            "combined_fp_per_minute_after": after_fp,
-            "budget_per_minute": budget,
-            "budget_met": after_fp <= budget,
+            "paired_f1_before": baseline_type_f1["paired"][flaw_type],
+            "reference_free_f1_before": baseline_type_f1["reference_free"][flaw_type],
+            "paired_f1_after": after_metrics["paired"][0],
+            "reference_free_f1_after": after_metrics["reference_free"][0],
+            "type_fp_per_minute_after": max(after_metrics[mode][3] for mode in MODES),
+            "type_budget_per_minute": type_budget,
+            "enabled": enabled,
+            "disabled_reason": disabled_reason,
+            "budget_met": (
+                not enabled
+                or max(after_metrics[mode][3] for mode in MODES) <= type_budget
+            ),
         })
+
+    combined_rate = max(combined_control_rate(current_predictions[mode]) for mode in MODES)
+    while combined_rate > budget:
+        enabled_types = [
+            flaw_type for flaw_type in DETECTOR_TYPES
+            if config["detectors"][flaw_type].get("enabled", True)
+        ]
+        if not enabled_types:
+            raise RuntimeError(
+                f"Combined DEV false-region rate {combined_rate:.3f}/minute exceeds "
+                f"the {budget:.3f}/minute budget with all types disabled."
+            )
+        contributions = {
+            flaw_type: max(
+                measure_predictions(current_predictions[mode], flaw_type)[3]
+                for mode in MODES
+            )
+            for flaw_type in enabled_types
+        }
+        disabled_type = max(enabled_types, key=lambda item: (contributions[item], item))
+        reason = (
+            f"Disabled to enforce the combined DEV false-region budget of "
+            f"{budget:.3f}/minute; remaining contribution was "
+            f"{contributions[disabled_type]:.3f}/minute."
+        )
+        config["detectors"][disabled_type]["enabled"] = False
+        config["detectors"][disabled_type]["disabled_reason"] = reason
+        for mode in MODES:
+            for recording_id, regions in current_predictions[mode].items():
+                current_predictions[mode][recording_id] = [
+                    region for region in regions if region["type"] != disabled_type
+                ]
+        tuning_rows.append({
+            "stage": "combined_budget_disable",
+            "flaw_type": disabled_type,
+            "enabled": False,
+            "disabled_reason": reason,
+            "type_fp_per_minute_before_disable": contributions[disabled_type],
+            "combined_budget_per_minute": budget,
+        })
+        combined_rate = max(combined_control_rate(current_predictions[mode]) for mode in MODES)
+
+    if combined_rate > budget:
+        raise RuntimeError(
+            f"Tuner left combined DEV false-region rate {combined_rate:.3f}/minute "
+            f"above the {budget:.3f}/minute budget."
+        )
+    print(
+        f"Final combined DEV false-region rate: {combined_rate:.3f}/minute "
+        f"(budget {budget:.3f})",
+        flush=True,
+    )
     return config, tuning_rows
 
 
@@ -647,7 +977,12 @@ def _write_reports(
     figure, axes = plt.subplots(1, 2, figsize=(12, 4), constrained_layout=True)
     for source in TIMING_SOURCES:
         for mode in MODES:
-            selected = [row for row in type_rows if row["timing_source"] == source and row["mode"] == mode]
+            selected = [
+                row for row in type_rows
+                if row["timing_source"] == source
+                and row["mode"] == mode
+                and row["iou_threshold"] == 0.3
+            ]
             axes[0].plot(
                 [row["flaw_type"] for row in selected], [row["recall"] for row in selected],
                 marker="o", label=f"{source}/{mode}",
@@ -679,14 +1014,32 @@ def _write_reports(
     plt.close(figure)
     headline = [row for row in summaries if row["timing_source"] == "realistic"]
     weak_types = [
-        {"mode": row["mode"], "flaw_type": row["flaw_type"], "precision": row["precision"], "recall": row["recall"]}
-        for row in type_rows if row["timing_source"] == "realistic" and row["recall"] < 0.5
+        {
+            "mode": row["mode"], "flaw_type": row["flaw_type"],
+            "iou_threshold": row["iou_threshold"],
+            "precision": row["precision"], "recall": row["recall"],
+        }
+        for row in type_rows
+        if row["timing_source"] == "realistic"
+        and row["iou_threshold"] == 0.3
+        and row["recall"] < 0.5
     ]
     limitations = {
         "headline_timing_source": "realistic",
+        "enabled_types": [
+            flaw_type for flaw_type in DETECTOR_TYPES
+            if config["detectors"][flaw_type].get("enabled", True)
+        ],
+        "disabled_types": {
+            flaw_type: config["detectors"][flaw_type].get("disabled_reason", "")
+            for flaw_type in DETECTOR_TYPES
+            if not config["detectors"][flaw_type].get("enabled", True)
+        },
         "weak_types_from_dev_metrics": weak_types,
-        "fillers": "Wildcard and low-variation voiced spans do not reveal lexical content; some star spans can absorb ordinary speech or alignment error.",
-        "stumbles": "Only acoustic repeats represented in adjacent aligned windows or wildcard spans can be found; a repeat hidden inside lexical alignment may be missed.",
+        "fillers": "Only stable voiced segments in inter-word gaps of the plain alignment are considered. Acoustic evidence cannot prove lexical content; controls and IDEAL rates are reported for review.",
+        "stumbles": "Greedy Wav2Vec2 ASR on CPU compares inserted words against the reference transcript; recognition and forced timing errors can still miss or misplace repeats.",
+        "reference_free": "Each DEV passage is scored against an IDEAL reference fitted on all other DEV IDEAL passages. No held-out passage contributes to its own reference.",
+        "alignment": "Pace, pause, monotone, and volume measurements use plain forced alignment. Wildcard alignment is diagnostic only.",
         "bootstrap_ci95": {
             row["mode"]: [row["f1_iou_0.3_ci95_low"], row["f1_iou_0.3_ci95_high"]]
             for row in headline
@@ -713,12 +1066,18 @@ def run_evaluation(project_root: Path = PROJECT_ROOT) -> list[dict]:
     _preserve_legacy_baseline()
     config = load_detection_config(PROJECT_ROOT / "config" / "detection.yaml")
     entries = _load_dev_entries(PROJECT_ROOT, config)
-    references = _fit_references(entries)
+    references = {
+        source: _fit_references_leave_one_passage_out(
+            entries, source, config["measurements"]["pace"]["window_words"]
+        )
+        for source in TIMING_SOURCES
+    }
     REFERENCE_PATH.write_text(
         json.dumps(references, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n",
         encoding="utf-8",
     )
     tables = _prepare_tables(entries, config, references)
+    _run_pre_tuning_diagnostics(entries, tables, config)
     config, tuning_rows = _tune_thresholds(entries, tables, config)
     summaries: list[dict] = []
     type_rows: list[dict] = []
@@ -749,6 +1108,12 @@ def run_evaluation(project_root: Path = PROJECT_ROOT) -> list[dict]:
         )
     print(f"Reference artifact: {REFERENCE_PATH.relative_to(PROJECT_ROOT).as_posix()}")
     print("Frozen config checksum: eval/results/frozen_config.sha256")
+    disabled = {
+        flaw_type: config["detectors"][flaw_type].get("disabled_reason", "")
+        for flaw_type in DETECTOR_TYPES
+        if not config["detectors"][flaw_type].get("enabled", True)
+    }
+    print(f"Disabled detector types: {json.dumps(disabled, sort_keys=True)}")
     return summaries
 
 
