@@ -56,7 +56,9 @@ flowchart LR
     F --> G
 ```
 
-Dataset download: DATASET_LINK_TODO
+Dataset download: https://drive.google.com/file/d/1jLXpR5qPxE_AshTLVyf_5yCk61IxZjUY/view?usp=sharing
+
+The archive is about 241 MB. Google Drive shows a virus-scan warning for files this size; choose Download anyway. Unzip it into the repository root so the files land in `data/processed/audio/` and `data/labels/`.
 
 To check a download, compare it with `data/labels/checksums.sha256`. The audio is stored as 24-bit FLAC. The 16-bit format flattened the quiet room tone we use to fill inserted pauses into digital silence, which a detector could have found trivially.
 
