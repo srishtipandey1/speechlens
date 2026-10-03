@@ -9,7 +9,7 @@ import pytest
 import soundfile as sf
 import yaml
 
-from speechlens.alignment.align import SAMPLE_RATE_HZ, align, has_cached_mms_fa_model, load_audio
+from speechlens.alignment.align import SAMPLE_RATE_HZ, align, load_audio
 from speechlens.injection import (
     filler,
     long_pause,
@@ -25,8 +25,6 @@ from scripts.make_dataset import _write_flac
 from scripts.demo_injection import _choose_region
 
 
-CLIP_PATH = Path("data/raw/test_clip.wav")
-TRANSCRIPT_PATH = Path("data/raw/test_clip.txt")
 INJECTORS = (
     pace_fast,
     pace_slow,
@@ -47,17 +45,14 @@ def _short_gap_region(timings: list[WordTiming]) -> tuple[int, int]:
     raise AssertionError("real test clip has no short natural word boundary")
 
 
-@pytest.mark.skipif(
-    not (CLIP_PATH.is_file() and has_cached_mms_fa_model()),
-    reason="test clip or locally cached MMS_FA model is missing",
-)
-def test_all_injectors_preserve_real_clip_properties() -> None:
+@pytest.mark.slow
+def test_all_injectors_preserve_real_clip_properties(
+    real_alignment_fixture: tuple[Path, Path],
+) -> None:
     """Apply each effect to real speech and check labels, timings, and audio."""
-    if not TRANSCRIPT_PATH.is_file():
-        pytest.fail("test_clip.txt is required when the real audio fixture is present")
-
-    audio = load_audio(CLIP_PATH)
-    transcript = TRANSCRIPT_PATH.read_text(encoding="utf-8")
+    clip_path, transcript_path = real_alignment_fixture
+    audio = load_audio(clip_path)
+    transcript = transcript_path.read_text(encoding="utf-8")
     timings = align(audio, transcript)
     region = _short_gap_region(timings)
 
@@ -98,10 +93,7 @@ def _f0_std_in_semitones(waveform: np.ndarray, start_s: float, end_s: float) -> 
     return float(np.std(semitones))
 
 
-@pytest.mark.skipif(
-    not (CLIP_PATH.is_file() and has_cached_mms_fa_model()),
-    reason="test clip or locally cached MMS_FA model is missing",
-)
+@pytest.mark.slow
 @pytest.mark.parametrize(
     ("severity", "minimum_ratio", "maximum_ratio"),
     [(0.3, 0.60, 0.95), (0.9, 0.0, 0.30)],
@@ -110,12 +102,12 @@ def test_monotone_reduces_real_clip_voiced_f0_variation(
     severity: float,
     minimum_ratio: float,
     maximum_ratio: float,
+    real_alignment_fixture: tuple[Path, Path],
 ) -> None:
     """Real-speech monotone F0 variation meets its severity-specific range."""
-    if not TRANSCRIPT_PATH.is_file():
-        pytest.fail("test_clip.txt is required when the real audio fixture is present")
-    audio = load_audio(CLIP_PATH)
-    timings = align(audio, TRANSCRIPT_PATH.read_text(encoding="utf-8"))
+    clip_path, transcript_path = real_alignment_fixture
+    audio = load_audio(clip_path)
+    timings = align(audio, transcript_path.read_text(encoding="utf-8"))
     region = _choose_region(len(timings))
     changed, labels, _ = monotone(
         audio,
@@ -137,14 +129,14 @@ def test_monotone_reduces_real_clip_voiced_f0_variation(
     assert minimum_ratio <= ratio <= maximum_ratio
 
 
-@pytest.mark.skipif(
-    not (CLIP_PATH.is_file() and has_cached_mms_fa_model()),
-    reason="test clip or locally cached MMS_FA model is missing",
-)
-def test_real_pause_room_tone_survives_flac_and_matches_source_level() -> None:
+@pytest.mark.slow
+def test_real_pause_room_tone_survives_flac_and_matches_source_level(
+    real_alignment_fixture: tuple[Path, Path],
+) -> None:
     """Real pause tone remains nonzero after FLAC encoding and RMS-matches source."""
-    audio = load_audio(CLIP_PATH)
-    timings = align(audio, TRANSCRIPT_PATH.read_text(encoding="utf-8"))
+    clip_path, transcript_path = real_alignment_fixture
+    audio = load_audio(clip_path)
+    timings = align(audio, transcript_path.read_text(encoding="utf-8"))
     region = _short_gap_region(timings)
     changed, labels, _ = long_pause(
         audio, timings, region, 0.9, np.random.default_rng(742)

@@ -599,5 +599,3 @@ def _runs(mask: np.ndarray) -> list[tuple[int, int]]:
     starts = np.r_[selected[0], selected[breaks + 1]]
     ends = np.r_[selected[breaks], selected[-1]] + 1
     return [(int(start), int(end)) for start, end in zip(starts, ends)]
-
-

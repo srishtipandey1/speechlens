@@ -1,6 +1,7 @@
 """Cross-platform entry point for SpeechLens project tasks."""
 
 import argparse
+import os
 import subprocess
 import sys
 
@@ -35,7 +36,10 @@ def run_task(task: str, smoke: bool = False) -> None:
     if task == "setup":
         run_setup()
     elif task == "test":
-        subprocess.run([sys.executable, "-m", "pytest"], check=True)
+        command = [sys.executable, "-m", "pytest"]
+        if os.environ.get("CI", "").casefold() == "true":
+            command.extend(["-m", "not slow"])
+        subprocess.run(command, check=True)
     elif task == "dataset":
         subprocess.run(
             [sys.executable, "-m", "scripts.make_dataset"],

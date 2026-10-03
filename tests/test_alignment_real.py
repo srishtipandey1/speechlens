@@ -8,26 +8,18 @@ import pytest
 from speechlens.alignment.align import (
     SAMPLE_RATE_HZ,
     align,
-    has_cached_mms_fa_model,
     load_audio,
 )
 
 
-CLIP_PATH = Path("data/raw/test_clip.wav")
-TRANSCRIPT_PATH = Path("data/raw/test_clip.txt")
-
-
-@pytest.mark.skipif(
-    not (CLIP_PATH.is_file() and has_cached_mms_fa_model()),
-    reason="test clip or locally cached MMS_FA model is missing",
-)
-def test_alignment_is_monotonic_and_invariant_to_two_second_silence_shift() -> None:
+@pytest.mark.slow
+def test_alignment_is_monotonic_and_invariant_to_two_second_silence_shift(
+    real_alignment_fixture: tuple[Path, Path],
+) -> None:
     """Prepending exact silence shifts every timing without changing word order."""
-    if not TRANSCRIPT_PATH.is_file():
-        pytest.fail("test_clip.txt is required when the real audio fixture is present")
-
-    waveform = load_audio(CLIP_PATH)
-    transcript = TRANSCRIPT_PATH.read_text(encoding="utf-8")
+    clip_path, transcript_path = real_alignment_fixture
+    waveform = load_audio(clip_path)
+    transcript = transcript_path.read_text(encoding="utf-8")
     original_timings = align(waveform, transcript)
     shift_samples = 2 * SAMPLE_RATE_HZ
     shifted_waveform = np.concatenate(

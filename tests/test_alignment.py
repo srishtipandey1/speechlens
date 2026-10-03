@@ -12,7 +12,6 @@ from speechlens.alignment.align import (
     align,
     _frame_stride_samples,
     frame_to_seconds,
-    has_cached_mms_fa_model,
     load_audio,
     normalize_transcript,
 )
@@ -104,16 +103,10 @@ def test_align_empty_transcript_does_not_load_model() -> None:
     assert align([], "... !!!") == []
 
 
-@pytest.mark.skipif(
-    not (Path("data/raw/test_clip.wav").is_file() and has_cached_mms_fa_model()),
-    reason="test clip or locally cached MMS_FA model is missing",
-)
-def test_align_real_speech_clip() -> None:
+@pytest.mark.slow
+def test_align_real_speech_clip(real_alignment_fixture: tuple[Path, Path]) -> None:
     """Align the optional local speech fixture without fetching model weights."""
-    audio_path = Path("data/raw/test_clip.wav")
-    transcript_path = Path("data/raw/test_clip.txt")
-    if not transcript_path.is_file():
-        pytest.skip("test transcript is missing")
+    audio_path, transcript_path = real_alignment_fixture
 
     timings = align(
         load_audio(audio_path),

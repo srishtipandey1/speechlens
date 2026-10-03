@@ -826,7 +826,6 @@ def test_asr_model_load_restores_torch_hub_cache_dir(monkeypatch) -> None:
         "get_model",
         lambda **_: FakeModel(),
     )
-
     with tempfile.TemporaryDirectory(prefix="speechlens-asr-cache-") as directory:
         cache_root = Path(directory) / "asr_torch_hub"
         checkpoint = (
@@ -836,9 +835,7 @@ def test_asr_model_load_restores_torch_hub_cache_dir(monkeypatch) -> None:
         )
         checkpoint.parent.mkdir(parents=True)
         checkpoint.write_bytes(b"test sentinel; model loading is mocked")
-
         asr._load_asr_model(str(cache_root.resolve()))
-
         assert changed_cache_dirs == [str(cache_root.resolve()), original_cache_dir]
         asr._load_asr_model.cache_clear()
 

@@ -19,5 +19,8 @@ data/processed/
 eval/results/*.log
 
 eval/results/**/*.png
-eval/results/*.log
 eval/results/smoke_artifacts/
+eval/results/test_*.csv
+eval/results/alignment_plain_vs_wildcard_dev_ideal.csv
+eval/results/ideal_debug.txt
+eval/results/ideal_region_debug.txt
