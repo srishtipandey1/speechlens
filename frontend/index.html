@@ -6,43 +6,40 @@
   <meta name="theme-color" content="#f4f5f4">
   <title>SpeechLens | Delivery analysis</title>
   <link rel="stylesheet" href="/style.css">
-  <script>
-    window.speechLensCdnFailures = [];
-    window.speechLensCdnFailed = function (name) {
-      window.speechLensCdnFailures.push(name);
-    };
-  </script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.6/wavesurfer.min.js" onerror="speechLensCdnFailed('WaveSurfer')"></script>
   <!-- Vendored Plotly.js v3.0.1 is distributed under the MIT License; see docs/THIRD_PARTY.md. -->
-  <script defer src="/vendor/plotly.min.js" onerror="speechLensCdnFailed('Plotly')"></script>
+  <script defer src="/vendor/plotly.min.js"></script>
   <script defer src="/app.js"></script>
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="/" aria-label="SpeechLens home">SpeechLens</a>
+    <div class="header-copy">
+      <a class="brand" href="/" aria-label="SpeechLens home">SpeechLens</a>
+      <p class="product-description">Compares a spoken delivery with a reference reading of the same text and shows where and why they differ.</p>
+    </div>
     <div class="mode-wrap"><span>Mode</span><span id="mode-badge" class="mode-badge">Waiting for recording</span></div>
   </header>
-  <p class="disclaimer">Educational and decision-support prototype; not a substitute for a human judge or formal assessment.</p>
 
   <main>
-    <nav class="tabs" aria-label="Analysis options" role="tablist">
-      <button id="tab-demo" class="tab is-active" type="button" role="tab" aria-selected="true" aria-controls="panel-demo">Try a demo</button>
-      <button id="tab-own" class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-own">Analyze your own</button>
-    </nav>
-
-    <section id="panel-demo" class="tab-panel" role="tabpanel" aria-labelledby="tab-demo">
-      <div class="input-row demo-controls">
+    <section id="panel-demo" class="demo-bar" role="tabpanel" aria-labelledby="tab-demo" aria-label="Demo recording controls">
+      <div class="demo-controls">
         <label class="control-field" for="demo-select">Recording
           <select id="demo-select" disabled><option>Loading demos…</option></select>
         </label>
         <label class="ladder-control" for="severity-slider">
-          <span class="ladder-heading">Severity ladder <output id="severity-value" for="severity-slider">IDEAL</output></span>
-          <input id="severity-slider" type="range" min="0" max="5" value="0" step="1" disabled aria-label="Choose ideal or flaw severity">
-          <span class="range-labels" aria-hidden="true"><span>IDEAL</span><span>L1</span><span>L2</span><span>L3</span><span>L4</span><span>L5</span></span>
+          <span class="ladder-heading">Severity ladder <output id="severity-value" for="severity-slider">L3</output></span>
+          <input id="severity-slider" type="range" min="0" max="5" value="3" step="1" disabled aria-label="Choose ideal or flaw severity">
+          <span class="range-labels" aria-hidden="true"><span>Ideal</span><span>L1</span><span>L2</span><span>L3</span><span>L4</span><span>L5</span></span>
         </label>
         <p id="demo-empty" class="empty-note" hidden>No precomputed demo results are available. Use “Analyze your own” or precompute a DEV demo locally.</p>
       </div>
+      <p class="demo-explainer">Each level adds more delivery flaws to the same passage; the ideal is the reference.</p>
+      <div id="demo-status" class="panel-status" role="status" aria-live="polite" hidden><span></span><button type="button" aria-label="Dismiss message">Dismiss</button></div>
     </section>
+
+    <nav class="tabs" aria-label="Analysis options" role="tablist">
+      <button id="tab-demo" class="tab is-active" type="button" role="tab" aria-selected="true" aria-controls="panel-demo">Try a demo</button>
+      <button id="tab-own" class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-own">Analyze your own</button>
+    </nav>
 
     <section id="panel-own" class="tab-panel" role="tabpanel" aria-labelledby="tab-own" hidden>
       <form id="analyze-form" class="input-row upload-form">
@@ -54,10 +51,8 @@
         <button id="analyze-button" class="primary-button" type="submit"><span aria-hidden="true">↗</span> Analyze recording</button>
       </form>
       <p id="analysis-progress" class="progress-note" role="status" hidden><span class="spinner" aria-hidden="true"></span> Aligning speech and extracting features…</p>
+      <div id="own-status" class="panel-status" role="status" aria-live="polite" hidden><span></span><button type="button" aria-label="Dismiss message">Dismiss</button></div>
     </section>
-
-    <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
-    <div id="error-banner" class="error-banner" role="alert" hidden></div>
 
     <section id="results" class="results" aria-live="polite" hidden>
       <div id="loading-skeleton" class="loading-skeleton" aria-label="Loading analysis">
@@ -93,8 +88,10 @@
         <section class="media-section" aria-labelledby="media-title">
           <div class="section-title"><h2 id="media-title">Waveform and transcript</h2><button id="play-button" class="icon-button" type="button" aria-label="Play recording" title="Play or pause">▶</button></div>
           <div id="waveform" class="waveform" aria-label="Recording waveform">
+            <canvas id="waveform-canvas" class="waveform-canvas" tabindex="0" role="img" aria-label="Audio waveform. Click or drag to seek."></canvas>
             <div id="wave-regions" class="wave-regions" aria-label="Flaw regions on waveform"></div>
           </div>
+          <div id="wave-status" class="panel-status" role="status" aria-live="polite" hidden><span></span><button type="button" aria-label="Dismiss message">Dismiss</button></div>
           <audio id="native-audio" class="native-audio" controls preload="metadata" hidden></audio>
           <div id="flaw-legend" class="flaw-legend" aria-label="Flaw type legend"></div>
           <div class="media-grid">
@@ -105,8 +102,11 @@
 
         <section class="charts-section" aria-labelledby="charts-title">
           <div class="section-title"><h2 id="charts-title">Feature timelines</h2><span id="baseline-label" class="chart-kicker"></span></div>
+          <p id="timeline-note" class="panel-caption">Smoothed for display; detection uses the unsmoothed features.</p>
+          <p id="reference-timeline-note" class="panel-caption" hidden>This is the reference reading; participant and baseline are identical.</p>
           <div id="timeseries-chart" class="timeseries-chart" role="img" aria-label="F0, energy, and speech-rate timelines"></div>
           <div id="timeseries-fallback" class="chart-fallback" hidden>Plotly is unavailable. Scores, region explanations, and transcript remain available.</div>
+          <div id="timeline-status" class="panel-status" role="status" aria-live="polite" hidden><span></span><button type="button" aria-label="Dismiss message">Dismiss</button></div>
         </section>
 
         <section class="regions-section" aria-labelledby="regions-title">
@@ -135,6 +135,6 @@
       <p>Scores compare delivery features using the supplied transcript for plain forced alignment.</p>
     </section>
   </main>
-  <footer><span>SpeechLens</span></footer>
+  <footer><span>Educational and decision-support prototype; not a substitute for a human judge or formal assessment.</span></footer>
 </body>
 </html>

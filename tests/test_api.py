@@ -223,9 +223,17 @@ def test_dashboard_root_and_assets_are_served() -> None:
     assert asset_status == 200
     assert b"loadDemoIndex" in app_body
     assert b"show-low-regions" in app_body
+    assert b"decodeAudioData" in app_body
+    assert b"__L3" in app_body
+    assert b"0.25" in app_body
+    assert b"1.5" in app_body
     assert b"summary-findings-list" in body
     assert b"/vendor/plotly.min.js" in body
     assert b"cdnjs.cloudflare.com/ajax/libs/plotly" not in body
+    assert b"cdnjs.cloudflare.com/ajax/libs/wavesurfer" not in body
+    assert b"WaveSurfer" not in body
+    assert b"Compares a spoken delivery with a reference reading of the same text" in body
+    assert b"Each level adds more delivery flaws to the same passage" in body
 
     plotly_status, plotly_headers, plotly_body = asyncio.run(_get("/vendor/plotly.min.js"))
     assert plotly_status == 200
