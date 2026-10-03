@@ -27,54 +27,66 @@ measurements:
     - hmm
 detectors:
   pace_fast:
-    enabled: true
+    enabled: false
     enter_threshold: 0.14
     exit_threshold: 0.07
     minimum_duration_s: 0.2
     merge_gap_s: 0.12
     severity_scale: 0.4
+    disabled_reason: No configured DEV-only threshold met the per-type false-region
+      budget of 0.150/minute with positive target F1 in both modes.
   pace_slow:
-    enabled: true
+    enabled: false
     enter_threshold: 0.2
     exit_threshold: 0.1
     minimum_duration_s: 0.25
     merge_gap_s: 0.12
     severity_scale: 0.6
+    disabled_reason: No configured DEV-only threshold met the per-type false-region
+      budget of 0.150/minute with positive target F1 in both modes.
   long_pause:
     enabled: true
-    enter_threshold: 0.45
+    enter_threshold: 1.5
     exit_threshold: 0.25
     minimum_duration_s: 0.2
     merge_gap_s: 0.12
     severity_scale: 2.0
   monotone:
-    enabled: true
+    enabled: false
     enter_threshold: 0.3
     exit_threshold: 0.15
     minimum_duration_s: 0.6
     merge_gap_s: 0.2
     severity_scale: 0.7
+    disabled_reason: No configured DEV-only threshold met the per-type false-region
+      budget of 0.150/minute with positive target F1 in both modes.
   volume_dropoff:
-    enabled: true
+    enabled: false
     enter_threshold: 4.0
     exit_threshold: 2.0
     minimum_duration_s: 0.6
     merge_gap_s: 0.2
     severity_scale: 12.0
+    disabled_reason: No configured DEV-only threshold met the per-type false-region
+      budget of 0.150/minute with positive target F1 in both modes.
   filler:
-    enabled: true
+    enabled: false
     enter_threshold: 0.2
     exit_threshold: 0.1
     minimum_duration_s: 0.2
     merge_gap_s: 0.05
     severity_scale: 0.8
+    disabled_reason: No configured DEV-only threshold met the per-type false-region
+      budget of 0.150/minute with positive target F1 in both modes.
   stumble_repeat:
-    enabled: true
+    enabled: false
     enter_threshold: 0.72
     exit_threshold: 0.55
     minimum_duration_s: 0.12
     merge_gap_s: 0.08
     severity_scale: 1.0
+    disabled_reason: No configured DEV-only threshold met the per-type false-region
+      budget of 0.150/minute with positive target F1 in both modes.
 evaluation:
   bootstrap_samples: 2000
   bootstrap_seed: 20261002
@@ -82,111 +94,118 @@ evaluation:
   false_region_budget_per_type_per_minute: 0.15
 tuning_candidates:
   pace_fast:
-    - 0.03
-    - 0.05
-    - 0.08
-    - 0.12
-    - 0.16
-    - 0.2
-    - 0.3
-    - 0.5
-    - 0.75
-    - 1.0
-    - 1.5
-    - 2.0
-    - 3.0
-    - 4.0
-    - 8.0
-    - 16.0
-    - 32.0
+  - 0.03
+  - 0.05
+  - 0.08
+  - 0.12
+  - 0.16
+  - 0.2
+  - 0.3
+  - 0.5
+  - 0.75
+  - 1.0
+  - 1.5
+  - 2.0
+  - 2.6642965456084964
+  - 3.0
+  - 4.0
+  - 8.0
+  - 16.0
+  - 32.0
   pace_slow:
-    - 0.03
-    - 0.05
-    - 0.08
-    - 0.12
-    - 0.18
-    - 0.2
-    - 0.3
-    - 0.5
-    - 0.75
-    - 1.0
-    - 1.5
-    - 2.0
-    - 3.0
-    - 4.0
-    - 8.0
-    - 16.0
-    - 32.0
+  - 0.03
+  - 0.05
+  - 0.08
+  - 0.12
+  - 0.18
+  - 0.2
+  - 0.3
+  - 0.5
+  - 0.75
+  - 1.0
+  - 1.5
+  - 2.0
+  - 3.0
+  - 4.0
+  - 8.0
+  - 15.850532847698023
+  - 16.0
+  - 32.0
   long_pause:
-    - 0.3
-    - 0.45
-    - 0.6
-    - 0.8
-    - 1.0
-    - 1.5
-    - 2.0
-    - 3.0
-    - 5.0
-    - 8.0
-    - 12.0
-    - 20.0
-    - 30.0
+  - 0.3
+  - 0.45
+  - 0.6
+  - 0.8
+  - 1.0
+  - 1.5
+  - 2.0
+  - 2.4299999999999957
+  - 3.0
+  - 5.0
+  - 8.0
+  - 12.0
+  - 20.0
+  - 30.0
   monotone:
-    - 0.05
-    - 0.1
-    - 0.15
-    - 0.2
-    - 0.25
-    - 0.3
-    - 0.4
-    - 0.5
-    - 0.75
-    - 1.0
-    - 1.5
-    - 2.0
-    - 3.0
-    - 5.0
-    - 8.0
+  - 0.05
+  - 0.1
+  - 0.15
+  - 0.2
+  - 0.25
+  - 0.3
+  - 0.4
+  - 0.5
+  - 0.75
+  - 1.0
+  - 1.5
+  - 1.8589585644982909
+  - 2.0
+  - 3.0
+  - 5.0
+  - 8.0
   volume_dropoff:
-    - 2.0
-    - 3.0
-    - 4.0
-    - 5.0
-    - 6.0
-    - 8.0
-    - 10.0
-    - 12.0
-    - 16.0
-    - 24.0
-    - 36.0
-    - 48.0
-    - 64.0
-    - 128.0
+  - 2.0
+  - 3.0
+  - 4.0
+  - 5.0
+  - 6.0
+  - 8.0
+  - 10.0
+  - 12.0
+  - 16.0
+  - 21.594338722019618
+  - 24.0
+  - 36.0
+  - 48.0
+  - 64.0
+  - 128.0
   filler:
-    - 0.2
-    - 0.25
-    - 0.3
-    - 0.4
-    - 0.5
-    - 0.75
-    - 1.0
-    - 1.5
-    - 2.0
-    - 3.0
-    - 5.0
-    - 10.0
-    - 30.0
-    - 60.0
+  - 0.2
+  - 0.25
+  - 0.3
+  - 0.4
+  - 0.5
+  - 0.5399999999999886
+  - 0.75
+  - 1.0
+  - 1.5
+  - 2.0
+  - 3.0
+  - 5.0
+  - 10.0
+  - 30.0
+  - 60.0
   stumble_repeat:
-    - 0.2
-    - 0.3
-    - 0.4
-    - 0.5
-    - 0.6
-    - 0.7
-    - 0.8
-    - 0.9
-    - 0.95
-    - 0.99
-    - 1.0
-    - 1.01
+  - 5.0e-324
+  - 0.2
+  - 0.3
+  - 0.4
+  - 0.5
+  - 0.6
+  - 0.7
+  - 0.8
+  - 0.9
+  - 0.95
+  - 0.99
+  - 1.0
+  - 1.01

@@ -32,7 +32,16 @@ are refreshed from `eval/results/detection_threshold_tuning.csv` after a full
 DEV evaluation.
 
 <!-- DEV_TUNED_DETECTORS_START -->
-Run the full DEV evaluation to populate the enabled/disabled detector table.
+
+| Detector | DEV status | Enter threshold | Exit threshold | Reason when disabled |
+| --- | --- | ---: | ---: | --- |
+| `pace_fast` | disabled | 0.14 | 0.07 | No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes. |
+| `pace_slow` | disabled | 0.2 | 0.1 | No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes. |
+| `long_pause` | enabled | 1.5 | 0.25 |  |
+| `monotone` | disabled | 0.3 | 0.15 | No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes. |
+| `volume_dropoff` | disabled | 4.0 | 2.0 | No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes. |
+| `filler` | disabled | 0.2 | 0.1 | No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes. |
+| `stumble_repeat` | disabled | 0.72 | 0.55 | No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes. |
 <!-- DEV_TUNED_DETECTORS_END -->
 
 The run writes DEV summaries, per-type metrics, severity recall, control false

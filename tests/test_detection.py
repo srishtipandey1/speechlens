@@ -362,7 +362,10 @@ def test_typed_detector_uses_only_the_crossed_type_threshold() -> None:
 
     config = load_detection_config()
     config["detectors"]["pace_fast"].update(
-        enter_threshold=0.1, exit_threshold=0.05, minimum_duration_s=0.1
+        enabled=True,
+        enter_threshold=0.1,
+        exit_threshold=0.05,
+        minimum_duration_s=0.1,
     )
     times = np.arange(100, dtype=np.float64) * 0.01
     table = pd.DataFrame({
