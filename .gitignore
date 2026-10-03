@@ -17,3 +17,7 @@ data/processed/
 .speechlens_cache/
 
 eval/results/*.log
+
+eval/results/**/*.png
+eval/results/*.log
+eval/results/smoke_artifacts/
