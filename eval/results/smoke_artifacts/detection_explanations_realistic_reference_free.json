@@ -1,0 +1,94 @@
+[
+  {
+    "confidence": 0.9927939586882545,
+    "end_s": 21.88,
+    "expected_numeric": 0.0,
+    "expected_value": "no excess pause",
+    "formula": "participant_pause_s - ideal_pause_s",
+    "mode": "reference_free",
+    "observed_numeric": 2.1699999999999973,
+    "observed_value": "2.17 s excess pause",
+    "recording_id": "dev_f_1462__L5",
+    "rendered_text": "00:19.2-00:21.9 'HAPPEN TO': 2.17 s beyond the expected pause, so the delivery stalled here. Reduce the pause and continue smoothly into the next phrase.",
+    "sentence": "00:19.2-00:21.9 'HAPPEN TO': 2.17 s beyond the expected pause, so the delivery stalled here.",
+    "severity": 1.0,
+    "start_s": 19.2,
+    "suggestion": "Reduce the pause and continue smoothly into the next phrase.",
+    "timing_source": "realistic",
+    "type": "long_pause",
+    "words": [
+      "HAPPEN",
+      "TO"
+    ],
+    "z_score_or_ratio": 2.1699999999999973
+  },
+  {
+    "confidence": 0.9942152664297036,
+    "end_s": 39.14,
+    "expected_numeric": 0.0,
+    "expected_value": "no excess pause",
+    "formula": "participant_pause_s - ideal_pause_s",
+    "mode": "reference_free",
+    "observed_numeric": 2.2299999999999995,
+    "observed_value": "2.23 s excess pause",
+    "recording_id": "dev_f_1462__L5",
+    "rendered_text": "00:36.4-00:39.1 'AND RUBBED': 2.23 s beyond the expected pause, so the delivery stalled here. Reduce the pause and continue smoothly into the next phrase.",
+    "sentence": "00:36.4-00:39.1 'AND RUBBED': 2.23 s beyond the expected pause, so the delivery stalled here.",
+    "severity": 1.0,
+    "start_s": 36.4,
+    "suggestion": "Reduce the pause and continue smoothly into the next phrase.",
+    "timing_source": "realistic",
+    "type": "long_pause",
+    "words": [
+      "AND",
+      "RUBBED"
+    ],
+    "z_score_or_ratio": 2.2299999999999995
+  },
+  {
+    "confidence": 0.9983995766377947,
+    "end_s": 60.84,
+    "expected_numeric": 0.0,
+    "expected_value": "no excess pause",
+    "formula": "participant_pause_s - ideal_pause_s",
+    "mode": "reference_free",
+    "observed_numeric": 1.3500000000000043,
+    "observed_value": "1.35 s excess pause",
+    "recording_id": "dev_f_1462__L5",
+    "rendered_text": "00:59.0-01:00.8 'THE STAGE': 1.35 s beyond the expected pause, so the delivery stalled here. Reduce the pause and continue smoothly into the next phrase.",
+    "sentence": "00:59.0-01:00.8 'THE STAGE': 1.35 s beyond the expected pause, so the delivery stalled here.",
+    "severity": 0.6750000000000022,
+    "start_s": 58.98,
+    "suggestion": "Reduce the pause and continue smoothly into the next phrase.",
+    "timing_source": "realistic",
+    "type": "long_pause",
+    "words": [
+      "THE",
+      "STAGE"
+    ],
+    "z_score_or_ratio": 1.3500000000000043
+  },
+  {
+    "confidence": 0.9961126758323526,
+    "end_s": 41.0,
+    "expected_numeric": 0.0,
+    "expected_value": "no excess pause",
+    "formula": "participant_pause_s - ideal_pause_s",
+    "mode": "reference_free",
+    "observed_numeric": 1.4899999999999978,
+    "observed_value": "1.49 s excess pause",
+    "recording_id": "dev_f_1673__L4",
+    "rendered_text": "00:39.0-00:41.0 'BY A': 1.49 s beyond the expected pause, so the delivery stalled here. Reduce the pause and continue smoothly into the next phrase.",
+    "sentence": "00:39.0-00:41.0 'BY A': 1.49 s beyond the expected pause, so the delivery stalled here.",
+    "severity": 0.7449999999999989,
+    "start_s": 38.98,
+    "suggestion": "Reduce the pause and continue smoothly into the next phrase.",
+    "timing_source": "realistic",
+    "type": "long_pause",
+    "words": [
+      "BY",
+      "A"
+    ],
+    "z_score_or_ratio": 1.4899999999999978
+  }
+]

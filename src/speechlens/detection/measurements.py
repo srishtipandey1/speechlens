@@ -230,7 +230,6 @@ def build_typed_deviation_table(
     ideal_bundle: FeatureBundle | None = None,
     ideal_timings: Sequence[WordTiming] | None = None,
     reference: Mapping | None = None,
-    wildcard_spans: Sequence[tuple[float, float]] = (),
     stumble_intervals: Sequence[tuple[float, float, float]] = (),
 ) -> pd.DataFrame:
     """Produce separate type-specific frame scores from direct measurements."""
@@ -391,11 +390,11 @@ def detect_typed_regions(
     selected_types = DETECTOR_TYPES if flaw_types is None else tuple(flaw_types)
     if any(flaw_type not in DETECTOR_TYPES for flaw_type in selected_types):
         raise ValueError("flaw_types contains an unsupported detector")
-        selected_types = tuple(
-            flaw_type
-            for flaw_type in selected_types
-            if config["detectors"][flaw_type].get("enabled", True)
-        )
+    selected_types = tuple(
+        flaw_type
+        for flaw_type in selected_types
+        if config["detectors"][flaw_type].get("enabled", True)
+    )
     for flaw_type in selected_types:
         settings = config["detectors"][flaw_type]
         scores = table[f"score_{flaw_type}"].fillna(0.0).to_numpy(dtype=np.float64)
@@ -484,11 +483,12 @@ def _mark_filler_scores(
     f0 = frames["f0_semitones"].to_numpy(dtype=np.float64)
     voiced = frames["voiced"].to_numpy(dtype=bool)
     activity = frames["speech_activity"].to_numpy(dtype=bool)
+    unassigned = frames["word_index"].to_numpy(dtype=np.int64) < 0
     minimum_duration_s = float(settings["minimum_duration_s"])
     maximum_f0_std = float(settings["maximum_f0_std_semitones"])
     for first, second in zip(words, words[1:]):
         gap_mask = (times >= first["end_s"]) & (times < second["start_s"])
-        voiced_gap = gap_mask & voiced & activity & np.isfinite(f0)
+        voiced_gap = gap_mask & unassigned & voiced & activity & np.isfinite(f0)
         for start, end in _runs(voiced_gap):
             duration_s = (end - start) * step_s
             if duration_s < minimum_duration_s:

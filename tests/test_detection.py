@@ -1,7 +1,6 @@
 """Synthetic tests for temporal detection primitives and rule classification."""
 
 import numpy as np
-import json
 import tempfile
 from pathlib import Path
 import librosa
@@ -22,10 +21,8 @@ from speechlens.explain import (
     render_explanations_json,
 )
 from scripts.eval_detection import (
-    _cached_forced_alignment,
     _cached_plain_alignment,
     _cached_recording_features,
-    _transcript_with_wildcards,
 )
 from speechlens.detection.measurements import (
     detect_typed_regions,
@@ -208,35 +205,6 @@ def test_each_flaw_type_has_a_complete_explanation_record() -> None:
         assert record["sentence"] in record["rendered_text"]
 
 
-def test_wildcard_alignment_cache_uses_audio_transcript_and_reuses_result(monkeypatch) -> None:
-    """A cache miss aligns the wildcard transcript and a hit avoids real alignment."""
-    import scripts.eval_detection as evaluator
-
-    audio = np.zeros(1600, dtype=np.float32)
-    expected_timing = WordTiming(word="hello", start_s=0.0, end_s=0.1, confidence=0.9)
-    calls = []
-
-    def fake_align(waveform, text):
-        calls.append((waveform.copy(), text))
-        return [expected_timing]
-
-    monkeypatch.setattr(evaluator, "align", fake_align)
-    with tempfile.TemporaryDirectory(prefix="speechlens-align-cache-", dir=Path.cwd()) as temp_dir:
-        cache_dir = Path(temp_dir)
-        first = _cached_forced_alignment(audio, "one two three", cache_dir, 2)
-        monkeypatch.setattr(
-            evaluator,
-            "align",
-            lambda *_: (_ for _ in ()).throw(AssertionError("cache was not used")),
-        )
-        second = _cached_forced_alignment(audio, "one two three", cache_dir, 2)
-
-        assert _transcript_with_wildcards("one two three", 2) == "one two * three"
-        assert calls[0][1] == "one two * three"
-        assert first == second == [expected_timing]
-        assert len(list(cache_dir.glob("*.json"))) == 1
-
-
 def test_plain_alignment_cache_uses_unmodified_transcript(monkeypatch) -> None:
     """Plain alignment cache does not inject wildcard slots and is reusable."""
     import scripts.eval_detection as evaluator
@@ -360,8 +328,32 @@ def test_detection_sources_do_not_read_labels_or_sidecar_timings() -> None:
         Path(__file__).resolve().parents[1] / "scripts" / "eval_detection.py"
     ).read_text(encoding="utf-8")
     assert "realistic_timings = _cached_plain_alignment(" in evaluator_source
-    assert "wildcard_timings = _cached_forced_alignment(" in evaluator_source
-    assert "oracle_timings = [WordTiming.model_validate(item) for item in sidecar[\"word_timings\"]]" in evaluator_source
+    assert "cached_inserted_word_spans" not in evaluator_source
+    assert "_cached_forced_alignment" not in evaluator_source
+    assert 'TIMING_SOURCES = ("realistic",)' in evaluator_source
+
+
+def test_test_evaluation_refuses_a_config_checksum_mismatch() -> None:
+    """TEST evaluation must stop before loading data when the DEV freeze differs."""
+    import pytest
+
+    from scripts.eval_detection_test import _verify_frozen_config
+
+    with tempfile.TemporaryDirectory(
+        prefix="speechlens-checksum-", dir=Path.cwd()
+    ) as temp_dir:
+        project_root = Path(temp_dir)
+        config_path = project_root / "config" / "detection.yaml"
+        config_path.parent.mkdir(parents=True)
+        config_path.write_text("detectors: {}\n", encoding="utf-8")
+        checksum_path = project_root / "eval" / "results" / "frozen_config.sha256"
+        checksum_path.parent.mkdir(parents=True)
+        checksum_path.write_text(
+            "not-the-config-hash  config/detection.yaml\n", encoding="ascii"
+        )
+
+        with pytest.raises(RuntimeError, match="does not match"):
+            _verify_frozen_config(project_root)
 
 
 def test_typed_detector_uses_only_the_crossed_type_threshold() -> None:
@@ -449,11 +441,27 @@ def test_identical_paired_ideal_has_no_scores_or_regions() -> None:
         config,
         ideal_bundle=bundle,
         ideal_timings=timings,
-        wildcard_spans=[(0.2, 0.4)],
     )
 
     assert all(table[f"score_{flaw_type}"].max() == 0.0 for flaw_type in DETECTOR_TYPES)
     assert detect_typed_regions(table, timings, config) == []
+
+
+def test_disabled_detector_type_is_not_emitted() -> None:
+    """Configured disabled detectors must not emit regions from cached scores."""
+    from speechlens.detection.core import load_detection_config
+    from speechlens.detection.measurements import DETECTOR_TYPES, detect_typed_regions
+
+    config = load_detection_config()
+    config["detectors"]["pace_fast"]["enabled"] = False
+    table = pd.DataFrame({
+        "time_s": np.arange(100, dtype=np.float64) * 0.01,
+        "word_index": np.zeros(100, dtype=np.int64),
+        **{f"score_{flaw_type}": np.zeros(100) for flaw_type in DETECTOR_TYPES},
+    })
+    table["score_pace_fast"] = 1.0
+
+    assert detect_typed_regions(table, _flat_word_timings(), config) == []
 
 
 def test_paired_ideal_is_not_marked_as_filler_in_a_long_voiced_gap() -> None:
@@ -498,26 +506,6 @@ def test_paired_ideal_is_not_marked_as_filler_in_a_long_voiced_gap() -> None:
     assert detect_typed_regions(table, timings, config) == []
 
 
-def test_wildcard_span_over_lexical_speech_is_not_a_filler() -> None:
-    """Wildcard alignment spans are not evidence of non-lexical speech."""
-    from speechlens.detection.core import load_detection_config
-    from speechlens.detection.measurements import build_typed_deviation_table
-
-    bundle = _flat_feature_bundle()
-    timings = _flat_word_timings()
-    table = build_typed_deviation_table(
-        bundle,
-        timings,
-        "word0 word1 word2 word3 word4",
-        load_detection_config(),
-        ideal_bundle=bundle,
-        ideal_timings=timings,
-        wildcard_spans=[(0.2, 0.4)],
-    )
-
-    assert table["score_filler"].max() == 0.0
-
-
 def test_filler_requires_a_stable_voiced_inter_word_gap() -> None:
     """A sufficiently long voiced run in a plain-alignment gap is marked as filler."""
     from speechlens.detection.core import load_detection_config
@@ -527,6 +515,11 @@ def test_filler_requires_a_stable_voiced_inter_word_gap() -> None:
     timings = _flat_word_timings()
     timings[1] = WordTiming(word="word1", start_s=0.2, end_s=0.25)
     timings[2] = WordTiming(word="word2", start_s=0.45, end_s=0.65)
+    gap = (
+        (bundle.frames["time_s"] >= timings[1].end_s)
+        & (bundle.frames["time_s"] < timings[2].start_s)
+    )
+    bundle.frames.loc[gap, "word_index"] = -1
     table = build_typed_deviation_table(
         bundle,
         timings,
@@ -638,42 +631,6 @@ def test_asr_model_load_restores_torch_hub_cache_dir(monkeypatch) -> None:
 
         assert changed_cache_dirs == [str(cache_root.resolve()), original_cache_dir]
         asr._load_asr_model.cache_clear()
-
-
-def test_plain_vs_wildcard_alignment_diagnostic_reports_boundary_and_duration_deltas() -> None:
-    """Matched plain/wildcard timings expose both edge and duration distortion."""
-    from scripts.eval_detection import _alignment_boundary_differences
-
-    plain = [
-        WordTiming(word="first", start_s=1.0, end_s=1.5),
-        WordTiming(word="second", start_s=1.6, end_s=2.0),
-    ]
-    wildcard = [
-        WordTiming(word="first", start_s=1.01, end_s=1.53),
-        WordTiming(word="*", start_s=1.54, end_s=1.58),
-        WordTiming(word="second", start_s=1.61, end_s=2.03),
-    ]
-    entries = [{
-        "manifest": {"kind": "ideal", "recording_id": "dev_fixture__ideal"},
-        "timing_bundles": {"realistic": {"timings": plain}},
-        "wildcard_timings": wildcard,
-    }]
-
-    differences = _alignment_boundary_differences(entries)
-
-    assert len(differences) == 2
-    np.testing.assert_allclose(
-        [row["start_boundary_abs_difference_ms"] for row in differences],
-        [10.0, 10.0],
-    )
-    np.testing.assert_allclose(
-        [row["end_boundary_abs_difference_ms"] for row in differences],
-        [30.0, 30.0],
-    )
-    np.testing.assert_allclose(
-        [row["duration_abs_difference_ms"] for row in differences],
-        [20.0, 20.0],
-    )
 
 
 def test_ideal_score_distribution_reports_requested_percentiles() -> None:

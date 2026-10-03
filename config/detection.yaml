@@ -2,10 +2,6 @@ frame_smoothing_s: 0.05
 boundary_tolerance_s: 0.2
 low_alignment_confidence: 0.3
 low_confidence_penalty: 0.5
-wildcard_words_per_slot: 4
-asr:
-  chunk_duration_s: 20.0
-  overlap_s: 2.0
 measurements:
   robust_scale_floor: 0.15
   pace:

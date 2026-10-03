@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
+import argparse
 import csv
 import hashlib
 import json
 import pickle
 from collections import Counter, defaultdict
-from difflib import SequenceMatcher
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any
 
 import matplotlib
 
@@ -22,13 +22,11 @@ import yaml
 
 from speechlens.alignment.align import align
 from speechlens.detection.core import load_detection_config
-from speechlens.detection.asr import cached_inserted_word_spans
 from speechlens.detection.measurements import (
     DETECTOR_TYPES,
     build_typed_deviation_table,
     detect_typed_regions,
     fit_reference_free,
-    normalize_token,
 )
 from speechlens.explain import explanation_record
 from speechlens.features import FeatureBundle, extract_recording_features
@@ -40,46 +38,8 @@ RESULTS_DIR = PROJECT_ROOT / "eval" / "results"
 REFERENCE_PATH = RESULTS_DIR / "reference_free_ideal_stats.json"
 IOU_THRESHOLDS = (0.3, 0.5)
 CONTROL_GROUPS = ("ideal", "identity", "mp3", "gain", "noise")
-TIMING_SOURCES = ("oracle", "realistic")
+TIMING_SOURCES = ("realistic",)
 MODES = ("paired", "reference_free")
-
-
-def _transcript_with_wildcards(transcript: str, words_per_slot: int) -> str:
-    """Add wildcard slots between transcript groups for untranscribed speech."""
-    if words_per_slot < 1:
-        raise ValueError("words_per_slot must be positive")
-    words = transcript.split()
-    groups = [words[index : index + words_per_slot] for index in range(0, len(words), words_per_slot)]
-    return " * ".join(" ".join(group) for group in groups)
-
-
-def _cached_forced_alignment(
-    audio: np.ndarray,
-    transcript: str,
-    cache_dir: Path,
-    words_per_slot: int,
-) -> list[WordTiming]:
-    """Forced-align actual audio and transcript; cache the exact output."""
-    alignable_text = _transcript_with_wildcards(transcript, words_per_slot)
-    waveform = np.ascontiguousarray(audio, dtype=np.float32)
-    digest = hashlib.sha256(waveform.tobytes() + alignable_text.encode("utf-8")).hexdigest()
-    path = cache_dir / f"{digest}.json"
-    if path.is_file():
-        values = json.loads(path.read_text(encoding="utf-8"))
-        return [WordTiming.model_validate(item) for item in values]
-    timings = align(waveform, alignable_text)
-    cache_dir.mkdir(parents=True, exist_ok=True)
-    path.write_text(
-        json.dumps(
-            [item.model_dump(mode="json") for item in timings],
-            ensure_ascii=False,
-            sort_keys=True,
-            separators=(",", ":"),
-        )
-        + "\n",
-        encoding="utf-8",
-    )
-    return timings
 
 
 def _cached_plain_alignment(
@@ -135,11 +95,11 @@ def _cached_recording_features(
     return bundle
 
 
-def _load_dev_rows(project_root: Path) -> list[dict[str, str]]:
-    """Filter the manifest to DEV before opening any recording sidecar/audio."""
+def _load_split_rows(project_root: Path, split: str) -> list[dict[str, str]]:
+    """Filter the manifest before opening sidecars or audio from a split."""
     path = project_root / "data" / "labels" / "manifest.csv"
     with path.open(newline="", encoding="utf-8") as stream:
-        return [row for row in csv.DictReader(stream) if row.get("split") == "dev"]
+        return [row for row in csv.DictReader(stream) if row.get("split") == split]
 
 
 def _preserve_legacy_baseline() -> None:
@@ -165,60 +125,50 @@ def _preserve_legacy_baseline() -> None:
         pd.DataFrame(preserved).to_csv(target, index=False, lineterminator="\n")
 
 
-def _load_dev_entries(project_root: Path, config: dict) -> list[dict]:
-    """Load DEV data; sidecar timings are retained solely for oracle metrics."""
+def _load_entries(
+    project_root: Path,
+    config: dict,
+    split: str,
+    passage_limit: int | None = None,
+) -> list[dict]:
+    """Load one split with plain forced alignment and no ASR decoding."""
     entries: list[dict] = []
     transcript_cache: dict[str, str] = {}
     cache_dir = project_root / ".speechlens_cache" / "detection_alignments"
-    dev_rows = _load_dev_rows(project_root)
-    for recording_index, row in enumerate(dev_rows, start=1):
+    split_rows = _load_split_rows(project_root, split)
+    if passage_limit is not None:
+        passage_ids = list(dict.fromkeys(row["passage_id"] for row in split_rows))
+        selected = set(passage_ids[:passage_limit])
+        split_rows = [row for row in split_rows if row["passage_id"] in selected]
+    for recording_index, row in enumerate(split_rows, start=1):
         recording_id = row["recording_id"]
         print(
-            f"Aligning DEV recording {recording_index}/{len(dev_rows)}: {recording_id}",
+            f"Aligning {split.upper()} recording {recording_index}/{len(split_rows)}: {recording_id}",
             flush=True,
         )
         sidecar_path = project_root / "data" / "labels" / f"{recording_id}.json"
         sidecar = json.loads(sidecar_path.read_text(encoding="utf-8"))
-        if sidecar.get("split") != "dev":
-            raise ValueError(f"DEV manifest row has non-DEV sidecar: {recording_id}")
+        if sidecar.get("split") != split:
+            raise ValueError(f"{split.upper()} manifest row has mismatched sidecar: {recording_id}")
         passage_id = row["passage_id"]
         if passage_id not in transcript_cache:
             passage_path = project_root / "data" / "labels" / "passages" / f"{passage_id}.json"
             passage = json.loads(passage_path.read_text(encoding="utf-8"))
-            if passage.get("split") != "dev":
-                raise ValueError(f"DEV row references non-DEV transcript: {passage_id}")
+            if passage.get("split") != split:
+                raise ValueError(f"{split.upper()} row references mismatched transcript: {passage_id}")
             transcript_cache[passage_id] = str(passage["transcript"])
         transcript = transcript_cache[passage_id]
         audio, sample_rate_hz = sf.read(project_root / row["path"], dtype="float32", always_2d=False)
         if audio.ndim != 1 or sample_rate_hz != 16000:
-            raise ValueError(f"expected mono 16 kHz DEV audio: {recording_id}")
+            raise ValueError(f"expected mono 16 kHz {split.upper()} audio: {recording_id}")
 
-        oracle_timings = [WordTiming.model_validate(item) for item in sidecar["word_timings"]]
         realistic_timings = _cached_plain_alignment(
             audio,
             transcript,
             cache_dir,
         )
-        wildcard_timings = _cached_forced_alignment(
-            audio, transcript, cache_dir, int(config["wildcard_words_per_slot"])
-        )
-        stumble_intervals = (
-            cached_inserted_word_spans(
-                audio,
-                transcript,
-                project_root / ".speechlens_cache" / "detection_asr",
-                project_root / ".speechlens_cache" / "asr_torch_hub",
-                float(config["asr"]["chunk_duration_s"]),
-                float(config["asr"]["overlap_s"]),
-            )
-            if row["kind"] != "ideal"
-            else []
-        )
         timing_bundles: dict[str, dict] = {}
-        for source, timings in (
-            ("oracle", oracle_timings),
-            ("realistic", realistic_timings),
-        ):
+        for source, timings in (("realistic", realistic_timings),):
             feature_cache_dir = project_root / ".speechlens_cache" / "detection_feature_bundles"
             timing_bundles[source] = {
                 "timings": timings,
@@ -228,11 +178,6 @@ def _load_dev_entries(project_root: Path, config: dict) -> list[dict]:
                     transcript,
                     feature_cache_dir,
                 ),
-                "wildcard_spans": [
-                    (float(timing.start_s), float(timing.end_s))
-                    for timing in timings
-                    if timing.word.strip() == "*"
-                ],
             }
         pair = sidecar.get("pair")
         entries.append({
@@ -240,8 +185,7 @@ def _load_dev_entries(project_root: Path, config: dict) -> list[dict]:
             "sidecar": sidecar,
             "transcript": transcript,
             "timing_bundles": timing_bundles,
-            "wildcard_timings": wildcard_timings,
-            "stumble_intervals": stumble_intervals,
+            "stumble_intervals": [],
             "ideal_recording_id": (
                 pair["ideal_recording_id"] if pair else
                 sidecar["recording"].get("parent_recording_id") or recording_id
@@ -257,6 +201,13 @@ def _load_dev_entries(project_root: Path, config: dict) -> list[dict]:
             ],
         })
     return entries
+
+
+def _load_dev_entries(
+    project_root: Path, config: dict, passage_limit: int | None = None
+) -> list[dict]:
+    """Compatibility wrapper for DEV-only callers."""
+    return _load_entries(project_root, config, "dev", passage_limit)
 
 
 def _interval_iou(predicted: Mapping, actual: Mapping) -> float:
@@ -343,42 +294,6 @@ def _fit_references_leave_one_passage_out(
     return references
 
 
-def _alignment_boundary_differences(entries: list[dict]) -> list[dict]:
-    """Compare matched plain and wildcard word boundaries for DEV IDEALs."""
-    differences: list[dict] = []
-    for entry in entries:
-        if entry["manifest"]["kind"] != "ideal":
-            continue
-        plain = entry["timing_bundles"]["realistic"]["timings"]
-        wildcard = entry["wildcard_timings"]
-        plain_lexical = [item for item in plain if item.word.strip() != "*"]
-        wildcard_lexical = [item for item in wildcard if item.word.strip() != "*"]
-        matcher = SequenceMatcher(
-            a=[normalize_token(item.word) for item in plain_lexical],
-            b=[normalize_token(item.word) for item in wildcard_lexical],
-            autojunk=False,
-        )
-        for plain_start, wildcard_start, size in matcher.get_matching_blocks():
-            for offset in range(size):
-                plain_word = plain_lexical[plain_start + offset]
-                wildcard_word = wildcard_lexical[wildcard_start + offset]
-                differences.append({
-                    "recording_id": entry["manifest"]["recording_id"],
-                    "word": plain_word.word,
-                    "start_boundary_abs_difference_ms": abs(
-                        plain_word.start_s - wildcard_word.start_s
-                    ) * 1000.0,
-                    "end_boundary_abs_difference_ms": abs(
-                        plain_word.end_s - wildcard_word.end_s
-                    ) * 1000.0,
-                    "duration_abs_difference_ms": abs(
-                        (plain_word.end_s - plain_word.start_s)
-                        - (wildcard_word.end_s - wildcard_word.start_s)
-                    ) * 1000.0,
-                })
-    return differences
-
-
 def _ideal_score_distributions(entries: list[dict], tables: dict) -> list[dict]:
     """Summarize per-type frame scores pooled over DEV IDEAL recordings."""
     ideal_ids = [
@@ -410,24 +325,8 @@ def _ideal_score_distributions(entries: list[dict], tables: dict) -> list[dict]:
 def _run_pre_tuning_diagnostics(
     entries: list[dict], tables: dict, config: dict
 ) -> list[dict]:
-    """Write alignment/score diagnostics and enforce zero paired IDEAL regions."""
-    boundary_rows = _alignment_boundary_differences(entries)
-    boundary_values = [
-        value
-        for row in boundary_rows
-        for value in (
-            row["start_boundary_abs_difference_ms"],
-            row["end_boundary_abs_difference_ms"],
-        )
-    ]
+    """Write score diagnostics and enforce zero paired IDEAL regions."""
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    _write_csv(RESULTS_DIR / "alignment_plain_vs_wildcard_dev_ideal.csv", boundary_rows)
-    if boundary_values:
-        print(
-            "Plain/wildcard DEV IDEAL median absolute boundary difference: "
-            f"{float(np.median(boundary_values)):.2f} ms",
-            flush=True,
-        )
     score_rows = _ideal_score_distributions(entries, tables)
     _write_csv(RESULTS_DIR / "detection_ideal_score_distributions.csv", score_rows)
     for row in score_rows:
@@ -485,7 +384,7 @@ def _prepare_tables(entries: list[dict], config: dict, references: dict[str, dic
             cache_root = PROJECT_ROOT / ".speechlens_cache" / "detection_tables"
             print(f"Preparing {source} tables {entry_index}/{len(entries)}: {recording_id}", flush=True)
             shared_key = {
-                "cache_version": "plain-alignment-typed-frame-table-v2",
+                "cache_version": "plain-alignment-typed-frame-table-v3",
                 "recording_id": recording_id,
                 "ideal_recording_id": entry["ideal_recording_id"],
                 "timing_source": source,
@@ -493,7 +392,6 @@ def _prepare_tables(entries: list[dict], config: dict, references: dict[str, dic
                 "participant_timings": [timing.model_dump(mode="json") for timing in participant["timings"]],
                 "ideal_timings": [timing.model_dump(mode="json") for timing in ideal_data["timings"]],
                 "measurement_config": config["measurements"],
-                "wildcard_spans": participant["wildcard_spans"],
                 "stumble_intervals": entry["stumble_intervals"],
             }
             for mode in MODES:
@@ -684,6 +582,40 @@ def _write_csv(path: Path, rows: list[dict]) -> None:
         path.write_text("\n", encoding="utf-8")
 
 
+def _refresh_detection_document() -> None:
+    """Record the actual DEV-tuned detector state from the written results CSV."""
+    document_path = PROJECT_ROOT / "docs" / "DETECTION.md"
+    document = document_path.read_text(encoding="utf-8")
+    start_marker = "<!-- DEV_TUNED_DETECTORS_START -->"
+    end_marker = "<!-- DEV_TUNED_DETECTORS_END -->"
+    start = document.index(start_marker) + len(start_marker)
+    end = document.index(end_marker, start)
+    with (RESULTS_DIR / "detection_threshold_tuning.csv").open(
+        newline="", encoding="utf-8"
+    ) as stream:
+        tuning = [
+            row for row in csv.DictReader(stream)
+            if row.get("stage") == "before_after"
+        ]
+    table = [
+        "",
+        "| Detector | DEV status | Enter threshold | Exit threshold | Reason when disabled |",
+        "| --- | --- | ---: | ---: | --- |",
+    ]
+    for row in tuning:
+        enabled = row.get("enabled", "").casefold() == "true"
+        reason = "" if enabled else row.get("disabled_reason", "")
+        table.append(
+            f"| `{row['flaw_type']}` | {'enabled' if enabled else 'disabled'} "
+            f"| {row.get('enter_threshold_after', '')} "
+            f"| {row.get('exit_threshold_after', '')} | {reason} |"
+        )
+    document_path.write_text(
+        document[:start] + "\n" + "\n".join(table) + "\n" + document[end:],
+        encoding="utf-8",
+    )
+
+
 def _tune_thresholds(entries: list[dict], tables: dict, config: dict) -> tuple[dict, list[dict]]:
     """Tune only thresholds that meet their share and enforce the combined budget."""
     from copy import deepcopy
@@ -842,7 +774,8 @@ def _tune_thresholds(entries: list[dict], tables: dict, config: dict) -> tuple[d
                 f"reference_free={metrics['reference_free'][3]:.3f} share_met={share_met}",
                 flush=True,
             )
-            if share_met and score > 0.0 and score > best_score:
+            positive_in_both_modes = all(metrics[mode][0] > 0.0 for mode in MODES)
+            if share_met and positive_in_both_modes and score > best_score:
                 best_score = score
                 best_thresholds = (detector["enter_threshold"], detector["exit_threshold"])
                 best_predictions = candidate_predictions
@@ -955,6 +888,7 @@ def _write_reports(
     tuning_rows: list[dict],
     predictions: dict[tuple[str, str], dict[str, list[dict]]],
     config: dict,
+    freeze_config: bool = True,
 ) -> None:
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     _write_csv(
@@ -1037,9 +971,9 @@ def _write_reports(
         },
         "weak_types_from_dev_metrics": weak_types,
         "fillers": "Only stable voiced segments in inter-word gaps of the plain alignment are considered. Acoustic evidence cannot prove lexical content; controls and IDEAL rates are reported for review.",
-        "stumbles": "Greedy Wav2Vec2 ASR on CPU compares inserted words against the reference transcript; recognition and forced timing errors can still miss or misplace repeats.",
+        "stumbles": "Stumble-repeat detection is disabled unless DEV tuning demonstrates positive F1 within its false-region budget; this bounded pipeline does not use ASR.",
         "reference_free": "Each DEV passage is scored against an IDEAL reference fitted on all other DEV IDEAL passages. No held-out passage contributes to its own reference.",
-        "alignment": "Pace, pause, monotone, and volume measurements use plain forced alignment. Wildcard alignment is diagnostic only.",
+        "alignment": "Pace, pause, monotone, and volume measurements use plain forced alignment. Wildcard alignment is not run.",
         "bootstrap_ci95": {
             row["mode"]: [row["f1_iou_0.3_ci95_low"], row["f1_iou_0.3_ci95_high"]]
             for row in headline
@@ -1049,23 +983,31 @@ def _write_reports(
         json.dumps(limitations, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    config_path = PROJECT_ROOT / "config" / "detection.yaml"
-    config_path.write_text(yaml.safe_dump(config, sort_keys=False), encoding="utf-8")
-    digest = hashlib.sha256(config_path.read_bytes()).hexdigest()
-    (RESULTS_DIR / "frozen_config.sha256").write_text(
-        f"{digest}  config/detection.yaml\n", encoding="ascii"
-    )
+    if freeze_config:
+        config_path = PROJECT_ROOT / "config" / "detection.yaml"
+        config_path.write_text(yaml.safe_dump(config, sort_keys=False), encoding="utf-8")
+        digest = hashlib.sha256(config_path.read_bytes()).hexdigest()
+        (RESULTS_DIR / "frozen_config.sha256").write_text(
+            f"{digest}  config/detection.yaml\n", encoding="ascii"
+        )
+        _refresh_detection_document()
 
 
-def run_evaluation(project_root: Path = PROJECT_ROOT) -> list[dict]:
-    """Run oracle and realistic evaluation for paired and reference-free modes."""
+def run_evaluation(
+    project_root: Path = PROJECT_ROOT, *, smoke: bool = False
+) -> list[dict]:
+    """Run plain-alignment DEV evaluation for paired and reference-free modes."""
     global PROJECT_ROOT, RESULTS_DIR, REFERENCE_PATH
     PROJECT_ROOT = project_root.resolve()
     RESULTS_DIR = PROJECT_ROOT / "eval" / "results"
+    if smoke:
+        RESULTS_DIR = RESULTS_DIR / "smoke_artifacts"
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     REFERENCE_PATH = RESULTS_DIR / "reference_free_ideal_stats.json"
-    _preserve_legacy_baseline()
+    if not smoke:
+        _preserve_legacy_baseline()
     config = load_detection_config(PROJECT_ROOT / "config" / "detection.yaml")
-    entries = _load_dev_entries(PROJECT_ROOT, config)
+    entries = _load_dev_entries(PROJECT_ROOT, config, passage_limit=2 if smoke else None)
     references = {
         source: _fit_references_leave_one_passage_out(
             entries, source, config["measurements"]["pace"]["window_words"]
@@ -1095,9 +1037,12 @@ def run_evaluation(project_root: Path = PROJECT_ROOT) -> list[dict]:
             control_rows.extend(controls)
             predictions[(source, mode)] = mode_predictions
     _write_reports(
-        summaries, type_rows, severity_rows, control_rows, tuning_rows, predictions, config
+        summaries, type_rows, severity_rows, control_rows, tuning_rows, predictions, config,
+        freeze_config=not smoke,
     )
     print(f"DEV recordings evaluated: {len(entries)}")
+    if smoke:
+        print("Smoke evaluation completed; production config and frozen checksum were not changed.")
     for row in summaries:
         print(
             f"{row['timing_source']}/{row['mode']}: "
@@ -1118,8 +1063,11 @@ def run_evaluation(project_root: Path = PROJECT_ROOT) -> list[dict]:
 
 
 def main() -> None:
-    """Run deterministic DEV-only evaluation."""
-    run_evaluation()
+    """Run deterministic DEV-only evaluation, optionally over two passages."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--smoke", action="store_true")
+    arguments = parser.parse_args()
+    run_evaluation(smoke=arguments.smoke)
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ import subprocess
 import sys
 
 
-TASKS = ("setup", "test", "dataset", "eval", "reproduce", "serve")
+TASKS = ("setup", "test", "dataset", "eval", "eval_test", "reproduce", "serve")
 CPU_TORCH_INDEX = "https://download.pytorch.org/whl/cpu"
 
 
@@ -30,7 +30,7 @@ def run_setup() -> None:
     )
 
 
-def run_task(task: str) -> None:
+def run_task(task: str, smoke: bool = False) -> None:
     """Run a supported task or report its placeholder status."""
     if task == "setup":
         run_setup()
@@ -42,8 +42,16 @@ def run_task(task: str) -> None:
             check=True,
         )
     elif task == "eval":
+        command = [sys.executable, "-m", "scripts.eval_detection"]
+        if smoke:
+            command.append("--smoke")
         subprocess.run(
-            [sys.executable, "-m", "scripts.eval_detection"],
+            command,
+            check=True,
+        )
+    elif task == "eval_test":
+        subprocess.run(
+            [sys.executable, "-m", "scripts.eval_detection_test"],
             check=True,
         )
     else:
@@ -54,8 +62,11 @@ def main() -> None:
     """Parse the requested task and execute it."""
     parser = argparse.ArgumentParser(description="SpeechLens project tasks")
     parser.add_argument("task", choices=TASKS)
+    parser.add_argument("--smoke", action="store_true")
     arguments = parser.parse_args()
-    run_task(arguments.task)
+    if arguments.smoke and arguments.task != "eval":
+        parser.error("--smoke is only valid with the eval task")
+    run_task(arguments.task, smoke=arguments.smoke)
 
 
 if __name__ == "__main__":
