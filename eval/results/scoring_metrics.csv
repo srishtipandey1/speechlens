@@ -1,0 +1,9 @@
+split,mode,metric,value,ci95_low,ci95_high,recordings,passages,bootstrap_samples,bootstrap_seed
+dev,paired,spearman_total_vs_severity,-0.901991,-0.949418,-0.863741,48,8,2000,20261002
+dev,paired,auc_ideal_vs_flawed,1.000000,,,48,8,0,20261002
+dev,reference_free,spearman_total_vs_severity,-0.338135,-0.654736,-0.211384,48,8,2000,20261002
+dev,reference_free,auc_ideal_vs_flawed,0.640625,,,48,8,0,20261002
+test,paired,spearman_total_vs_severity,-0.886105,-0.937440,-0.842548,48,8,2000,20261002
+test,paired,auc_ideal_vs_flawed,1.000000,,,48,8,0,20261002
+test,reference_free,spearman_total_vs_severity,-0.643689,-0.736628,-0.474183,48,8,2000,20261002
+test,reference_free,auc_ideal_vs_flawed,0.687500,,,48,8,0,20261002

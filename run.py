@@ -6,7 +6,10 @@ import subprocess
 import sys
 
 
-TASKS = ("setup", "test", "dataset", "eval", "eval_test", "reproduce", "serve")
+TASKS = (
+    "setup", "test", "dataset", "eval", "eval_test", "score_eval",
+    "precompute_demo", "reproduce", "serve",
+)
 CPU_TORCH_INDEX = "https://download.pytorch.org/whl/cpu"
 
 
@@ -31,7 +34,11 @@ def run_setup() -> None:
     )
 
 
-def run_task(task: str, smoke: bool = False) -> None:
+def run_task(
+    task: str,
+    smoke: bool = False,
+    passage_id: str | None = None,
+) -> None:
     """Run a supported task or report its placeholder status."""
     if task == "setup":
         run_setup()
@@ -58,6 +65,30 @@ def run_task(task: str, smoke: bool = False) -> None:
             [sys.executable, "-m", "scripts.eval_detection_test"],
             check=True,
         )
+    elif task == "score_eval":
+        subprocess.run(
+            [sys.executable, "-m", "scripts.score_eval"],
+            check=True,
+        )
+    elif task == "precompute_demo":
+        command = [sys.executable, "-m", "scripts.precompute_demo"]
+        if passage_id:
+            command.extend(["--passage-id", passage_id])
+        subprocess.run(command, check=True)
+    elif task == "serve":
+        subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "uvicorn",
+                "speechlens.api.app:app",
+                "--host",
+                "127.0.0.1",
+                "--port",
+                "8000",
+            ],
+            check=True,
+        )
     else:
         print("not implemented yet")
 
@@ -67,10 +98,13 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="SpeechLens project tasks")
     parser.add_argument("task", choices=TASKS)
     parser.add_argument("--smoke", action="store_true")
+    parser.add_argument("--passage-id")
     arguments = parser.parse_args()
     if arguments.smoke and arguments.task != "eval":
         parser.error("--smoke is only valid with the eval task")
-    run_task(arguments.task, smoke=arguments.smoke)
+    if arguments.passage_id and arguments.task != "precompute_demo":
+        parser.error("--passage-id is only valid with the precompute_demo task")
+    run_task(arguments.task, smoke=arguments.smoke, passage_id=arguments.passage_id)
 
 
 if __name__ == "__main__":
