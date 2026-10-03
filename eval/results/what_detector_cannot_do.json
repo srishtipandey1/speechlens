@@ -2,25 +2,54 @@
   "alignment": "Pace, pause, monotone, and volume measurements use plain forced alignment. Wildcard alignment is not run.",
   "bootstrap_ci95": {
     "paired": [
-      0.06711409395973154,
-      0.17721518987341772
+      0.4175824175824176,
+      0.51190834767642
     ],
     "reference_free": [
-      0.05405405405405406,
-      0.17721518987341772
+      0.2221881390593047,
+      0.3428571428571429
     ]
   },
   "disabled_types": {
-    "filler": "No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes.",
-    "monotone": "No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes.",
-    "pace_fast": "No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes.",
-    "pace_slow": "No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes.",
-    "stumble_repeat": "No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes.",
-    "volume_dropoff": "No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes."
+    "monotone": {
+      "reference_free": "Best DEV F1 0.085 is below 0.150 or no threshold met the combined false-region budget."
+    },
+    "pace_fast": {
+      "reference_free": "Best DEV F1 0.000 is below 0.150 or no threshold met the combined false-region budget."
+    },
+    "pace_slow": {
+      "reference_free": "Best DEV F1 0.058 is below 0.150 or no threshold met the combined false-region budget."
+    },
+    "stumble_repeat": {
+      "paired": "needs ASR, out of scope",
+      "reference_free": "needs ASR, out of scope"
+    },
+    "volume_dropoff": {
+      "reference_free": "Best DEV F1 0.101 is below 0.150 or no threshold met the combined false-region budget."
+    }
   },
   "enabled_types": [
-    "long_pause"
+    "pace_fast",
+    "pace_slow",
+    "long_pause",
+    "monotone",
+    "volume_dropoff",
+    "filler"
   ],
+  "enabled_types_by_mode": {
+    "paired": [
+      "pace_fast",
+      "pace_slow",
+      "long_pause",
+      "monotone",
+      "volume_dropoff",
+      "filler"
+    ],
+    "reference_free": [
+      "long_pause",
+      "filler"
+    ]
+  },
   "fillers": "Only stable voiced segments in inter-word gaps of the plain alignment are considered. Acoustic evidence cannot prove lexical content; controls and IDEAL rates are reported for review.",
   "headline_timing_source": "realistic",
   "reference_free": "Each DEV passage is scored against an IDEAL reference fitted on all other DEV IDEAL passages. No held-out passage contributes to its own reference.",
@@ -30,43 +59,15 @@
       "flaw_type": "pace_fast",
       "iou_threshold": 0.3,
       "mode": "paired",
-      "precision": 0.0,
-      "recall": 0.0
-    },
-    {
-      "flaw_type": "pace_slow",
-      "iou_threshold": 0.3,
-      "mode": "paired",
-      "precision": 0.0,
-      "recall": 0.0
-    },
-    {
-      "flaw_type": "long_pause",
-      "iou_threshold": 0.3,
-      "mode": "paired",
-      "precision": 1.0,
-      "recall": 0.47619047619047616
+      "precision": 0.6923076923076923,
+      "recall": 0.45
     },
     {
       "flaw_type": "monotone",
       "iou_threshold": 0.3,
       "mode": "paired",
-      "precision": 0.0,
-      "recall": 0.0
-    },
-    {
-      "flaw_type": "volume_dropoff",
-      "iou_threshold": 0.3,
-      "mode": "paired",
-      "precision": 0.0,
-      "recall": 0.0
-    },
-    {
-      "flaw_type": "filler",
-      "iou_threshold": 0.3,
-      "mode": "paired",
-      "precision": 0.0,
-      "recall": 0.0
+      "precision": 0.17391304347826086,
+      "recall": 0.18181818181818182
     },
     {
       "flaw_type": "stumble_repeat",
@@ -90,13 +91,6 @@
       "recall": 0.0
     },
     {
-      "flaw_type": "long_pause",
-      "iou_threshold": 0.3,
-      "mode": "reference_free",
-      "precision": 1.0,
-      "recall": 0.42857142857142855
-    },
-    {
       "flaw_type": "monotone",
       "iou_threshold": 0.3,
       "mode": "reference_free",
@@ -105,13 +99,6 @@
     },
     {
       "flaw_type": "volume_dropoff",
-      "iou_threshold": 0.3,
-      "mode": "reference_free",
-      "precision": 0.0,
-      "recall": 0.0
-    },
-    {
-      "flaw_type": "filler",
       "iou_threshold": 0.3,
       "mode": "reference_free",
       "precision": 0.0,

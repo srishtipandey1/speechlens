@@ -18,30 +18,38 @@ does not tune on TEST data.
 
 Filler candidates are restricted to sustained, stable, voiced and speech-active
 frames that remain unassigned by plain alignment inside an inter-word gap.
-Stumble-repeat remains disabled unless DEV tuning shows positive per-type F1 in
-both modes while meeting its allocated false-region budget.
+Stumble-repeat is disabled with the reason `needs ASR, out of scope`; plain
+alignment cannot supply inserted-token intervals.
 
 ## DEV-Tuned Detectors
 
 Run `python run.py eval` using the project virtual environment. It reads DEV
-manifest rows only, searches each detector's configured threshold grid, and
-accepts a detector only when its false-region share fits the combined budget
-and it has positive per-type F1 in both modes. A final combined-budget check
-disables additional types if necessary. Thresholds and disable reasons below
+manifest rows only, searches each detector's extended score-derived threshold
+grid independently per mode, and greedily accepts the best-F1 candidate only
+when every DEV control family and the aggregate remain within the combined
+false-region budget. A mode is disabled when its best DEV F1 is below the
+configured minimum. Thresholds, mode-specific F1, and disable reasons below
 are refreshed from `eval/results/detection_threshold_tuning.csv` after a full
 DEV evaluation.
 
 <!-- DEV_TUNED_DETECTORS_START -->
 
-| Detector | DEV status | Enter threshold | Exit threshold | Reason when disabled |
-| --- | --- | ---: | ---: | --- |
-| `pace_fast` | disabled | 0.14 | 0.07 | No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes. |
-| `pace_slow` | disabled | 0.2 | 0.1 | No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes. |
-| `long_pause` | enabled | 1.5 | 0.25 |  |
-| `monotone` | disabled | 0.3 | 0.15 | No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes. |
-| `volume_dropoff` | disabled | 4.0 | 2.0 | No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes. |
-| `filler` | disabled | 0.2 | 0.1 | No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes. |
-| `stumble_repeat` | disabled | 0.72 | 0.55 | No configured DEV-only threshold met the per-type false-region budget of 0.150/minute with positive target F1 in both modes. |
+| Detector | Mode | DEV status | F1@0.3 | Enter | Exit | Reason when disabled |
+| --- | --- | --- | ---: | ---: | ---: | --- |
+| `pace_fast` | paired | enabled | 0.5454545454545455 | 0.2857142857142886 | 0.07 |  |
+| `pace_fast` | reference_free | disabled | 0.0 | 2.4494664423095425 | 0.07 | Best DEV F1 0.000 is below 0.150 or no threshold met the combined false-region budget. |
+| `pace_slow` | paired | enabled | 0.2 | 0.12 | 0.06 |  |
+| `pace_slow` | reference_free | disabled | 0.05797101449275362 | 5.937293659076101 | 0.1 | Best DEV F1 0.058 is below 0.150 or no threshold met the combined false-region budget. |
+| `long_pause` | paired | enabled | 0.7567567567567567 | 0.3 | 0.15 |  |
+| `long_pause` | reference_free | enabled | 0.6666666666666667 | 1.2299999999999998 | 0.25 |  |
+| `monotone` | paired | enabled | 0.17777777777777776 | 0.5899794388054722 | 0.15 |  |
+| `monotone` | reference_free | disabled | 0.0851063829787234 | 1.316003966865027 | 0.15 | Best DEV F1 0.085 is below 0.150 or no threshold met the combined false-region budget. |
+| `volume_dropoff` | paired | enabled | 0.6046511627906976 | 12.0 | 2.0 |  |
+| `volume_dropoff` | reference_free | disabled | 0.10126582278481013 | 3.772754340592023 | 1.8863771702960115 | Best DEV F1 0.101 is below 0.150 or no threshold met the combined false-region budget. |
+| `filler` | paired | enabled | 0.7096774193548387 | 0.25 | 0.1 |  |
+| `filler` | reference_free | enabled | 0.75 | 0.25 | 0.1 |  |
+| `stumble_repeat` | paired | disabled | 0.0 | 5e-324 | 0.0 | needs ASR, out of scope |
+| `stumble_repeat` | reference_free | disabled | 0.0 | 5e-324 | 0.0 | needs ASR, out of scope |
 <!-- DEV_TUNED_DETECTORS_END -->
 
 The run writes DEV summaries, per-type metrics, severity recall, control false
@@ -49,6 +57,13 @@ regions, and a SHA-256 freeze at `eval/results/frozen_config.sha256`.
 `python run.py eval --smoke` exercises the same pipeline on two DEV passages but
 keeps its artifacts isolated and does not freeze or modify the production
 config.
+
+Frame-score separation is recorded before and after measurement changes in
+`eval/results/score_diagnostics.csv`, including labeled-region medians, clean
+and control medians, frame AUC, and low-threshold region recall. Reference-free
+scores use other DEV IDEAL passages rather than the recording's paired ideal;
+weak modes remain disabled when they cannot meet the DEV F1 and false-region
+gates.
 
 ## TEST Evaluation
 

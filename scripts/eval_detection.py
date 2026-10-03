@@ -46,6 +46,8 @@ def _cached_plain_alignment(
     audio: np.ndarray,
     transcript: str,
     cache_dir: Path,
+    *,
+    require_cached: bool = False,
 ) -> list[WordTiming]:
     """Forced-align the unmodified transcript and cache the exact word timings."""
     waveform = np.ascontiguousarray(audio, dtype=np.float32)
@@ -54,6 +56,8 @@ def _cached_plain_alignment(
     if path.is_file():
         values = json.loads(path.read_text(encoding="utf-8"))
         return [WordTiming.model_validate(item) for item in values]
+    if require_cached:
+        raise FileNotFoundError(f"required cached plain alignment is missing: {path}")
     timings = align(waveform, transcript)
     cache_dir.mkdir(parents=True, exist_ok=True)
     path.write_text(
@@ -73,6 +77,8 @@ def _cached_recording_features(
     timings: list[WordTiming],
     transcript: str,
     cache_dir: Path,
+    *,
+    require_cached: bool = False,
 ) -> FeatureBundle:
     """Cache acoustic feature bundles keyed by the exact waveform and timing payload."""
     cache_dir.mkdir(parents=True, exist_ok=True)
@@ -89,6 +95,8 @@ def _cached_recording_features(
     if path.is_file():
         with path.open("rb") as cache_file:
             return pickle.load(cache_file)
+    if require_cached:
+        raise FileNotFoundError(f"required cached feature bundle is missing: {path}")
     bundle = extract_recording_features(audio, timings, transcript)
     with path.open("wb") as cache_file:
         pickle.dump(bundle, cache_file, protocol=pickle.HIGHEST_PROTOCOL)
@@ -130,6 +138,8 @@ def _load_entries(
     config: dict,
     split: str,
     passage_limit: int | None = None,
+    *,
+    require_cached_inputs: bool = False,
 ) -> list[dict]:
     """Load one split with plain forced alignment and no ASR decoding."""
     entries: list[dict] = []
@@ -166,6 +176,7 @@ def _load_entries(
             audio,
             transcript,
             cache_dir,
+            require_cached=require_cached_inputs,
         )
         timing_bundles: dict[str, dict] = {}
         for source, timings in (("realistic", realistic_timings),):
@@ -177,6 +188,7 @@ def _load_entries(
                     timings,
                     transcript,
                     feature_cache_dir,
+                    require_cached=require_cached_inputs,
                 ),
             }
         pair = sidecar.get("pair")
@@ -370,7 +382,13 @@ def _run_pre_tuning_diagnostics(
     return diagnostic_rows
 
 
-def _prepare_tables(entries: list[dict], config: dict, references: dict[str, dict]) -> dict:
+def _prepare_tables(
+    entries: list[dict],
+    config: dict,
+    references: dict[str, dict],
+    *,
+    require_cached: bool = False,
+) -> dict:
     by_id = {entry["manifest"]["recording_id"]: entry for entry in entries}
     result = {source: {mode: {} for mode in MODES} for source in TIMING_SOURCES}
     for entry_index, entry in enumerate(entries, 1):
@@ -384,7 +402,7 @@ def _prepare_tables(entries: list[dict], config: dict, references: dict[str, dic
             cache_root = PROJECT_ROOT / ".speechlens_cache" / "detection_tables"
             print(f"Preparing {source} tables {entry_index}/{len(entries)}: {recording_id}", flush=True)
             shared_key = {
-                "cache_version": "plain-alignment-typed-frame-table-v3",
+                "cache_version": "plain-alignment-typed-frame-table-v8",
                 "recording_id": recording_id,
                 "ideal_recording_id": entry["ideal_recording_id"],
                 "timing_source": source,
@@ -408,6 +426,10 @@ def _prepare_tables(entries: list[dict], config: dict, references: dict[str, dic
                     with cache_path.open("rb") as cache_file:
                         result[source][mode][recording_id] = pickle.load(cache_file)
                     continue
+                if require_cached:
+                    raise FileNotFoundError(
+                        f"required cached detector table is missing: {cache_path}"
+                    )
                 if mode == "paired":
                     table = build_typed_deviation_table(
                         participant["bundle"], participant["timings"], entry["transcript"], config,
@@ -478,7 +500,9 @@ def _evaluate_variant(
         row = entry["manifest"]
         recording_id = row["recording_id"]
         timings = entry["timing_bundles"][source]["timings"]
-        predicted = detect_typed_regions(tables[recording_id], timings, config)
+        predicted = detect_typed_regions(
+            tables[recording_id], timings, config, mode=mode
+        )
         predictions[recording_id] = predicted
         actual = entry["ground_truth"]
         group = _control_group(entry)
@@ -595,20 +619,22 @@ def _refresh_detection_document() -> None:
     ) as stream:
         tuning = [
             row for row in csv.DictReader(stream)
-            if row.get("stage") == "before_after"
+            if row.get("stage") == "mode_selection"
         ]
     table = [
         "",
-        "| Detector | DEV status | Enter threshold | Exit threshold | Reason when disabled |",
-        "| --- | --- | ---: | ---: | --- |",
+        "| Detector | Mode | DEV status | F1@0.3 | Enter | Exit | Reason when disabled |",
+        "| --- | --- | --- | ---: | ---: | ---: | --- |",
     ]
     for row in tuning:
         enabled = row.get("enabled", "").casefold() == "true"
         reason = "" if enabled else row.get("disabled_reason", "")
         table.append(
-            f"| `{row['flaw_type']}` | {'enabled' if enabled else 'disabled'} "
-            f"| {row.get('enter_threshold_after', '')} "
-            f"| {row.get('exit_threshold_after', '')} | {reason} |"
+            f"| `{row['flaw_type']}` | {row.get('mode', '')} "
+            f"| {'enabled' if enabled else 'disabled'} "
+            f"| {row.get('best_dev_f1_iou_0_3', '')} "
+            f"| {row.get('enter_threshold', '')} "
+            f"| {row.get('exit_threshold', '')} | {reason} |"
         )
     document_path.write_text(
         document[:start] + "\n" + "\n".join(table) + "\n" + document[end:],
@@ -617,266 +643,233 @@ def _refresh_detection_document() -> None:
 
 
 def _tune_thresholds(entries: list[dict], tables: dict, config: dict) -> tuple[dict, list[dict]]:
-    """Tune only thresholds that meet their share and enforce the combined budget."""
+    """Greedily tune each detector/mode under the combined DEV control budget."""
     from copy import deepcopy
 
     realistic = tables["realistic"]
     budget = float(config["evaluation"]["false_region_budget_per_minute"])
-    type_budget = float(config["evaluation"]["false_region_budget_per_type_per_minute"])
+    minimum_f1 = float(config["evaluation"]["minimum_detector_f1"])
+    percentiles = [float(value) for value in config["evaluation"]["score_grid_percentiles"]]
     tuning_rows: list[dict] = []
-    baseline_thresholds = {
-        flaw_type: {
-            "enter": float(config["detectors"][flaw_type]["enter_threshold"]),
-            "exit": float(config["detectors"][flaw_type]["exit_threshold"]),
-        }
-        for flaw_type in DETECTOR_TYPES
-    }
-    for flaw_type in DETECTOR_TYPES:
-        config["detectors"][flaw_type]["enabled"] = True
-        config["detectors"][flaw_type].pop("disabled_reason", None)
-
     current_predictions = {
-        mode: {
-            entry["manifest"]["recording_id"]: detect_typed_regions(
-                realistic[mode][entry["manifest"]["recording_id"]],
-                entry["timing_bundles"]["realistic"]["timings"],
-                config,
-            )
-            for entry in entries
-        }
+        mode: {entry["manifest"]["recording_id"]: [] for entry in entries}
         for mode in MODES
     }
+    for flaw_type in DETECTOR_TYPES:
+        detector = config["detectors"][flaw_type]
+        detector["enabled"] = False
+        detector["enabled_modes"] = {mode: False for mode in MODES}
+        detector["thresholds_by_mode"] = {
+            mode: deepcopy(detector.get("thresholds_by_mode", {}).get(mode, {
+                "enter_threshold": float(detector["enter_threshold"]),
+                "exit_threshold": float(detector["exit_threshold"]),
+            }))
+            for mode in MODES
+        }
+        detector.pop("disabled_reason", None)
+        detector["disabled_reasons_by_mode"] = {}
 
-    def measure_predictions(
-        mode_predictions: dict[str, list[dict]], target: str
-    ) -> tuple[float, float, float, float]:
-        target_tp = target_fp = target_fn = 0
-        all_tp = all_fp = all_fn = 0
-        false_regions = 0
-        target_false_regions = 0
-        control_minutes = 0.0
+    def _type_f1(mode_predictions: dict[str, list[dict]], target: str) -> float:
+        tp = fp = fn = 0
         for entry in entries:
             recording_id = entry["manifest"]["recording_id"]
-            predicted = mode_predictions[recording_id]
-            actual = entry["ground_truth"]
+            predicted = [region for region in mode_predictions[recording_id] if region["type"] == target]
+            actual = [region for region in entry["ground_truth"] if region["type"] == target]
             matches = _match_regions(predicted, actual, 0.3)
-            all_tp += len(matches)
-            all_fp += len(predicted) - len({match[0] for match in matches})
-            all_fn += len(actual) - len({match[1] for match in matches})
-            predicted_target = [item for item in predicted if item["type"] == target]
-            actual_target = [item for item in actual if item["type"] == target]
-            typed_matches = _match_regions(predicted_target, actual_target, 0.3)
-            target_tp += len(typed_matches)
-            target_fp += len(predicted_target) - len({match[0] for match in typed_matches})
-            target_fn += len(actual_target) - len({match[1] for match in typed_matches})
-            if _control_group(entry) is not None:
-                false_regions += len(predicted)
-                target_false_regions += len(predicted_target)
-                control_minutes += float(entry["manifest"]["duration_s"]) / 60.0
-        type_f1 = _prf(target_tp, target_fp, target_fn)[2]
-        overall_f1 = _prf(all_tp, all_fp, all_fn)[2]
-        return (
-            type_f1,
-            overall_f1,
-            false_regions / max(control_minutes, 1e-12),
-            target_false_regions / max(control_minutes, 1e-12),
-        )
+            tp += len(matches)
+            fp += len(predicted) - len({match[0] for match in matches})
+            fn += len(actual) - len({match[1] for match in matches})
+        return _prf(tp, fp, fn)[2]
 
-    def combined_control_rate(mode_predictions: dict[str, list[dict]]) -> float:
-        false_regions = 0
-        control_minutes = 0.0
+    def _false_rates(mode_predictions: dict[str, list[dict]]) -> dict[str, float]:
+        counts: Counter = Counter()
+        minutes: Counter = Counter()
         for entry in entries:
-            if _control_group(entry) is None:
+            group = _control_group(entry)
+            if group is None:
                 continue
             recording_id = entry["manifest"]["recording_id"]
-            false_regions += len(mode_predictions[recording_id])
-            control_minutes += float(entry["manifest"]["duration_s"]) / 60.0
-        return false_regions / max(control_minutes, 1e-12)
-
-    baseline_type_f1 = {
-        mode: {
-            flaw_type: measure_predictions(current_predictions[mode], flaw_type)[0]
-            for flaw_type in DETECTOR_TYPES
+            counts[group] += len(mode_predictions[recording_id])
+            minutes[group] += float(entry["manifest"]["duration_s"]) / 60.0
+        rates = {
+            group: counts[group] / max(minutes[group], 1e-12)
+            for group in CONTROL_GROUPS
         }
-        for mode in MODES
-    }
+        rates["all_controls_and_ideals"] = sum(counts.values()) / max(sum(minutes.values()), 1e-12)
+        return rates
+
+    def _candidate_predictions(
+        mode: str,
+        flaw_type: str,
+        threshold: float,
+        exit_threshold: float,
+    ) -> dict[str, list[dict]]:
+        candidate = deepcopy(config)
+        detector = candidate["detectors"][flaw_type]
+        detector["enabled"] = True
+        detector["enabled_modes"] = {candidate_mode: candidate_mode == mode for candidate_mode in MODES}
+        detector["thresholds_by_mode"][mode] = {
+            "enter_threshold": threshold,
+            "exit_threshold": exit_threshold,
+        }
+        result: dict[str, list[dict]] = {}
+        for entry in entries:
+            recording_id = entry["manifest"]["recording_id"]
+            own = detect_typed_regions(
+                realistic[mode][recording_id],
+                entry["timing_bundles"]["realistic"]["timings"],
+                candidate,
+                flaw_types=(flaw_type,),
+                mode=mode,
+            )
+            result[recording_id] = sorted(
+                current_predictions[mode][recording_id] + own,
+                key=lambda region: (region["start_s"], region["type"]),
+            )
+        return result
 
     for flaw_type in DETECTOR_TYPES:
-        before_metrics = {
-            mode: measure_predictions(current_predictions[mode], flaw_type)
-            for mode in MODES
-        }
-        before_fp = max(metrics[2] for metrics in before_metrics.values())
         score_column = f"score_{flaw_type}"
-        maximum_observed_score = max(
-            float(realistic[mode][entry["manifest"]["recording_id"]][score_column].max())
-            for mode in MODES
-            for entry in entries
-        )
-        thresholds = sorted({
+        all_type_candidates: set[float] = set(
             float(value) for value in config["tuning_candidates"][flaw_type]
-        } | {float(np.nextafter(maximum_observed_score, np.inf))})
-        config["tuning_candidates"][flaw_type] = thresholds
-        best_score = -1.0
-        best_thresholds = None
-        best_predictions = None
-        for threshold in thresholds:
-            print(f"Tuning {flaw_type}: enter_threshold={float(threshold):g}", flush=True)
-            candidate = deepcopy(config)
-            detector = candidate["detectors"][flaw_type]
-            detector["enabled"] = True
-            detector["enter_threshold"] = float(threshold)
-            detector["exit_threshold"] = min(
-                float(detector["exit_threshold"]), float(threshold) * 0.5
+        )
+        for mode in MODES:
+            ideal_ids = [
+                entry["manifest"]["recording_id"]
+                for entry in entries
+                if entry["manifest"]["kind"] == "ideal"
+            ]
+            ideal_scores = np.concatenate([
+                realistic[mode][recording_id][score_column].to_numpy(dtype=np.float64)
+                for recording_id in ideal_ids
+            ])
+            all_scores = np.concatenate([
+                realistic[mode][entry["manifest"]["recording_id"]][score_column].to_numpy(dtype=np.float64)
+                for entry in entries
+            ])
+            ideal_values = np.percentile(ideal_scores, percentiles)
+            all_values = np.percentile(all_scores, percentiles)
+            percentile_text = ", ".join(
+                f"p{percentile:g}={value:.6g}"
+                for percentile, value in zip(percentiles, ideal_values)
             )
-            candidate_predictions = {}
-            for mode in MODES:
-                candidate_predictions[mode] = {}
-                for entry in entries:
-                    recording_id = entry["manifest"]["recording_id"]
-                    timings = entry["timing_bundles"]["realistic"]["timings"]
-                    other_regions = [
-                        region for region in current_predictions[mode][recording_id]
-                        if region["type"] != flaw_type
-                    ]
-                    own_regions = detect_typed_regions(
-                        realistic[mode][recording_id],
-                        timings,
-                        candidate,
-                        flaw_types=(flaw_type,),
-                    )
-                    candidate_predictions[mode][recording_id] = sorted(
-                        other_regions + own_regions,
-                        key=lambda region: (region["start_s"], region["type"]),
-                    )
-            metrics = {
-                mode: measure_predictions(candidate_predictions[mode], flaw_type)
-                for mode in MODES
-            }
-            score = float(np.mean([metrics[mode][0] for mode in MODES]))
-            worst_type_fp = max(metrics[mode][3] for mode in MODES)
-            share_met = worst_type_fp <= type_budget
+            print(f"IDEAL score percentiles {mode}/{flaw_type}: {percentile_text}", flush=True)
+            for percentile, value in zip(percentiles, ideal_values):
+                tuning_rows.append({
+                    "stage": "ideal_score_percentile", "mode": mode,
+                    "flaw_type": flaw_type, "percentile": percentile,
+                    "ideal_score": float(value),
+                })
+                if value > 0.0:
+                    all_type_candidates.add(float(value))
+            all_type_candidates.update(float(value) for value in all_values if value > 0.0)
+            maximum_score = float(np.max(all_scores)) if all_scores.size else 0.0
+            if maximum_score > 0.0:
+                all_type_candidates.add(float(np.nextafter(maximum_score, np.inf)))
+            thresholds = sorted(value for value in all_type_candidates if value > 0.0)
+            detector = config["detectors"][flaw_type]
+            best_f1 = -1.0
+            best_entry_threshold = None
+            best_exit_threshold = None
+            best_predictions = None
+            best_rates = {}
+            for threshold in thresholds:
+                base_exit = float(detector["exit_threshold"])
+                exit_threshold = min(base_exit, threshold * 0.5)
+                predictions = _candidate_predictions(
+                    mode, flaw_type, threshold, exit_threshold
+                )
+                rates = _false_rates(predictions)
+                budget_met = all(rate <= budget for rate in rates.values())
+                f1 = _type_f1(predictions, flaw_type)
+                tuning_rows.append({
+                    "stage": "candidate", "mode": mode, "flaw_type": flaw_type,
+                    "enter_threshold": threshold, "exit_threshold": exit_threshold,
+                    "type_f1_iou_0_3": f1,
+                    "combined_false_regions_per_minute": rates["all_controls_and_ideals"],
+                    **{f"false_regions_per_minute_{group}": rates[group] for group in CONTROL_GROUPS},
+                    "combined_budget_per_minute": budget,
+                    "budget_met": budget_met,
+                })
+                print(
+                    f"Tuning {mode}/{flaw_type} enter={threshold:g} "
+                    f"F1={f1:.3f} combined-false/min="
+                    f"{rates['all_controls_and_ideals']:.3f} budget_met={budget_met}",
+                    flush=True,
+                )
+                if budget_met and f1 > best_f1:
+                    best_f1 = f1
+                    best_entry_threshold = threshold
+                    best_exit_threshold = exit_threshold
+                    best_predictions = predictions
+                    best_rates = rates
+
+            enabled = best_predictions is not None and best_f1 >= minimum_f1
+            if best_entry_threshold is not None:
+                detector["thresholds_by_mode"][mode] = {
+                    "enter_threshold": best_entry_threshold,
+                    "exit_threshold": best_exit_threshold,
+                }
+            if enabled:
+                detector["enabled_modes"][mode] = True
+                current_predictions[mode] = best_predictions
+                disabled_reason = ""
+            else:
+                disabled_reason = (
+                    "needs ASR, out of scope"
+                    if flaw_type == "stumble_repeat"
+                    else f"Best DEV F1 {max(0.0, best_f1):.3f} is below {minimum_f1:.3f} "
+                    "or no threshold met the combined false-region budget."
+                )
+                detector["enabled_modes"][mode] = False
+                detector["disabled_reasons_by_mode"][mode] = disabled_reason
+            detector["enabled"] = any(detector["enabled_modes"].values())
+            if enabled:
+                detector["disabled_reasons_by_mode"].pop(mode, None)
+                detector["enabled"] = any(detector["enabled_modes"].values())
             tuning_rows.append({
-                "stage": "candidate", "flaw_type": flaw_type,
-                "enter_threshold": float(threshold),
-                "exit_threshold": detector["exit_threshold"],
-                "paired_f1_iou_0_3": metrics["paired"][1],
-                "reference_free_f1_iou_0_3": metrics["reference_free"][1],
-                "mean_target_type_f1": score,
-                "worst_mode_combined_fp_per_minute": max(metrics[mode][2] for mode in MODES),
-                "worst_mode_type_fp_per_minute": worst_type_fp,
-                "type_budget_per_minute": type_budget,
+                "stage": "mode_selection", "mode": mode, "flaw_type": flaw_type,
+                "enabled": enabled, "best_dev_f1_iou_0_3": max(0.0, best_f1),
+                "enter_threshold": best_entry_threshold,
+                "exit_threshold": best_exit_threshold,
+                "combined_false_regions_per_minute": best_rates.get("all_controls_and_ideals", 0.0),
+                **{
+                    f"false_regions_per_minute_{group}": best_rates.get(group, 0.0)
+                    for group in CONTROL_GROUPS
+                },
+                "disabled_reason": disabled_reason,
+                "minimum_f1": minimum_f1,
                 "combined_budget_per_minute": budget,
-                "budget_met": share_met,
             })
             print(
-                f"  {flaw_type} type-FP/min paired={metrics['paired'][3]:.3f} "
-                f"reference_free={metrics['reference_free'][3]:.3f} share_met={share_met}",
+                f"Selected {mode}/{flaw_type}: enabled={enabled} "
+                f"F1={max(0.0, best_f1):.3f} reason={disabled_reason}",
                 flush=True,
             )
-            positive_in_both_modes = all(metrics[mode][0] > 0.0 for mode in MODES)
-            if share_met and positive_in_both_modes and score > best_score:
-                best_score = score
-                best_thresholds = (detector["enter_threshold"], detector["exit_threshold"])
-                best_predictions = candidate_predictions
+        config["tuning_candidates"][flaw_type] = sorted(all_type_candidates)
 
-        if best_thresholds is None:
-            enabled = False
-            disabled_reason = (
-                f"No configured DEV-only threshold met the per-type false-region "
-                f"budget of {type_budget:.3f}/minute with positive target F1 in both modes."
-            )
-            config["detectors"][flaw_type]["enabled"] = False
-            config["detectors"][flaw_type]["disabled_reason"] = disabled_reason
-            for mode in MODES:
-                for recording_id, regions in current_predictions[mode].items():
-                    current_predictions[mode][recording_id] = [
-                        region for region in regions if region["type"] != flaw_type
-                    ]
-        else:
-            enabled = True
-            disabled_reason = ""
-            config["detectors"][flaw_type]["enabled"] = True
-            config["detectors"][flaw_type].pop("disabled_reason", None)
-            config["detectors"][flaw_type]["enter_threshold"] = best_thresholds[0]
-            config["detectors"][flaw_type]["exit_threshold"] = best_thresholds[1]
-            current_predictions = best_predictions
-
-        after_metrics = {
-            mode: measure_predictions(current_predictions[mode], flaw_type)
-            for mode in MODES
+    for mode in MODES:
+        final_rates = _false_rates(current_predictions[mode])
+        over_budget = {
+            group: rate for group, rate in final_rates.items() if rate > budget
         }
-        tuning_rows.append({
-            "stage": "before_after", "flaw_type": flaw_type,
-            "enter_threshold_before": baseline_thresholds[flaw_type]["enter"],
-            "exit_threshold_before": baseline_thresholds[flaw_type]["exit"],
-            "enter_threshold_after": config["detectors"][flaw_type]["enter_threshold"],
-            "exit_threshold_after": config["detectors"][flaw_type]["exit_threshold"],
-            "paired_f1_before": baseline_type_f1["paired"][flaw_type],
-            "reference_free_f1_before": baseline_type_f1["reference_free"][flaw_type],
-            "paired_f1_after": after_metrics["paired"][0],
-            "reference_free_f1_after": after_metrics["reference_free"][0],
-            "type_fp_per_minute_after": max(after_metrics[mode][3] for mode in MODES),
-            "type_budget_per_minute": type_budget,
-            "enabled": enabled,
-            "disabled_reason": disabled_reason,
-            "budget_met": (
-                not enabled
-                or max(after_metrics[mode][3] for mode in MODES) <= type_budget
-            ),
-        })
-
-    combined_rate = max(combined_control_rate(current_predictions[mode]) for mode in MODES)
-    while combined_rate > budget:
-        enabled_types = [
-            flaw_type for flaw_type in DETECTOR_TYPES
-            if config["detectors"][flaw_type].get("enabled", True)
-        ]
-        if not enabled_types:
+        if over_budget:
             raise RuntimeError(
-                f"Combined DEV false-region rate {combined_rate:.3f}/minute exceeds "
-                f"the {budget:.3f}/minute budget with all types disabled."
+                f"Tuner left {mode} DEV false-region rates over budget: {over_budget}"
             )
-        contributions = {
-            flaw_type: max(
-                measure_predictions(current_predictions[mode], flaw_type)[3]
-                for mode in MODES
-            )
-            for flaw_type in enabled_types
-        }
-        disabled_type = max(enabled_types, key=lambda item: (contributions[item], item))
-        reason = (
-            f"Disabled to enforce the combined DEV false-region budget of "
-            f"{budget:.3f}/minute; remaining contribution was "
-            f"{contributions[disabled_type]:.3f}/minute."
-        )
-        config["detectors"][disabled_type]["enabled"] = False
-        config["detectors"][disabled_type]["disabled_reason"] = reason
-        for mode in MODES:
-            for recording_id, regions in current_predictions[mode].items():
-                current_predictions[mode][recording_id] = [
-                    region for region in regions if region["type"] != disabled_type
-                ]
         tuning_rows.append({
-            "stage": "combined_budget_disable",
-            "flaw_type": disabled_type,
-            "enabled": False,
-            "disabled_reason": reason,
-            "type_fp_per_minute_before_disable": contributions[disabled_type],
+            "stage": "final_budget", "mode": mode,
+            "combined_false_regions_per_minute": final_rates["all_controls_and_ideals"],
+            **{f"false_regions_per_minute_{group}": final_rates[group] for group in CONTROL_GROUPS},
             "combined_budget_per_minute": budget,
+            "budget_met": True,
         })
-        combined_rate = max(combined_control_rate(current_predictions[mode]) for mode in MODES)
-
-    if combined_rate > budget:
-        raise RuntimeError(
-            f"Tuner left combined DEV false-region rate {combined_rate:.3f}/minute "
-            f"above the {budget:.3f}/minute budget."
+        print(
+            f"Final {mode} DEV false-region rate: "
+            f"{final_rates['all_controls_and_ideals']:.3f}/minute "
+            f"(budget {budget:.3f})",
+            flush=True,
         )
-    print(
-        f"Final combined DEV false-region rate: {combined_rate:.3f}/minute "
-        f"(budget {budget:.3f})",
-        flush=True,
-    )
     return config, tuning_rows
 
 
@@ -964,10 +957,18 @@ def _write_reports(
             flaw_type for flaw_type in DETECTOR_TYPES
             if config["detectors"][flaw_type].get("enabled", True)
         ],
+        "enabled_types_by_mode": {
+            mode: [
+                flaw_type for flaw_type in DETECTOR_TYPES
+                if config["detectors"][flaw_type].get("enabled_modes", {}).get(mode, False)
+            ]
+            for mode in MODES
+        },
         "disabled_types": {
-            flaw_type: config["detectors"][flaw_type].get("disabled_reason", "")
+            flaw_type: config["detectors"][flaw_type].get("disabled_reasons_by_mode", {})
             for flaw_type in DETECTOR_TYPES
             if not config["detectors"][flaw_type].get("enabled", True)
+            or config["detectors"][flaw_type].get("disabled_reasons_by_mode")
         },
         "weak_types_from_dev_metrics": weak_types,
         "fillers": "Only stable voiced segments in inter-word gaps of the plain alignment are considered. Acoustic evidence cannot prove lexical content; controls and IDEAL rates are reported for review.",
@@ -1054,9 +1055,9 @@ def run_evaluation(
     print(f"Reference artifact: {REFERENCE_PATH.relative_to(PROJECT_ROOT).as_posix()}")
     print("Frozen config checksum: eval/results/frozen_config.sha256")
     disabled = {
-        flaw_type: config["detectors"][flaw_type].get("disabled_reason", "")
+        flaw_type: config["detectors"][flaw_type].get("disabled_reasons_by_mode", {})
         for flaw_type in DETECTOR_TYPES
-        if not config["detectors"][flaw_type].get("enabled", True)
+        if config["detectors"][flaw_type].get("disabled_reasons_by_mode")
     }
     print(f"Disabled detector types: {json.dumps(disabled, sort_keys=True)}")
     return summaries

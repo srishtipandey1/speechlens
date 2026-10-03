@@ -27,23 +27,45 @@ measurements:
     - hmm
 detectors:
   pace_fast:
-    enabled: false
+    enabled: true
     enter_threshold: 0.14
     exit_threshold: 0.07
     minimum_duration_s: 0.2
     merge_gap_s: 0.12
     severity_scale: 0.4
-    disabled_reason: No configured DEV-only threshold met the per-type false-region
-      budget of 0.150/minute with positive target F1 in both modes.
+    enabled_modes:
+      paired: true
+      reference_free: false
+    thresholds_by_mode:
+      paired:
+        enter_threshold: 0.2857142857142886
+        exit_threshold: 0.07
+      reference_free:
+        enter_threshold: 2.4494664423095425
+        exit_threshold: 0.07
+    disabled_reasons_by_mode:
+      reference_free: Best DEV F1 0.000 is below 0.150 or no threshold met the combined
+        false-region budget.
   pace_slow:
-    enabled: false
+    enabled: true
     enter_threshold: 0.2
     exit_threshold: 0.1
     minimum_duration_s: 0.25
     merge_gap_s: 0.12
     severity_scale: 0.6
-    disabled_reason: No configured DEV-only threshold met the per-type false-region
-      budget of 0.150/minute with positive target F1 in both modes.
+    enabled_modes:
+      paired: true
+      reference_free: false
+    thresholds_by_mode:
+      paired:
+        enter_threshold: 0.12
+        exit_threshold: 0.06
+      reference_free:
+        enter_threshold: 5.937293659076101
+        exit_threshold: 0.1
+    disabled_reasons_by_mode:
+      reference_free: Best DEV F1 0.058 is below 0.150 or no threshold met the combined
+        false-region budget.
   long_pause:
     enabled: true
     enter_threshold: 1.5
@@ -51,33 +73,75 @@ detectors:
     minimum_duration_s: 0.2
     merge_gap_s: 0.12
     severity_scale: 2.0
+    enabled_modes:
+      paired: true
+      reference_free: true
+    thresholds_by_mode:
+      paired:
+        enter_threshold: 0.3
+        exit_threshold: 0.15
+      reference_free:
+        enter_threshold: 1.2299999999999998
+        exit_threshold: 0.25
+    disabled_reasons_by_mode: {}
   monotone:
-    enabled: false
+    enabled: true
     enter_threshold: 0.3
     exit_threshold: 0.15
     minimum_duration_s: 0.6
     merge_gap_s: 0.2
     severity_scale: 0.7
-    disabled_reason: No configured DEV-only threshold met the per-type false-region
-      budget of 0.150/minute with positive target F1 in both modes.
+    enabled_modes:
+      paired: true
+      reference_free: false
+    thresholds_by_mode:
+      paired:
+        enter_threshold: 0.5899794388054722
+        exit_threshold: 0.15
+      reference_free:
+        enter_threshold: 1.316003966865027
+        exit_threshold: 0.15
+    disabled_reasons_by_mode:
+      reference_free: Best DEV F1 0.085 is below 0.150 or no threshold met the combined
+        false-region budget.
   volume_dropoff:
-    enabled: false
+    enabled: true
     enter_threshold: 4.0
     exit_threshold: 2.0
     minimum_duration_s: 0.6
     merge_gap_s: 0.2
     severity_scale: 12.0
-    disabled_reason: No configured DEV-only threshold met the per-type false-region
-      budget of 0.150/minute with positive target F1 in both modes.
+    enabled_modes:
+      paired: true
+      reference_free: false
+    thresholds_by_mode:
+      paired:
+        enter_threshold: 12.0
+        exit_threshold: 2.0
+      reference_free:
+        enter_threshold: 3.772754340592023
+        exit_threshold: 1.8863771702960115
+    disabled_reasons_by_mode:
+      reference_free: Best DEV F1 0.101 is below 0.150 or no threshold met the combined
+        false-region budget.
   filler:
-    enabled: false
+    enabled: true
     enter_threshold: 0.2
     exit_threshold: 0.1
     minimum_duration_s: 0.2
     merge_gap_s: 0.05
     severity_scale: 0.8
-    disabled_reason: No configured DEV-only threshold met the per-type false-region
-      budget of 0.150/minute with positive target F1 in both modes.
+    enabled_modes:
+      paired: true
+      reference_free: true
+    thresholds_by_mode:
+      paired:
+        enter_threshold: 0.25
+        exit_threshold: 0.1
+      reference_free:
+        enter_threshold: 0.25
+        exit_threshold: 0.1
+    disabled_reasons_by_mode: {}
   stumble_repeat:
     enabled: false
     enter_threshold: 0.72
@@ -85,27 +149,65 @@ detectors:
     minimum_duration_s: 0.12
     merge_gap_s: 0.08
     severity_scale: 1.0
-    disabled_reason: No configured DEV-only threshold met the per-type false-region
-      budget of 0.150/minute with positive target F1 in both modes.
+    enabled_modes:
+      paired: false
+      reference_free: false
+    thresholds_by_mode:
+      paired:
+        enter_threshold: 5.0e-324
+        exit_threshold: 0.0
+      reference_free:
+        enter_threshold: 5.0e-324
+        exit_threshold: 0.0
+    disabled_reasons_by_mode:
+      paired: needs ASR, out of scope
+      reference_free: needs ASR, out of scope
 evaluation:
   bootstrap_samples: 2000
   bootstrap_seed: 20261002
   false_region_budget_per_minute: 1.0
-  false_region_budget_per_type_per_minute: 0.15
+  minimum_detector_f1: 0.15
+  score_grid_percentiles:
+  - 50
+  - 75
+  - 90
+  - 95
+  - 99
+  - 99.5
+  - 99.9
+  diagnostic_low_threshold: 1.0e-06
 tuning_candidates:
   pace_fast:
+  - 0.027027027027021533
   - 0.03
+  - 0.04081632653061873
   - 0.05
   - 0.08
+  - 0.09090909090910415
   - 0.12
+  - 0.1384615384615413
   - 0.16
   - 0.2
+  - 0.2857142857142886
   - 0.3
+  - 0.37931034482758635
   - 0.5
+  - 0.710414723840058
+  - 0.7419398354241588
   - 0.75
   - 1.0
+  - 1.2365663923736294
+  - 1.2365663923737684
+  - 1.4613966455326513
+  - 1.4801647475602127
   - 1.5
+  - 1.911057151850166
+  - 1.9110571518503732
   - 2.0
+  - 2.0430227352262964
+  - 2.0944713057428954
+  - 2.4494664423095425
+  - 2.4515427718127283
   - 2.6642965456084964
   - 3.0
   - 4.0
@@ -113,32 +215,64 @@ tuning_candidates:
   - 16.0
   - 32.0
   pace_slow:
+  - 0.027027027027060724
   - 0.03
+  - 0.049999999999999156
   - 0.05
   - 0.08
   - 0.12
   - 0.18
   - 0.2
   - 0.3
+  - 0.45190880884933976
+  - 0.46149367753666337
   - 0.5
   - 0.75
+  - 0.8928571428571266
   - 1.0
+  - 1.4838796708485589
   - 1.5
+  - 1.57381177211204
   - 2.0
+  - 2.0151515151515285
+  - 2.795586700461789
+  - 2.8754606061892756
   - 3.0
+  - 3.372453797383122
+  - 3.703782591511505
   - 4.0
+  - 5.111929966558776
+  - 5.937293659076101
+  - 6.312499999999964
+  - 6.336663187713501
+  - 6.46978636392597
+  - 7.5000000000000115
   - 8.0
+  - 9.316331058173677
+  - 14.838796708485075
   - 15.850532847698023
   - 16.0
   - 32.0
   long_pause:
+  - 0.06999999999999779
+  - 0.06999999999999956
+  - 0.2299999999999997
+  - 0.2699999999999953
   - 0.3
   - 0.45
+  - 0.5699999999999961
   - 0.6
   - 0.8
+  - 0.8299999999999976
+  - 0.8700000000000003
   - 1.0
+  - 1.069999999999996
+  - 1.2299999999999998
   - 1.5
   - 2.0
+  - 2.2300000000000066
+  - 2.2899999999999983
+  - 2.2900000000000023
   - 2.4299999999999957
   - 3.0
   - 5.0
@@ -147,44 +281,86 @@ tuning_candidates:
   - 20.0
   - 30.0
   monotone:
+  - 0.013987611717974358
   - 0.05
+  - 0.07694809615950848
   - 0.1
   - 0.15
+  - 0.1556616737732195
   - 0.2
   - 0.25
   - 0.3
   - 0.4
+  - 0.44917071356296734
   - 0.5
+  - 0.5899794388054722
+  - 0.6759444041037741
+  - 0.680236776407915
   - 0.75
+  - 0.8303031529788744
+  - 0.9585939238643201
+  - 0.9999394985768909
   - 1.0
+  - 1.0025293161708515
+  - 1.131040110875141
+  - 1.1363152017386395
+  - 1.2907357586524875
+  - 1.2981506496056445
+  - 1.316003966865027
+  - 1.3394346066317242
   - 1.5
+  - 1.7041823587604266
   - 1.8589585644982909
   - 2.0
   - 3.0
   - 5.0
   - 8.0
   volume_dropoff:
+  - 0.49717767457379836
+  - 0.7202229710123226
+  - 0.7204204832735139
+  - 1.4143010079464633
+  - 1.4159065800004365
+  - 1.6840357685141036
   - 2.0
+  - 2.1183637487643865
+  - 2.130878128509214
+  - 2.6696280461592354
+  - 2.7432777369453984
+  - 2.8560792116794467
   - 3.0
+  - 3.7727540953521674
+  - 3.772754340592023
   - 4.0
+  - 4.463224605639145
+  - 4.476779083604497
   - 5.0
+  - 5.317662695180409
   - 6.0
+  - 6.233137690575123
+  - 6.857101179903907
   - 8.0
   - 10.0
+  - 10.524368933190011
   - 12.0
   - 16.0
+  - 17.50200849893771
   - 21.594338722019618
   - 24.0
+  - 34.3817465738878
   - 36.0
   - 48.0
   - 64.0
   - 128.0
   filler:
   - 0.2
+  - 0.24999999999999467
   - 0.25
+  - 0.25999999999999446
   - 0.3
   - 0.4
   - 0.5
+  - 0.5099999999999892
   - 0.5399999999999886
   - 0.75
   - 1.0

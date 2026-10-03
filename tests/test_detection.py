@@ -298,6 +298,113 @@ def test_flattened_pitch_has_expected_f0_std_ratio() -> None:
     assert ratio < 0.2
 
 
+def test_paired_measurements_retain_local_stretch_pitch_and_volume_changes() -> None:
+    """Extracted synthetic audio keeps known local deviations in paired scores."""
+    from speechlens.detection.core import load_detection_config
+    from speechlens.detection.measurements import build_typed_deviation_table
+
+    sample_rate_hz = 16000
+    word_duration_s = 0.2
+
+    def tone(duration_s: float, amplitude: np.ndarray | float = 0.2) -> np.ndarray:
+        sample_count = round(sample_rate_hz * duration_s)
+        times = np.arange(sample_count, dtype=np.float64) / sample_rate_hz
+        values = np.asarray(amplitude)
+        if values.ndim == 0:
+            envelope = np.full(sample_count, float(values))
+        else:
+            envelope = np.interp(
+                np.linspace(0.0, 1.0, sample_count),
+                np.linspace(0.0, 1.0, values.size),
+                values,
+            )
+        return (envelope * np.sin(2.0 * np.pi * 190.0 * times)).astype(np.float32)
+
+    def pitch_sweep(duration_s: float, flatten: bool = False) -> np.ndarray:
+        sample_count = round(sample_rate_hz * duration_s)
+        times = np.arange(sample_count, dtype=np.float64) / sample_rate_hz
+        frequency = (
+            np.full(sample_count, 190.0)
+            if flatten
+            else np.linspace(130.0, 270.0, sample_count)
+        )
+        phase = 2.0 * np.pi * np.cumsum(frequency) / sample_rate_hz
+        return (0.2 * np.sin(phase)).astype(np.float32)
+
+    def bundle(audio: np.ndarray, timings: list[WordTiming]) -> FeatureBundle:
+        return FeatureBundle(
+            frames=extract_frame_features(audio, timings),
+            words=pd.DataFrame(),
+            phrases=pd.DataFrame(),
+            pauses=pd.DataFrame(),
+            summary={},
+            modulation={},
+        )
+
+    words = ["one", "two", "three", "four", "five"]
+    transcript = " ".join(words)
+    ideal_timings = [
+        WordTiming(word=word, start_s=index * word_duration_s,
+                   end_s=(index + 1) * word_duration_s)
+        for index, word in enumerate(words)
+    ]
+    ideal_tones = np.concatenate([tone(word_duration_s) for _ in words])
+    stretched_timings = [
+        WordTiming(
+            word=word,
+            start_s=(word_duration_s if index > 2 else 0.0) + index * word_duration_s,
+            end_s=(word_duration_s if index > 2 else 0.0)
+            + index * word_duration_s
+            + (2.0 * word_duration_s if index == 2 else word_duration_s),
+        )
+        for index, word in enumerate(words)
+    ]
+    stretched_audio = np.concatenate([
+        tone(2.0 * word_duration_s if index == 2 else word_duration_s)
+        for index in range(len(words))
+    ])
+    ideal_bundle = bundle(ideal_tones, ideal_timings)
+    config = load_detection_config()
+    stretched_table = build_typed_deviation_table(
+        bundle(stretched_audio, stretched_timings),
+        stretched_timings,
+        transcript,
+        config,
+        ideal_bundle=ideal_bundle,
+        ideal_timings=ideal_timings,
+    )
+    assert float(stretched_table["score_pace_slow"].max()) > 0.0
+
+    sweep_audio = np.concatenate([pitch_sweep(word_duration_s) for _ in words])
+    flattened_audio = np.concatenate([
+        pitch_sweep(word_duration_s, flatten=index == 2)
+        for index in range(len(words))
+    ])
+    monotone_table = build_typed_deviation_table(
+        bundle(flattened_audio, ideal_timings),
+        ideal_timings,
+        transcript,
+        config,
+        ideal_bundle=bundle(sweep_audio, ideal_timings),
+        ideal_timings=ideal_timings,
+    )
+    assert float(monotone_table["score_monotone"].max()) > 0.0
+
+    volume_audio = np.concatenate([
+        tone(word_duration_s, (0.2, 0.2, 0.2, 0.1, 0.04)[index])
+        for index in range(len(words))
+    ])
+    volume_table = build_typed_deviation_table(
+        bundle(volume_audio, ideal_timings),
+        ideal_timings,
+        transcript,
+        config,
+        ideal_bundle=ideal_bundle,
+        ideal_timings=ideal_timings,
+    )
+    assert float(volume_table["score_volume_dropoff"].max()) > 0.0
+
+
 def test_synthetic_gain_ramp_reports_expected_db_drop() -> None:
     """Frame RMS levels of a gain-ramped carrier yield the configured dB fall."""
     sample_rate_hz = 16000
@@ -467,6 +574,43 @@ def test_disabled_detector_type_is_not_emitted() -> None:
     assert detect_typed_regions(table, _flat_word_timings(), config) == []
 
 
+def test_detector_thresholds_and_enablement_are_mode_specific() -> None:
+    """A detector can run in paired mode while remaining disabled reference-free."""
+    from speechlens.detection.core import load_detection_config
+    from speechlens.detection.measurements import DETECTOR_TYPES, detect_typed_regions
+
+    config = load_detection_config()
+    config["detectors"]["pace_fast"].update(
+        enabled=True,
+        enabled_modes={"paired": True, "reference_free": False},
+        thresholds_by_mode={
+            "paired": {"enter_threshold": 0.1, "exit_threshold": 0.05},
+            "reference_free": {"enter_threshold": 1.0, "exit_threshold": 0.5},
+        },
+        minimum_duration_s=0.1,
+    )
+    frame_count = 100
+    table = pd.DataFrame({
+        "time_s": np.arange(frame_count, dtype=np.float64) * 0.01,
+        "word_index": np.zeros(frame_count, dtype=np.int64),
+        "alignment_confidence": np.ones(frame_count),
+        "explicit_filler": np.zeros(frame_count, dtype=bool),
+        "rate_ratio": np.ones(frame_count),
+        "f0_std_ratio": np.ones(frame_count),
+        "intensity_drop_db": np.zeros(frame_count),
+        "pause_excess_s": np.zeros(frame_count),
+        **{f"score_{flaw_type}": np.zeros(frame_count) for flaw_type in DETECTOR_TYPES},
+    })
+    table.loc[20:69, "score_pace_fast"] = 0.2
+    timings = [WordTiming(word="rushed", start_s=0.0, end_s=1.0)]
+
+    paired = detect_typed_regions(table, timings, config, mode="paired")
+    reference_free = detect_typed_regions(table, timings, config, mode="reference_free")
+
+    assert {region["type"] for region in paired} == {"pace_fast"}
+    assert reference_free == []
+
+
 def test_paired_ideal_is_not_marked_as_filler_in_a_long_voiced_gap() -> None:
     """A paired self-comparison must ignore a long voiced gap that is still normal speech."""
     from speechlens.detection.core import load_detection_config
@@ -507,6 +651,69 @@ def test_paired_ideal_is_not_marked_as_filler_in_a_long_voiced_gap() -> None:
 
     assert float(table["score_filler"].max()) == 0.0
     assert detect_typed_regions(table, timings, config) == []
+
+
+def test_paired_filler_scores_only_voiced_gap_excess_over_ideal() -> None:
+    """A voiced unassigned gap is scored only when absent from the IDEAL gap."""
+    from speechlens.detection.core import load_detection_config
+    from speechlens.detection.measurements import build_typed_deviation_table
+
+    times = np.arange(100, dtype=np.float64) * 0.01
+    timings = [
+        WordTiming(word="hello", start_s=0.1, end_s=0.2),
+        WordTiming(word="world", start_s=0.8, end_s=0.9),
+    ]
+
+    def make_bundle(with_voiced_gap: bool) -> FeatureBundle:
+        word_index = np.full(times.size, -1, dtype=np.int64)
+        word_index[(times >= 0.1) & (times < 0.2)] = 0
+        word_index[(times >= 0.8) & (times < 0.9)] = 1
+        active = word_index >= 0
+        voiced = active.copy()
+        if with_voiced_gap:
+            gap_voiced = (times >= 0.35) & (times < 0.65)
+            active |= gap_voiced
+            voiced |= gap_voiced
+        frames = pd.DataFrame({
+            "time_s": times,
+            "word_index": word_index,
+            "speech_activity": active,
+            "voiced": voiced,
+            "f0_semitones": np.zeros(times.size),
+            "intensity_db": np.zeros(times.size),
+            "intensity_raw_dbfs": np.where(active, -20.0, -80.0),
+        })
+        return FeatureBundle(
+            frames=frames,
+            words=pd.DataFrame(),
+            phrases=pd.DataFrame(),
+            pauses=pd.DataFrame(),
+            summary={},
+            modulation={},
+        )
+
+    ideal_bundle = make_bundle(False)
+    config = load_detection_config()
+    transcript = "hello world"
+    ideal_table = build_typed_deviation_table(
+        ideal_bundle,
+        timings,
+        transcript,
+        config,
+        ideal_bundle=ideal_bundle,
+        ideal_timings=timings,
+    )
+    participant_table = build_typed_deviation_table(
+        make_bundle(True),
+        timings,
+        transcript,
+        config,
+        ideal_bundle=ideal_bundle,
+        ideal_timings=timings,
+    )
+
+    assert float(ideal_table["score_filler"].max()) == 0.0
+    assert float(participant_table["score_filler"].max()) >= 0.2
 
 
 def test_filler_requires_a_stable_voiced_inter_word_gap() -> None:
@@ -699,8 +906,8 @@ def test_asr_chunking_covers_audio_and_offsets_word_times(monkeypatch) -> None:
     np.testing.assert_allclose([span[0] for span in inserted], [10.0, 28.0, 40.5])
 
 
-def test_threshold_tuner_disables_types_that_cannot_meet_budget(monkeypatch) -> None:
-    """Over-budget candidates are disabled explicitly instead of left enabled."""
+def test_threshold_tuner_disables_modes_that_cannot_meet_budget(monkeypatch) -> None:
+    """An over-budget mode remains disabled and cannot leak its thresholds."""
     from copy import deepcopy
 
     import scripts.eval_detection as evaluator
@@ -708,7 +915,9 @@ def test_threshold_tuner_disables_types_that_cannot_meet_budget(monkeypatch) -> 
     from speechlens.detection.measurements import DETECTOR_TYPES
 
     config = deepcopy(load_detection_config())
-    config["evaluation"]["false_region_budget_per_type_per_minute"] = 0.15
+    config["evaluation"]["false_region_budget_per_minute"] = 1.0
+    config["evaluation"]["minimum_detector_f1"] = 0.15
+    config["evaluation"]["score_grid_percentiles"] = [50, 90, 99]
     config["tuning_candidates"] = {flaw_type: [1.0] for flaw_type in DETECTOR_TYPES}
     entries = [{
         "manifest": {
@@ -730,11 +939,12 @@ def test_threshold_tuner_disables_types_that_cannot_meet_budget(monkeypatch) -> 
         }
     }
 
-    def always_false_positive(_table, _timings, _config, flaw_types=None):
+    def always_false_positive(_table, _timings, _config, flaw_types=None, *, mode=None):
         selected = DETECTOR_TYPES if flaw_types is None else flaw_types
         return [
             {"start_s": 1.0, "end_s": 2.0, "type": flaw_type}
             for flaw_type in selected
+            for _ in range(2)
         ]
 
     monkeypatch.setattr(evaluator, "detect_typed_regions", always_false_positive)
@@ -742,7 +952,10 @@ def test_threshold_tuner_disables_types_that_cannot_meet_budget(monkeypatch) -> 
     tuned, rows = evaluator._tune_thresholds(entries, tables, config)
 
     assert all(not tuned["detectors"][flaw_type]["enabled"] for flaw_type in DETECTOR_TYPES)
-    assert all(tuned["detectors"][flaw_type]["disabled_reason"] for flaw_type in DETECTOR_TYPES)
+    assert all(
+        tuned["detectors"][flaw_type]["disabled_reasons_by_mode"]
+        for flaw_type in DETECTOR_TYPES
+    )
     assert not any(
         row.get("stage") == "candidate" and row.get("budget_met")
         for row in rows

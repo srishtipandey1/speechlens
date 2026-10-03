@@ -1,8 +1,8 @@
 mode,timing_source,control_type,false_regions,minutes,false_regions_per_minute
 paired,realistic,ideal,0,8.782916666666667,0.0
-paired,realistic,identity,0,8.782916666666667,0.0
+paired,realistic,identity,7,8.782916666666667,0.7970017553014849
 paired,realistic,mp3,0,8.782916666666667,0.0
-paired,realistic,gain,0,8.782916666666667,0.0
+paired,realistic,gain,2,8.782916666666667,0.22771478722899569
 paired,realistic,noise,0,8.782916666666667,0.0
 reference_free,realistic,ideal,0,8.782916666666667,0.0
 reference_free,realistic,identity,0,8.782916666666667,0.0

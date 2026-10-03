@@ -29,13 +29,12 @@ def normalize_token(token: str) -> str:
 def measure_duration_ratio(
     participant_durations_s: Sequence[float],
     ideal_durations_s: Sequence[float],
-    passage_rate_ratio: float = 1.0,
 ) -> float:
-    """Return local duration ratio after normalizing the passage-wide rate."""
+    """Return the local participant-to-IDEAL duration ratio."""
     ideal_total = float(np.sum(ideal_durations_s))
-    if ideal_total <= 0 or passage_rate_ratio <= 0:
-        raise ValueError("ideal duration and passage_rate_ratio must be positive")
-    return float(np.sum(participant_durations_s)) / ideal_total / passage_rate_ratio
+    if ideal_total <= 0:
+        raise ValueError("ideal duration must be positive")
+    return float(np.sum(participant_durations_s)) / ideal_total
 
 
 def measure_f0_std_ratio(
@@ -94,6 +93,8 @@ def _word_rows(
     bundle: FeatureBundle,
     timings: Sequence[WordTiming],
     transcript: str,
+    *,
+    intensity_reference_median_db: float | None = None,
 ) -> list[dict]:
     frames = bundle.frames
     lexical = _lexical_timings(timings)
@@ -112,7 +113,18 @@ def _word_rows(
     active = frames["speech_activity"].to_numpy(dtype=bool)
     voiced = frames["voiced"].to_numpy(dtype=bool)
     f0 = frames["f0_semitones"].to_numpy(dtype=np.float64)
-    intensity = frames["intensity_db"].to_numpy(dtype=np.float64)
+    intensity_column = (
+        "intensity_raw_dbfs" if "intensity_raw_dbfs" in frames else "intensity_db"
+    )
+    intensity = frames[intensity_column].to_numpy(dtype=np.float64)
+    active_levels = intensity[active & np.isfinite(intensity)]
+    own_median_db = float(np.median(active_levels)) if active_levels.size else 0.0
+    target_median_db = (
+        own_median_db
+        if intensity_reference_median_db is None
+        else intensity_reference_median_db
+    )
+    intensity = intensity - own_median_db + target_median_db
     result = []
     for frame_index, timing in lexical:
         mask = frame_indices == frame_index
@@ -245,20 +257,37 @@ def build_typed_deviation_table(
     table["intensity_drop_db"] = 0.0
     table["pause_excess_s"] = 0.0
 
-    words = _word_rows(bundle, timings, transcript)
+    reference_median_db = None
+    if ideal_bundle is not None:
+        ideal_frames = ideal_bundle.frames
+        ideal_activity = ideal_frames["speech_activity"].to_numpy(dtype=bool)
+        intensity_column = (
+            "intensity_raw_dbfs"
+            if "intensity_raw_dbfs" in ideal_frames
+            else "intensity_db"
+        )
+        ideal_levels = ideal_frames[intensity_column].to_numpy(dtype=np.float64)
+        selected_ideal_levels = ideal_levels[ideal_activity & np.isfinite(ideal_levels)]
+        if selected_ideal_levels.size:
+            reference_median_db = float(np.median(selected_ideal_levels))
+    words = _word_rows(
+        bundle,
+        timings,
+        transcript,
+        intensity_reference_median_db=reference_median_db,
+    )
     ideal_words = (
-        _word_rows(ideal_bundle, ideal_timings, transcript)
+        _word_rows(
+            ideal_bundle,
+            ideal_timings,
+            transcript,
+            intensity_reference_median_db=reference_median_db,
+        )
         if ideal_bundle is not None and ideal_timings is not None
         else []
     )
     paired = bool(ideal_words)
     mapping = _matched_word_indices(words, ideal_words) if paired else {}
-    passage_rate_ratio = 1.0
-    if paired and mapping:
-        participant_total = sum(words[p]["duration_s"] for p in mapping)
-        ideal_total = sum(ideal_words[i]["duration_s"] for i in mapping.values())
-        passage_rate_ratio = participant_total / max(ideal_total, 1e-8)
-
     measurement = config["measurements"]
     refs = (reference or {}).get("position_statistics", {})
     robust_floor = float(measurement["robust_scale_floor"])
@@ -280,7 +309,6 @@ def build_typed_deviation_table(
                 ratio = measure_duration_ratio(
                     [item["duration_s"] for item in window],
                     [item["duration_s"] for item in expected],
-                    passage_rate_ratio,
                 )
                 participant_f0 = np.concatenate([item["f0"] for item in window])
                 expected_f0 = np.concatenate([item["f0"] for item in expected])
@@ -318,10 +346,9 @@ def build_typed_deviation_table(
                         robust_floor,
                     ),
                 )
-            fast_score = max(0.0, float(pace["fast_ratio_bound"]) - ratio) if paired else max(0.0, -rate_z)
-            slow_score = max(0.0, ratio - float(pace["slow_ratio_bound"])) if paired else max(0.0, rate_z)
-            monotone_bound = float(measurement["monotone"]["paired_ratio_bound"])
-            monotone_score = max(0.0, monotone_bound - f0_ratio) if paired else max(0.0, -f0_z)
+            fast_score = max(0.0, 1.0 - ratio) if paired else max(0.0, -rate_z)
+            slow_score = max(0.0, ratio - 1.0) if paired else max(0.0, rate_z)
+            monotone_score = max(0.0, 1.0 - f0_ratio) if paired else max(0.0, -f0_z)
             _raise_score(table, window_mask, "pace_fast", fast_score)
             _raise_score(table, window_mask, "pace_slow", slow_score)
             _raise_score(table, window_mask, "monotone", monotone_score)
@@ -329,6 +356,7 @@ def build_typed_deviation_table(
             table.loc[window_mask, "rate_ratio"] = ratio
             table.loc[window_mask, "f0_std_ratio"] = f0_ratio
             table.loc[window_mask, "intensity_drop_db"] = volume_drop
+
 
     pause = measurement["long_pause"]
     transcript_words = transcript.split()
@@ -361,7 +389,9 @@ def build_typed_deviation_table(
         bundle,
         words,
         measurement["filler"],
-        paired=bool(ideal_bundle is not None and ideal_timings is not None),
+        ideal_bundle=ideal_bundle if paired else None,
+        ideal_words=ideal_words,
+        mapping=mapping,
     )
     _mark_stumble_scores(table, stumble_intervals)
     table["nonlexical_voiced"] = table.get("nonlexical_voiced", False)
@@ -373,6 +403,8 @@ def detect_typed_regions(
     timings: Sequence[WordTiming],
     config: Mapping,
     flaw_types: Sequence[str] | None = None,
+    *,
+    mode: str | None = None,
 ) -> list[dict]:
     """Run all independent type thresholds and return type-tagged regions."""
     from speechlens.detection.core import hysteresis_regions, snap_interval_to_words
@@ -393,17 +425,24 @@ def detect_typed_regions(
     selected_types = tuple(
         flaw_type
         for flaw_type in selected_types
-        if config["detectors"][flaw_type].get("enabled", True)
+        if (
+            config["detectors"][flaw_type].get("enabled_modes", {}).get(
+                mode, config["detectors"][flaw_type].get("enabled", True)
+            )
+            if mode is not None
+            else config["detectors"][flaw_type].get("enabled", True)
+        )
     )
     for flaw_type in selected_types:
         settings = config["detectors"][flaw_type]
+        thresholds = settings.get("thresholds_by_mode", {}).get(mode, {}) if mode else {}
         scores = table[f"score_{flaw_type}"].fillna(0.0).to_numpy(dtype=np.float64)
         smoothed = np.convolve(scores, kernel, mode="same")
         intervals = hysteresis_regions(
             smoothed,
             times,
-            float(settings["enter_threshold"]),
-            float(settings["exit_threshold"]),
+            float(thresholds.get("enter_threshold", settings["enter_threshold"])),
+            float(thresholds.get("exit_threshold", settings["exit_threshold"])),
             float(settings["minimum_duration_s"]),
             float(settings["merge_gap_s"]),
         )
@@ -468,15 +507,15 @@ def _mark_filler_scores(
     words: Sequence[dict],
     settings: Mapping,
     *,
-    paired: bool = False,
+    ideal_bundle: FeatureBundle | None = None,
+    ideal_words: Sequence[dict] = (),
+    mapping: Mapping[int, int] | None = None,
 ) -> None:
     """Mark stable voiced segments in plain-alignment gaps as filler candidates.
 
-    Paired self-comparisons against an ideal reference are never treated as filler,
-    because a long voiced gap in identical audio is normal speech, not a flaw.
+    Paired mode requires more unassigned voicing in the participant gap than the
+    matched IDEAL gap, preventing identical self-comparisons from becoming flaws.
     """
-    if paired:
-        return
     frames = bundle.frames
     times = frames["time_s"].to_numpy(dtype=np.float64)
     step_s = float(np.median(np.diff(times))) if len(times) > 1 else 0.01
@@ -484,13 +523,50 @@ def _mark_filler_scores(
     voiced = frames["voiced"].to_numpy(dtype=bool)
     activity = frames["speech_activity"].to_numpy(dtype=bool)
     unassigned = frames["word_index"].to_numpy(dtype=np.int64) < 0
+    ideal_voiced_gap_duration: dict[tuple[int, int], float] = {}
+    if ideal_bundle is not None and mapping is not None:
+        ideal_frames = ideal_bundle.frames
+        ideal_times = ideal_frames["time_s"].to_numpy(dtype=np.float64)
+        ideal_unassigned = ideal_frames["word_index"].to_numpy(dtype=np.int64) < 0
+        ideal_voiced = ideal_frames["voiced"].to_numpy(dtype=bool)
+        ideal_activity = ideal_frames["speech_activity"].to_numpy(dtype=bool)
+        ideal_step_s = (
+            float(np.median(np.diff(ideal_times))) if len(ideal_times) > 1 else step_s
+        )
+        for participant_index, ideal_index in mapping.items():
+            next_ideal_index = mapping.get(participant_index + 1)
+            if next_ideal_index != ideal_index + 1:
+                continue
+            if ideal_index + 1 >= len(ideal_words):
+                continue
+            ideal_first = ideal_words[ideal_index]
+            ideal_second = ideal_words[ideal_index + 1]
+            ideal_gap = (
+                (ideal_times >= ideal_first["end_s"])
+                & (ideal_times < ideal_second["start_s"])
+                & ideal_unassigned
+                & ideal_voiced
+                & ideal_activity
+            )
+            ideal_voiced_gap_duration[(participant_index, participant_index + 1)] = (
+                float(np.count_nonzero(ideal_gap)) * ideal_step_s
+            )
     minimum_duration_s = float(settings["minimum_duration_s"])
     maximum_f0_std = float(settings["maximum_f0_std_semitones"])
     for first, second in zip(words, words[1:]):
         gap_mask = (times >= first["end_s"]) & (times < second["start_s"])
         voiced_gap = gap_mask & unassigned & voiced & activity & np.isfinite(f0)
-        for start, end in _runs(voiced_gap):
-            duration_s = (end - start) * step_s
+        runs = _runs(voiced_gap)
+        paired_gap = ideal_bundle is not None and mapping is not None
+        participant_gap_duration = sum((end - start) * step_s for start, end in runs)
+        expected_gap_duration = ideal_voiced_gap_duration.get(
+            (first["frame_index"], second["frame_index"]), 0.0
+        ) if paired_gap else 0.0
+        excess_duration = participant_gap_duration - expected_gap_duration
+        if paired_gap and excess_duration < minimum_duration_s:
+            continue
+        for start, end in runs:
+            duration_s = min((end - start) * step_s, excess_duration) if paired_gap else (end - start) * step_s
             if duration_s < minimum_duration_s:
                 continue
             if float(np.std(f0[start:end])) > maximum_f0_std:
