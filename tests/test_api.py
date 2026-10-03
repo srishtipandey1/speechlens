@@ -7,12 +7,71 @@ from pathlib import Path
 import tempfile
 
 import numpy as np
+import pytest
 import soundfile as sf
 from starlette.datastructures import UploadFile
 
 from speechlens.api import app as api
 from speechlens.api import service
 from speechlens.schema import WordTiming
+
+
+async def _get(path: str) -> tuple[int, dict[bytes, bytes], bytes]:
+    """Issue a dependency-free in-process ASGI GET request."""
+    messages = []
+    request_sent = False
+
+    async def receive():
+        nonlocal request_sent
+        if request_sent:
+            return {"type": "http.disconnect"}
+        request_sent = True
+        return {"type": "http.request", "body": b"", "more_body": False}
+
+    async def send(message):
+        messages.append(message)
+
+    raw_path = path.encode("ascii")
+    await api.app(
+        {
+            "type": "http",
+            "asgi": {"version": "3.0", "spec_version": "2.4"},
+            "http_version": "1.1",
+            "method": "GET",
+            "scheme": "http",
+            "path": path,
+            "raw_path": raw_path,
+            "query_string": b"",
+            "root_path": "",
+            "headers": [(b"host", b"testserver")],
+            "client": ("testclient", 12345),
+            "server": ("testserver", 80),
+        },
+        receive,
+        send,
+    )
+    response_start = next(message for message in messages if message["type"] == "http.response.start")
+    body = b"".join(
+        message.get("body", b"")
+        for message in messages
+        if message["type"] == "http.response.body"
+    )
+    return response_start["status"], dict(response_start["headers"]), body
+
+
+@pytest.fixture
+def demo_store(monkeypatch):
+    with tempfile.TemporaryDirectory(prefix="speechlens-route-demo-", dir=".") as directory:
+        root = Path(directory)
+        demo_dir = root / "demo"
+        audio_dir = root / "audio"
+        demo_dir.mkdir()
+        audio_dir.mkdir()
+        (demo_dir / "fixture.json").write_text('{"mode":"paired"}\n', encoding="utf-8")
+        (audio_dir / "fixture.flac").write_bytes(b"synthetic-flac-fixture")
+        monkeypatch.setattr(api, "DEMO_DIR", demo_dir)
+        monkeypatch.setattr(api, "AUDIO_DIR", audio_dir)
+        yield demo_dir, audio_dir
 
 
 def _wav_bytes() -> bytes:
@@ -82,3 +141,43 @@ def test_health_and_precomputed_demo_endpoints(monkeypatch) -> None:
 
         assert api.demo_list() == {"recording_ids": ["fixture"]}
         assert api.demo_recording("fixture") == {"mode": "paired"}
+
+
+def test_demo_audio_route_requires_listed_recording_and_streams_file(demo_store) -> None:
+    _demo_dir, audio_dir = demo_store
+
+    status, headers, body = asyncio.run(_get("/audio/fixture"))
+    assert status == 200
+    assert headers[b"content-type"] == b"audio/flac"
+    assert body == (audio_dir / "fixture.flac").read_bytes()
+
+    status, _headers, body = asyncio.run(_get("/audio/not-listed"))
+    assert status == 404
+    assert b"not available" in body
+
+    (audio_dir / "fixture.flac").unlink()
+    status, _headers, body = asyncio.run(_get("/audio/fixture"))
+    assert status == 404
+    assert b"audio is missing" in body
+
+
+def test_dashboard_metrics_reports_absent_artifacts(monkeypatch) -> None:
+    with tempfile.TemporaryDirectory(prefix="speechlens-route-metrics-", dir=".") as directory:
+        monkeypatch.setattr(api, "RESULTS_DIR", Path(directory))
+
+        response = api.dashboard_metrics()
+
+        assert response["available"] is False
+        assert "scoring_metrics.csv" in response["missing_artifacts"]
+        assert response["scoring"] == {}
+
+
+def test_dashboard_root_and_assets_are_served() -> None:
+    status, headers, body = asyncio.run(_get("/"))
+    assert status == 200
+    assert headers[b"content-type"].startswith(b"text/html")
+    assert b"SpeechLens" in body
+
+    asset_status, _asset_headers, app_body = asyncio.run(_get("/app.js"))
+    assert asset_status == 200
+    assert b"loadDemoIndex" in app_body
