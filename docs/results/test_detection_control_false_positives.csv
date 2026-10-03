@@ -1,0 +1,11 @@
+mode,timing_source,control_type,false_regions,minutes,false_regions_per_minute
+paired,realistic,ideal,0,8.734833333333334,0.0
+paired,realistic,identity,11,8.734833333333334,1.2593256883359727
+paired,realistic,mp3,4,8.734833333333334,0.4579366139403537
+paired,realistic,gain,27,8.734833333333334,3.0910721440973874
+paired,realistic,noise,4,8.734833333333334,0.4579366139403537
+reference_free,realistic,ideal,1,8.734833333333334,0.11448415348508842
+reference_free,realistic,identity,1,8.734833333333334,0.11448415348508842
+reference_free,realistic,mp3,1,8.734833333333334,0.11448415348508842
+reference_free,realistic,gain,1,8.734833333333334,0.11448415348508842
+reference_free,realistic,noise,1,8.734833333333334,0.11448415348508842

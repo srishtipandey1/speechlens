@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use SpeechLens in your work, please cite the project using the metadata below."
+title: "SpeechLens"
+authors:
+  - family-names: "SpeechLens contributors"
+    given-names: ""
+version: 0.1.0
+date-released: 2026-10-03
+url: "https://github.com/"
+abstract: "Contrastive, explainable speech evaluation with temporal flaw grounding."
+license: "MIT"
+keywords:
+  - speech
+  - evaluation
+  - audio
+  - explainability
+  - alignment
