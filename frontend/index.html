@@ -14,12 +14,41 @@
   <header class="site-header">
     <div class="header-copy">
       <a class="brand" href="/" aria-label="SpeechLens home">SpeechLens</a>
-      <p class="product-description">Compares a spoken delivery with a reference reading of the same text and shows where and why they differ.</p>
     </div>
-    <div class="mode-wrap"><span>Mode</span><span id="mode-badge" class="mode-badge">Waiting for recording</span></div>
+    <div class="mode-wrap"><span>Mode</span><span id="mode-badge" class="mode-badge">Waiting for recording</span><button id="mode-help" class="mode-help" type="button" aria-label="About analysis modes" title="Paired compares with an ideal reading of the same text. Reference-free compares with DEV-IDEAL statistics.">i</button></div>
   </header>
 
+  <section class="hero-shell" aria-labelledby="hero-title">
+    <div id="hero-grid" class="hero-grid is-wide">
+      <div class="hero-copy">
+        <h1 id="hero-title">Find exactly where a spoken delivery departs from a reference reading</h1>
+        <p class="hero-description">SpeechLens aligns the recording to a reference of the same text, measures pace, pauses, pitch and loudness, and points to the exact seconds and words that differ, with the numbers behind each flag.</p>
+        <div class="hero-actions">
+          <a id="hero-open-demo" class="hero-primary" href="#panel-demo">Open the demo</a>
+          <button id="hero-open-own" class="hero-secondary" type="button">Analyze your own recording</button>
+        </div>
+        <ul id="hero-facts" class="hero-facts" aria-label="Dataset and held-out evaluation facts" hidden></ul>
+      </div>
+      <aside id="hero-card" class="hero-card" aria-label="Example analysis from a flawed demo recording" hidden>
+        <div class="hero-card-heading"><h2 id="hero-recording-id"></h2><span>L5 example</span></div>
+        <p id="hero-alt" class="screen-reader-only"></p>
+        <div id="hero-waveform" class="hero-waveform" aria-describedby="hero-alt">
+          <canvas id="hero-waveform-canvas" aria-hidden="true"></canvas>
+          <div id="hero-wave-regions" class="hero-wave-regions" aria-hidden="true"></div>
+        </div>
+        <div id="hero-callouts" class="hero-callouts" role="list" aria-label="Highest-reliability example findings"></div>
+        <div class="hero-score-strip"><span><strong id="hero-score">--</strong> / 100</span><span id="hero-band"></span></div>
+      </aside>
+    </div>
+  </section>
+  <p class="disclaimer">Educational and decision-support prototype; not a substitute for a human judge or formal assessment.</p>
+
   <main>
+    <nav class="tabs" aria-label="Analysis options" role="tablist">
+      <button id="tab-demo" class="tab is-active" type="button" role="tab" aria-selected="true" aria-controls="panel-demo">Try a demo</button>
+      <button id="tab-own" class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-own">Analyze your own</button>
+    </nav>
+
     <section id="panel-demo" class="demo-bar" role="tabpanel" aria-labelledby="tab-demo" aria-label="Demo recording controls">
       <div class="demo-controls">
         <label class="control-field" for="demo-select">Recording
@@ -35,11 +64,6 @@
       <p class="demo-explainer">Each level adds more delivery flaws to the same passage; the ideal is the reference.</p>
       <div id="demo-status" class="panel-status" role="status" aria-live="polite" hidden><span></span><button type="button" aria-label="Dismiss message">Dismiss</button></div>
     </section>
-
-    <nav class="tabs" aria-label="Analysis options" role="tablist">
-      <button id="tab-demo" class="tab is-active" type="button" role="tab" aria-selected="true" aria-controls="panel-demo">Try a demo</button>
-      <button id="tab-own" class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-own">Analyze your own</button>
-    </nav>
 
     <section id="panel-own" class="tab-panel" role="tabpanel" aria-labelledby="tab-own" hidden>
       <form id="analyze-form" class="input-row upload-form">

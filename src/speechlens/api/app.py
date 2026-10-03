@@ -27,6 +27,7 @@ DEMO_DIR = PROJECT_ROOT / "data" / "processed" / "demo"
 AUDIO_DIR = PROJECT_ROOT / "data" / "processed" / "audio"
 FRONTEND_DIR = PROJECT_ROOT / "frontend"
 RESULTS_DIR = PROJECT_ROOT / "eval" / "results"
+MANIFEST_PATH = PROJECT_ROOT / "data" / "labels" / "manifest.csv"
 _CACHE_LIMIT = 32
 _ANALYSIS_CACHE: OrderedDict[str, dict[str, Any]] = OrderedDict()
 _CACHE_LOCK = threading.Lock()
@@ -224,6 +225,16 @@ def dashboard_metrics() -> dict[str, Any]:
     detector_rows = _read_csv("test_detection_type_metrics.csv", missing)
     summary_rows = _read_csv("test_detection_summary.csv", missing)
     control_rows = _read_csv("test_detection_control_false_positives.csv", missing)
+    dataset_counts: dict[str, int] | None = None
+    if not MANIFEST_PATH.is_file():
+        missing.append("data/labels/manifest.csv")
+    else:
+        with MANIFEST_PATH.open(newline="", encoding="utf-8") as stream:
+            manifest_rows = list(csv.DictReader(stream))
+        dataset_counts = {
+            "passages": len({row["passage_id"] for row in manifest_rows if row.get("passage_id")}),
+            "recordings": len({row["recording_id"] for row in manifest_rows if row.get("recording_id")}),
+        }
 
     scoring: dict[str, dict[str, dict[str, float | None]]] = {}
     for row in scoring_rows:
@@ -294,6 +305,7 @@ def dashboard_metrics() -> dict[str, Any]:
     return {
         "available": not missing,
         "missing_artifacts": missing,
+        "dataset_counts": dataset_counts,
         "scoring": scoring,
         "detector_reliability": reliability,
         "test_performance": performance,

@@ -2,6 +2,7 @@
 
 const $ = (selector) => document.querySelector(selector);
 const DEFAULT_DEMO_ID = "dev_f_1462__L3";
+const HERO_DEMO_ID = "dev_f_1462__L5";
 const dimensions = [
   ["pacing", "Pacing", "Word-duration similarity to the reference."],
   ["pausing_fluency", "Pausing / fluency", "Excess inter-word pauses."],
@@ -24,7 +25,8 @@ const state = {
   demoIds: [], demoByLadder: {}, currentId: "", result: null, transcript: "",
   audio: null, objectUrl: null, audioContext: null, audioBuffer: null, peaks: [],
   peakColumns: 0, duration: 0, lowVisible: false, frame: 0, dragging: false,
-  scoreValue: 0, metrics: null, lastScrolledWord: "",
+  scoreValue: 0, metrics: null, lastScrolledWord: "", hero: null,
+  chartResizeObserver: null,
 };
 
 function escapeHtml(value) {
@@ -270,31 +272,25 @@ function peaksForBuffer(buffer, columns) {
   return peaks;
 }
 
-function drawWaveform() {
-  const canvas = $("#waveform-canvas");
+function paintWaveform(canvas, peaks, duration, currentTime, regions) {
   const bounds = canvas.getBoundingClientRect();
   if (!bounds.width || !bounds.height) return;
   const pixelRatio = Math.max(1, window.devicePixelRatio || 1);
-  const columns = Math.max(1, Math.floor(bounds.width));
   const backingWidth = Math.round(bounds.width * pixelRatio);
   const backingHeight = Math.round(bounds.height * pixelRatio);
   if (canvas.width !== backingWidth || canvas.height !== backingHeight) {
     canvas.width = backingWidth;
     canvas.height = backingHeight;
   }
-  if (state.audioBuffer && state.peaks.length !== columns) state.peaks = peaksForBuffer(state.audioBuffer, columns);
-  state.peakColumns = columns;
-  canvas.dataset.peakColumns = String(state.peaks.length);
-  canvas.dataset.regionOverlays = String(shownRegions().length);
   const context = canvas.getContext("2d");
   context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
   context.clearRect(0, 0, bounds.width, bounds.height);
   context.fillStyle = "#fff";
   context.fillRect(0, 0, bounds.width, bounds.height);
-  const duration = Math.max(state.duration, 0.001);
-  for (const { region } of shownRegions()) {
-    const left = Math.max(0, Number(region.start_s) / duration * bounds.width);
-    const right = Math.min(bounds.width, Number(region.end_s) / duration * bounds.width);
+  const safeDuration = Math.max(duration, 0.001);
+  for (const region of regions) {
+    const left = Math.max(0, Number(region.start_s) / safeDuration * bounds.width);
+    const right = Math.min(bounds.width, Number(region.end_s) / safeDuration * bounds.width);
     context.fillStyle = rgba(regionColor(region.type), reliable(region) ? 0.15 : 0.045);
     context.fillRect(left, 0, Math.max(1, right - left), bounds.height);
   }
@@ -303,18 +299,36 @@ function drawWaveform() {
   context.beginPath();
   context.strokeStyle = "#65736e";
   context.lineWidth = 1;
-  state.peaks.forEach((peak, column) => {
+  peaks.forEach((peak, column) => {
     context.moveTo(column + 0.5, middle - peak.maximum * amplitude);
     context.lineTo(column + 0.5, middle - peak.minimum * amplitude);
   });
   context.stroke();
-  const cursor = Math.max(0, Math.min(bounds.width, (state.audio?.currentTime || 0) / duration * bounds.width));
+  const cursor = Math.max(0, Math.min(bounds.width, currentTime / safeDuration * bounds.width));
   context.beginPath();
   context.strokeStyle = "#246e61";
   context.lineWidth = 1.5;
   context.moveTo(cursor + 0.5, 0);
   context.lineTo(cursor + 0.5, bounds.height);
   context.stroke();
+}
+
+function drawWaveform() {
+  const canvas = $("#waveform-canvas");
+  const columns = Math.max(1, Math.floor(canvas.clientWidth));
+  if (state.audioBuffer && state.peaks.length !== columns) state.peaks = peaksForBuffer(state.audioBuffer, columns);
+  state.peakColumns = columns;
+  canvas.dataset.peakColumns = String(state.peaks.length);
+  canvas.dataset.regionOverlays = String(shownRegions().length);
+  paintWaveform(canvas, state.peaks, state.duration, state.audio?.currentTime || 0, shownRegions().map(({ region }) => region));
+}
+
+function drawHeroWaveform() {
+  if (!state.hero?.buffer) return;
+  const canvas = $("#hero-waveform-canvas");
+  const columns = Math.max(1, Math.floor(canvas.clientWidth));
+  if (state.hero.peaks.length !== columns) state.hero.peaks = peaksForBuffer(state.hero.buffer, columns);
+  paintWaveform(canvas, state.hero.peaks, state.hero.buffer.duration, 0, state.hero.result.regions || []);
 }
 
 function renderWaveRegions(result) {
@@ -616,8 +630,111 @@ function renderDetectorCoverage(modes) {
 }
 
 async function loadMetrics() {
-  try { state.metrics = await getJson("/dashboard-metrics"); renderReliability(state.metrics); }
-  catch (_error) { renderReliability(null); }
+  try {
+    state.metrics = await getJson("/dashboard-metrics");
+    renderReliability(state.metrics);
+    renderHeroFacts(state.metrics);
+  } catch (_error) {
+    renderReliability(null);
+    renderHeroFacts(null);
+  }
+}
+
+function renderHeroFacts(metrics) {
+  const facts = [];
+  const counts = metrics?.dataset_counts;
+  if (counts && Number.isFinite(counts.passages) && Number.isFinite(counts.recordings)) {
+    facts.push(`${counts.passages.toLocaleString()} passages · ${counts.recordings.toLocaleString()} recordings`);
+  }
+  const pairedEnabled = metrics?.detectors_by_mode?.paired?.enabled;
+  if (Array.isArray(pairedEnabled)) facts.push(`${pairedEnabled.length} paired detector types enabled`);
+  const rho = Number(metrics?.scoring?.test?.paired?.spearman_total_vs_severity);
+  if (Number.isFinite(rho)) facts.push(`Held-out paired Spearman ${rho < 0 ? "−" : "+"}${Math.abs(rho).toFixed(2)}`);
+  const target = $("#hero-facts");
+  target.replaceChildren();
+  for (const fact of facts) {
+    const item = document.createElement("li");
+    item.textContent = fact;
+    target.append(item);
+  }
+  target.hidden = facts.length === 0;
+}
+
+function calloutTimestamp(seconds) {
+  const value = Math.max(0, Number(seconds) || 0);
+  return `${Math.floor(value / 60)}:${String(Math.floor(value % 60)).padStart(2, "0")}`;
+}
+
+function renderHeroCard(result, buffer) {
+  state.hero = { result, buffer, peaks: [] };
+  $("#hero-grid").classList.remove("is-wide");
+  $("#hero-card").hidden = false;
+  $("#hero-recording-id").textContent = result.recording_id || HERO_DEMO_ID;
+  $("#hero-score").textContent = formatNumber(result.total_score, 1);
+  $("#hero-band").textContent = scoreBand(Number(result.total_score))[0];
+  const findings = (result.regions || []).map((region, index) => ({ region, index }))
+    .filter(({ region }) => reliable(region))
+    .sort((a, b) => (Number(b.region.reliability?.test_precision) || 0) - (Number(a.region.reliability?.test_precision) || 0)
+      || deviation(b.region) - deviation(a.region))
+    .slice(0, 3);
+  const labels = $("#hero-callouts");
+  labels.replaceChildren();
+  for (const { region, index } of findings) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "hero-callout";
+    button.setAttribute("role", "listitem");
+    button.dataset.regionIndex = String(index);
+    button.style.setProperty("--type-color", regionColor(region.type));
+    button.setAttribute("aria-label", `${flawLabels[region.type] || region.type} at ${calloutTimestamp(region.start_s)}; open this region in detailed results`);
+    button.title = summarySentence(region);
+    button.innerHTML = `<strong>${escapeHtml(flawLabels[region.type] || region.type)}</strong><time>${calloutTimestamp(region.start_s)}</time>`;
+    button.addEventListener("click", () => selectHeroRegion(index));
+    labels.append(button);
+  }
+  const accessibleSummary = findings.length
+    ? findings.map(({ region }) => `${flawLabels[region.type] || region.type} at ${formatTime(region.start_s)}`).join(", ")
+    : "No high- or medium-reliability regions were reported.";
+  $("#hero-alt").textContent = `Example analysis for ${result.recording_id || HERO_DEMO_ID}. ${accessibleSummary}`;
+  drawHeroWaveform();
+}
+
+async function loadHeroCard() {
+  const card = $("#hero-card");
+  try {
+    const result = await getJson(`/demo/${encodeURIComponent(HERO_DEMO_ID)}`);
+    const response = await fetch(`/audio/${encodeURIComponent(HERO_DEMO_ID)}`);
+    if (!response.ok) throw new Error(`Example audio unavailable (${response.status})`);
+    const encoded = await response.arrayBuffer();
+    const Context = window.AudioContext || window.webkitAudioContext;
+    if (!Context) throw new Error("Web Audio decoding is unavailable");
+    const heroContext = new Context();
+    const buffer = await heroContext.decodeAudioData(encoded.slice(0));
+    await heroContext.close();
+    renderHeroCard(result, buffer);
+  } catch (error) {
+    card.hidden = true;
+    $("#hero-grid").classList.add("is-wide");
+    setStatus("demo", `Example card unavailable: ${error.message}`);
+  }
+}
+
+async function selectHeroRegion(index) {
+  const region = state.hero?.result.regions?.[index];
+  if (!region) return;
+  setTab("demo");
+  $("#demo-select").value = HERO_DEMO_ID;
+  setLadderFor(HERO_DEMO_ID);
+  await loadDemo(HERO_DEMO_ID);
+  if (!state.result?.regions?.[index]) return;
+  if (!reliable(state.result.regions[index])) {
+    state.lowVisible = true;
+    refreshRegions();
+  }
+  const row = $(`#region-rows tr[data-region-index="${index}"]`);
+  row?.classList.add("is-selected");
+  row?.scrollIntoView({ block: "center", behavior: "smooth" });
+  seekTo(region.start_s, index);
 }
 
 function renderResult(result, { label = "", transcript = "", audioUrl = null, audioFile = null } = {}) {
@@ -787,6 +904,17 @@ async function submitAnalysis(event) {
 }
 
 function connectEvents() {
+  $("#hero-open-demo").addEventListener("click", (event) => {
+    event.preventDefault();
+    setTab("demo");
+    $("#panel-demo").scrollIntoView({ block: "start", behavior: "smooth" });
+    $("#demo-select").focus({ preventScroll: true });
+  });
+  $("#hero-open-own").addEventListener("click", () => {
+    setTab("own");
+    $("#panel-own").scrollIntoView({ block: "start", behavior: "smooth" });
+    $("#audio-file").focus({ preventScroll: true });
+  });
   $("#tab-demo").addEventListener("click", () => setTab("demo"));
   $("#tab-own").addEventListener("click", () => setTab("own"));
   $("#demo-select").addEventListener("change", (event) => {
@@ -829,18 +957,27 @@ function connectEvents() {
   document.querySelectorAll(".panel-status button").forEach((button) => {
     button.addEventListener("click", () => { button.closest(".panel-status").hidden = true; });
   });
-  window.addEventListener("resize", () => {
+  const resizeCharts = () => {
     if (window.Plotly) {
-      if (!$("#radar-chart").hidden) window.Plotly.Plots.resize("radar-chart");
-      if (!$("#timeseries-chart").hidden) window.Plotly.Plots.resize("timeseries-chart");
+      requestAnimationFrame(() => {
+        if (!$("#radar-chart").hidden) window.Plotly.Plots.resize("radar-chart");
+        if (!$("#timeseries-chart").hidden) window.Plotly.Plots.resize("timeseries-chart");
+      });
     }
     drawWaveform();
-  });
+    drawHeroWaveform();
+  };
+  window.addEventListener("resize", resizeCharts);
+  if (window.ResizeObserver) {
+    state.chartResizeObserver = new ResizeObserver(resizeCharts);
+    state.chartResizeObserver.observe($("#radar-chart"));
+    state.chartResizeObserver.observe($("#timeseries-chart"));
+  }
 }
 
 async function initialize() {
   connectEvents();
-  await Promise.all([loadDemoIndex(), loadMetrics()]);
+  await Promise.all([loadDemoIndex(), loadMetrics(), loadHeroCard()]);
 }
 
 initialize();

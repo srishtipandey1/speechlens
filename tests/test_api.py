@@ -213,6 +213,20 @@ def test_dashboard_metrics_reports_absent_artifacts(monkeypatch) -> None:
         assert response["scoring"] == {}
 
 
+def test_dashboard_metrics_counts_unique_manifest_ids(monkeypatch) -> None:
+    with tempfile.TemporaryDirectory(prefix="speechlens-hero-manifest-", dir=".") as directory:
+        manifest_path = Path(directory) / "manifest.csv"
+        manifest_path.write_text(
+            "recording_id,passage_id\nrecording-a,passage-a\nrecording-b,passage-a\nrecording-c,passage-b\n",
+            encoding="utf-8",
+        )
+        monkeypatch.setattr(api, "MANIFEST_PATH", manifest_path)
+
+        response = api.dashboard_metrics()
+
+        assert response["dataset_counts"] == {"passages": 2, "recordings": 3}
+
+
 def test_dashboard_root_and_assets_are_served() -> None:
     status, headers, body = asyncio.run(_get("/"))
     assert status == 200
@@ -232,7 +246,10 @@ def test_dashboard_root_and_assets_are_served() -> None:
     assert b"cdnjs.cloudflare.com/ajax/libs/plotly" not in body
     assert b"cdnjs.cloudflare.com/ajax/libs/wavesurfer" not in body
     assert b"WaveSurfer" not in body
-    assert b"Compares a spoken delivery with a reference reading of the same text" in body
+    assert b"Find exactly where a spoken delivery departs from a reference reading" in body
+    assert b"measures pace, pauses, pitch and loudness" in body
+    assert b"hero-card" in body
+    assert b"mode-help" in body
     assert b"Each level adds more delivery flaws to the same passage" in body
 
     plotly_status, plotly_headers, plotly_body = asyncio.run(_get("/vendor/plotly.min.js"))
