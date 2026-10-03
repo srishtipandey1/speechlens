@@ -161,6 +161,47 @@ def test_demo_audio_route_requires_listed_recording_and_streams_file(demo_store)
     assert b"audio is missing" in body
 
 
+def test_legacy_paired_demo_explanation_uses_peak_word_window(demo_store) -> None:
+    demo_dir, _audio_dir = demo_store
+    result = {
+        "mode": "paired",
+        "series": {
+            "participant": {
+                "speech_rate_sps": [
+                    {"word": word, "start_s": index * 0.2, "end_s": (index + 1) * 0.2, "value": 1.0}
+                    for index, word in enumerate(("one", "two", "three"))
+                ]
+            },
+            "baseline": {
+                "speech_rate_sps": [
+                    {"word": word, "start_s": index * 0.1, "end_s": (index + 1) * 0.1, "value": 1.0}
+                    for index, word in enumerate(("one", "two", "three"))
+                ]
+            },
+        },
+        "regions": [{
+            "start_s": 0.0,
+            "end_s": 0.6,
+            "words": ["one", "two", "three"],
+            "type": "pace_slow",
+            "observed_numeric": 1.01,
+            "expected_numeric": 1.0,
+            "observed_value": "1.01 normalized duration ratio",
+            "expected_value": "1.00 normalized ideal duration",
+            "formula": "legacy region median ratio",
+            "severity": 0.5,
+            "confidence": 1.0,
+        }],
+    }
+    (demo_dir / "fixture.json").write_text(json.dumps(result), encoding="utf-8")
+
+    refreshed = api.demo_recording("fixture")["regions"][0]
+
+    assert refreshed["observed_numeric"] == 2.0
+    assert "above 1.00 expected" in refreshed["sentence"]
+    assert "drawn out" in refreshed["sentence"]
+
+
 def test_dashboard_metrics_reports_absent_artifacts(monkeypatch) -> None:
     with tempfile.TemporaryDirectory(prefix="speechlens-route-metrics-", dir=".") as directory:
         monkeypatch.setattr(api, "RESULTS_DIR", Path(directory))
@@ -181,3 +222,12 @@ def test_dashboard_root_and_assets_are_served() -> None:
     asset_status, _asset_headers, app_body = asyncio.run(_get("/app.js"))
     assert asset_status == 200
     assert b"loadDemoIndex" in app_body
+    assert b"show-low-regions" in app_body
+    assert b"summary-findings-list" in body
+    assert b"/vendor/plotly.min.js" in body
+    assert b"cdnjs.cloudflare.com/ajax/libs/plotly" not in body
+
+    plotly_status, plotly_headers, plotly_body = asyncio.run(_get("/vendor/plotly.min.js"))
+    assert plotly_status == 200
+    assert "javascript" in plotly_headers[b"content-type"].decode("ascii")
+    assert b"plotly.js v3.0.1" in plotly_body[:256]

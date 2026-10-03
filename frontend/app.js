@@ -38,11 +38,14 @@ const state = {
   currentAudio: null,
   currentObjectUrl: null,
   wavesurfer: null,
+  waveformReady: false,
   duration: 0,
   activeRegion: -1,
   metrics: null,
   animatedScore: 0,
   cdnNotice: "",
+  showLowReliability: false,
+  transcript: "",
 };
 
 function escapeHtml(value) {
@@ -138,6 +141,85 @@ function scoreModeLabel(mode) {
   return mode === "paired" ? "Paired" : "Reference-free";
 }
 
+function scoreBand(score) {
+  if (score >= 80) return "Close to reference";
+  if (score >= 60) return "Noticeable differences";
+  return "Substantial differences";
+}
+
+function isReliableRegion(region) {
+  return ["high", "medium"].includes(region.reliability?.level);
+}
+
+function visibleRegionEntries(result) {
+  return (result.regions || []).map((region, index) => ({ region, index })).filter(({ region }) => (
+    isReliableRegion(region) || state.showLowReliability
+  ));
+}
+
+function updateLowToggle(result) {
+  const lowCount = (result.regions || []).filter((region) => !isReliableRegion(region)).length;
+  const checkbox = $("#show-low-regions");
+  checkbox.checked = state.showLowReliability;
+  checkbox.disabled = lowCount === 0;
+  $("#low-toggle-label").textContent = `Show low-reliability regions (${lowCount})`;
+}
+
+function findingDeviation(region) {
+  const observed = Number(region.observed_numeric);
+  const expected = Number(region.expected_numeric);
+  if (Number.isFinite(observed) && Number.isFinite(expected)) return Math.abs(observed - expected);
+  const ratio = Number(region.features?.peak_rate_ratio);
+  if (Number.isFinite(ratio)) return Math.abs(ratio - 1);
+  const value = Number(region.z_score_or_ratio);
+  return Number.isFinite(value) ? Math.abs(value) : Number(region.severity) || 0;
+}
+
+function renderSummary(result) {
+  const total = Number(result.total_score ?? 0);
+  const band = $("#score-band");
+  band.textContent = scoreBand(total);
+  band.className = `score-band ${total >= 80 ? "close" : total >= 60 ? "noticeable" : "substantial"}`;
+  const findings = (result.regions || []).map((region, index) => ({ region, index })).sort((left, right) => {
+    const reliabilityRank = (region) => ({ high: 0, medium: 1, low: 2 }[region.reliability?.level] ?? 3);
+    return reliabilityRank(left.region) - reliabilityRank(right.region)
+      || findingDeviation(right.region) - findingDeviation(left.region)
+      || Number(left.region.start_s) - Number(right.region.start_s);
+  }).slice(0, 3);
+  const list = $("#summary-findings-list");
+  if (!findings.length) {
+    list.innerHTML = '<li class="empty-state">No flaw regions were detected.</li>';
+    return;
+  }
+  list.innerHTML = findings.map(({ region, index }) => `
+    <li><button class="finding-link" type="button" data-region-index="${index}">
+      <span class="finding-time">${formatTime(region.start_s)}</span>
+      <span class="finding-copy"><strong>${escapeHtml(region.sentence || "Timing differs from the reference here.")}</strong><small>${escapeHtml(region.suggestion || "Review this delivery segment.")}</small></span>
+      <span class="finding-reliability ${escapeHtml(region.reliability?.level || "unavailable")}">${escapeHtml(region.reliability?.level || "unavailable")}</span>
+    </button></li>`).join("");
+  list.querySelectorAll("button[data-region-index]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const index = Number(button.dataset.regionIndex);
+      const region = result.regions[index];
+      if (!isReliableRegion(region) && !state.showLowReliability) {
+        state.showLowReliability = true;
+        refreshFilteredRegions();
+      }
+      seekTo(Number(region.start_s), index);
+    });
+  });
+}
+
+function refreshFilteredRegions() {
+  const result = state.currentResult;
+  if (!result) return;
+  updateLowToggle(result);
+  renderRegions(result);
+  renderWaveRegions(result);
+  renderTranscript(result, state.transcript);
+  renderTimelines(result);
+}
+
 function animateTotal(target) {
   const startValue = state.animatedScore;
   const startTime = performance.now();
@@ -146,7 +228,7 @@ function animateTotal(target) {
     const fraction = Math.min(1, (now - startTime) / duration);
     const eased = 1 - (1 - fraction) ** 3;
     const value = startValue + (target - startValue) * eased;
-    $("#total-score").textContent = value.toFixed(1);
+    $("#summary-total-score").textContent = value.toFixed(1);
     if (fraction < 1) requestAnimationFrame(frame);
     else state.animatedScore = target;
   }
@@ -185,7 +267,7 @@ function renderRadar(result) {
   $("#radar-fallback").hidden = true;
   const categories = dimensionInfo.map((dimension) => dimension.label);
   const values = dimensionInfo.map((dimension) => Number(result.scores?.[dimension.key] ?? 0));
-  window.Plotly.react("radar-chart", [{
+  const radarDraw = window.Plotly.react("radar-chart", [{
     type: "scatterpolar", r: [...values, values[0]], theta: [...categories, categories[0]],
     fill: "toself", fillcolor: "rgba(8,127,120,.16)", line: { color: "#087f78", width: 2 },
     marker: { color: "#c65645", size: 5 }, hovertemplate: "%{theta}: %{r:.1f}<extra></extra>",
@@ -193,6 +275,7 @@ function renderRadar(result) {
     margin: { t: 16, r: 35, b: 28, l: 35 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
     showlegend: false, polar: { bgcolor: "transparent", radialaxis: { range: [0, 100], tickvals: [0, 50, 100], tickfont: { size: 9, color: "#607271" }, gridcolor: "#d8e3df", linecolor: "#d8e3df" }, angularaxis: { tickfont: { size: 10, color: "#172d2d" }, gridcolor: "#d8e3df" } },
   }, { displayModeBar: false, responsive: true });
+  radarDraw.then(() => window.Plotly.Plots.resize("radar-chart"));
 }
 
 function timelineDuration(result) {
@@ -209,12 +292,12 @@ function timelineDuration(result) {
 function seekTo(seconds, selectedIndex = -1) {
   state.activeRegion = selectedIndex;
   highlightRegion(selectedIndex);
-  if (state.wavesurfer && state.duration > 0) {
-    state.wavesurfer.setTime(Math.max(0, Math.min(state.duration, seconds)));
-    state.wavesurfer.play().catch(() => {});
-  } else if (state.currentAudio) {
+  if (state.currentAudio) {
     state.currentAudio.currentTime = Math.max(0, seconds);
     state.currentAudio.play().catch(() => {});
+  }
+  if (state.waveformReady && state.wavesurfer && state.duration > 0) {
+    state.wavesurfer.setTime(Math.max(0, Math.min(state.duration, seconds)));
   }
   syncTranscript(seconds);
 }
@@ -225,9 +308,9 @@ function regionColor(type) {
 
 function renderWaveRegions(result) {
   const container = $("#wave-regions");
-  const regions = result.regions || [];
+  const regions = visibleRegionEntries(result);
   container.replaceChildren();
-  for (const [index, region] of regions.entries()) {
+  for (const { region, index } of regions) {
     const start = Number(region.start_s) || 0;
     const end = Number(region.end_s) || start;
     const button = document.createElement("button");
@@ -238,6 +321,7 @@ function renderWaveRegions(result) {
     button.style.setProperty("--type-color", regionColor(region.type));
     button.style.backgroundColor = `${regionColor(region.type)}22`;
     button.style.color = regionColor(region.type);
+    button.style.opacity = isReliableRegion(region) ? "1" : "0.32";
     button.textContent = flawLabels[region.type] || region.type;
     button.title = `${formatTime(start)}–${formatTime(end)} · ${flawLabels[region.type] || region.type}`;
     button.setAttribute("aria-label", `Seek to ${flawLabels[region.type] || region.type} region at ${formatTime(start)}`);
@@ -266,7 +350,9 @@ function renderTranscript(result, transcriptText = "") {
     word.dataset.end = String(item.end_s ?? "");
     const start = Number(item.start_s);
     const end = Number(item.end_s);
-    const inRegion = (result.regions || []).some((region) => start < Number(region.end_s) && end > Number(region.start_s));
+    const inRegion = visibleRegionEntries(result).some(({ region }) => (
+      start < Number(region.end_s) && end > Number(region.start_s)
+    ));
     if (inRegion) word.classList.add("is-flawed");
     word.setAttribute("aria-label", Number.isFinite(start) ? `Seek to ${item.word} at ${formatTime(start)}` : item.word);
     word.addEventListener("click", () => { if (Number.isFinite(start)) seekTo(start); });
@@ -303,24 +389,28 @@ function reliabilityTitle(reliability) {
 
 function renderRegions(result) {
   const rows = $("#region-rows");
-  const regions = result.regions || [];
+  const regions = visibleRegionEntries(result);
   $("#region-count").textContent = String(regions.length);
   if (!regions.length) {
-    rows.innerHTML = '<tr><td colspan="7" class="empty-state">No detected regions in this recording.</td></tr>';
+    rows.innerHTML = '<tr><td colspan="5" class="empty-state">No high- or medium-reliability regions are shown.</td></tr>';
     return;
   }
-  rows.innerHTML = regions.map((region, index) => {
+  rows.innerHTML = regions.map(({ region, index }) => {
     const type = String(region.type || "other_deviation");
     const reliability = region.reliability || {};
     const level = ["high", "medium", "low"].includes(reliability.level) ? reliability.level : "unavailable";
     const phrase = (region.words || []).join(" ");
     const message = [region.sentence, region.suggestion].filter(Boolean).join(" ");
+    const measured = [
+      region.observed_value || "Observed value unavailable",
+      `Expected: ${region.expected_value || "unavailable"}`,
+      `Ratio / z: ${formatNumber(region.z_score_or_ratio, 2)}`,
+      `Formula: ${region.formula || "unavailable"}`,
+    ].join(" · ");
     return `<tr data-region-index="${index}">
       <td><button class="time-link" type="button" data-seek="${Number(region.start_s) || 0}" data-region="${index}">${formatTime(region.start_s)}–${formatTime(region.end_s)}</button></td>
       <td><span class="type-tag" style="--type-color:${regionColor(type)}">${escapeHtml(flawLabels[type] || type)}</span></td>
-      <td>${escapeHtml(region.observed_value || "unavailable")}<br><span class="muted">${escapeHtml(region.expected_value || "unavailable")}</span></td>
-      <td>${formatNumber(region.z_score_or_ratio, 2)}</td>
-      <td class="formula-cell">${escapeHtml(region.formula || "unavailable")}</td>
+      <td class="measured-cell">${escapeHtml(measured)}</td>
       <td class="explanation-cell">${phrase ? `<strong>${escapeHtml(phrase)}</strong>` : ""}<span>${escapeHtml(message || "Explanation unavailable")}</span></td>
       <td><span class="reliability-badge ${level}" title="${escapeHtml(reliabilityTitle(reliability))}">${level}</span></td>
     </tr>`;
@@ -363,14 +453,14 @@ function renderTimelines(result) {
       traces.push({ ...baselineTrace, type: "scatter", mode: "lines", name: `Baseline · ${label}`, xaxis, yaxis, line: { color, width: 1.4, dash: "dot" }, connectgaps: false });
     }
   }
-  const shapes = (result.regions || []).map((region) => ({
+  const shapes = visibleRegionEntries(result).map(({ region }) => ({
     type: "rect", xref: "x", yref: "paper", x0: Number(region.start_s), x1: Number(region.end_s), y0: 0, y1: 1,
-    fillcolor: regionColor(region.type), opacity: 0.10, line: { width: 0 }, layer: "below",
+    fillcolor: regionColor(region.type), opacity: isReliableRegion(region) ? 0.10 : 0.035, line: { width: 0 }, layer: "below",
   }));
   shapes.push({ type: "line", xref: "x", yref: "paper", x0: 0, x1: 0, y0: 0, y1: 1, line: { color: "#172d2d", width: 1.5, dash: "dot" } });
-  window.Plotly.react("timeseries-chart", traces, {
+  const timelineDraw = window.Plotly.react("timeseries-chart", traces, {
     height: 400, margin: { l: 62, r: 20, t: 38, b: 35 }, paper_bgcolor: "transparent", plot_bgcolor: "#ffffff",
-    font: { family: "Aptos, Segoe UI, sans-serif", size: 10, color: "#607271" },
+    font: { family: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', size: 10, color: "#607271" },
     grid: { rows: 3, columns: 1, pattern: "independent" },
     xaxis: { domain: [0, 1], anchor: "y", range: [0, state.duration], showticklabels: false, gridcolor: "#edf1ef", zeroline: false },
     xaxis2: { domain: [0, 1], anchor: "y2", matches: "x", showticklabels: false, gridcolor: "#edf1ef", zeroline: false },
@@ -380,14 +470,15 @@ function renderTimelines(result) {
     yaxis3: { domain: [0, 0.30], title: { text: "Rate · syl/s", font: { size: 9 } }, gridcolor: "#edf1ef", zeroline: false },
     legend: { orientation: "h", y: 1.12, x: 0, font: { size: 9 } }, hovermode: "x unified", shapes,
   }, { displayModeBar: false, responsive: true });
+  timelineDraw.then(() => window.Plotly.Plots.resize("timeseries-chart"));
 }
 
 function updatePlotCursor(seconds) {
   if (!window.Plotly || $("#timeseries-chart").hidden || !state.currentResult) return;
   const existing = $("#timeseries-chart").layout?.shapes || [];
-  const regions = (state.currentResult.regions || []).map((region) => ({
+  const regions = visibleRegionEntries(state.currentResult).map(({ region }) => ({
     type: "rect", xref: "x", yref: "paper", x0: Number(region.start_s), x1: Number(region.end_s), y0: 0, y1: 1,
-    fillcolor: regionColor(region.type), opacity: 0.10, line: { width: 0 }, layer: "below",
+    fillcolor: regionColor(region.type), opacity: isReliableRegion(region) ? 0.10 : 0.035, line: { width: 0 }, layer: "below",
   }));
   regions.push({ type: "line", xref: "x", yref: "paper", x0: seconds, x1: seconds, y0: 0, y1: 1, line: { color: "#172d2d", width: 1.5, dash: "dot" } });
   if (existing.length) window.Plotly.relayout("timeseries-chart", { shapes: regions });
@@ -396,8 +487,8 @@ function updatePlotCursor(seconds) {
 function renderReliability(metrics) {
   const target = $("#reliability-content");
   if (!metrics) {
-    target.innerHTML = '<p class="empty-state">Evaluation metrics are unavailable. No reliability values are being inferred.</p>';
-    $("#metrics-source").textContent = "ARTIFACTS UNAVAILABLE";
+    target.innerHTML = '<tr><td colspan="3" class="empty-state">Evaluation metrics are unavailable. No reliability values are being inferred.</td></tr>';
+    $("#metrics-source").textContent = "Artifacts unavailable";
     return;
   }
   const pairedDev = metrics.scoring?.dev?.paired?.spearman_total_vs_severity;
@@ -413,28 +504,26 @@ function renderReliability(metrics) {
   const falseRateNote = `TEST controls + IDEAL; budget ${formatNumber(budget, 2)} per minute${overBudget ? " · slightly over budget" : ""}`;
   const weak = (metrics.weak_paired_detectors || []).map((type) => flawLabels[type] || type).join(", ") || "Unavailable";
   const unavailable = (metrics.missing_artifacts || []).length
-    ? `<p class="metrics-warning" style="grid-column:1/-1">Unavailable sources: ${escapeHtml(metrics.missing_artifacts.join(", "))}</p>`
+    ? `<tr class="metrics-warning"><td colspan="3">Unavailable sources: ${escapeHtml(metrics.missing_artifacts.join(", "))}</td></tr>`
     : "";
   const blocks = [
-    ["Paired · DEV Spearman", pairedDev, "score vs severity; ideal recording supplied", ""],
-    ["Paired · TEST Spearman", pairedTest, "held-out passage severity correlation", ""],
-    ["Reference-free · DEV Spearman", freeDev, "DEV-IDEAL reference statistics", ""],
-    ["Reference-free · TEST Spearman", freeTest, "held-out passage severity correlation", ""],
-    ["Paired · TEST AUC", pairedAuc, "ideal vs flawed; partly by construction because paired mode compares each read with its same-text ideal", "good"],
-    ["Paired false regions / min", falseRate, falseRateNote, overBudget ? "warning" : ""],
-    ["Paired boundary error", pairedPerformance.boundary_error_ms, "mean TEST boundary error, milliseconds", ""],
-    ["Gain-control false regions / min", gain.false_regions_per_minute, "paired TEST gain controls; gain changes can trigger false regions", "warning"],
-    ["Weak paired detectors", null, weak, "warning"],
+    ["Paired DEV Spearman", pairedDev, "Score vs severity; paired ideal supplied", 2],
+    ["Paired TEST Spearman", pairedTest, "Held-out passage severity correlation", 2],
+    ["Reference-free DEV Spearman", freeDev, "Reference fitted from DEV IDEAL passages", 2],
+    ["Reference-free TEST Spearman", freeTest, "Held-out passage severity correlation", 2],
+    ["Paired TEST AUC", pairedAuc, "Ideal vs flawed; partly by construction because each read has its same-text ideal", 2],
+    ["Paired false regions / min", falseRate, falseRateNote, 3],
+    ["Paired boundary error", pairedPerformance.boundary_error_ms, "Mean TEST boundary error, milliseconds", 1],
+    ["Gain-control false regions / min", gain.false_regions_per_minute, "Paired TEST controls; gain changes can cause false regions", 3],
+    ["Weak paired detectors", weak, "TEST precision below 0.4", null],
   ];
-  target.innerHTML = unavailable + blocks.map(([label, value, note, className]) => {
-    const isText = label === "Weak paired detectors";
-    const display = isText ? escapeHtml(note) : value == null ? "unavailable" : formatNumber(value, label.includes("Spearman") || label.includes("AUC") ? 2 : 2);
-    return `<article class="metric-block ${className}"><span class="eyebrow">${escapeHtml(label)}</span><strong>${display}</strong><p>${escapeHtml(note)}</p></article>`;
+  target.innerHTML = unavailable + blocks.map(([label, value, note, digits]) => {
+    const display = typeof value === "number" && digits !== null
+      ? formatNumber(value, digits)
+      : value == null ? "unavailable" : escapeHtml(value);
+    return `<tr><th scope="row">${escapeHtml(label)}</th><td>${display}</td><td>${escapeHtml(note)}</td></tr>`;
   }).join("");
-  if (!metrics.available && !unavailable) {
-    target.insertAdjacentHTML("afterbegin", '<p class="metrics-warning" style="grid-column:1/-1">Some reliability artifacts are absent; missing values are shown as unavailable.</p>');
-  }
-  $("#metrics-source").textContent = metrics.missing_artifacts?.length ? "PARTIAL EVALUATION ARTIFACTS" : "EVAL/RESULTS · FROZEN CONFIG";
+  $("#metrics-source").textContent = metrics.missing_artifacts?.length ? "Partial evaluation artifacts" : "Evaluation results and frozen config";
   renderDetectorCoverage(metrics.detectors_by_mode || {});
 }
 
@@ -463,10 +552,15 @@ async function loadMetrics() {
 function renderResult(result, { label = "", transcript = "", audioUrl = null, audioFile = null } = {}) {
   state.currentResult = result;
   state.currentId = label;
+  state.transcript = transcript;
+  state.showLowReliability = false;
   $("#mode-badge").textContent = scoreModeLabel(result.mode);
   $("#mode-badge").classList.toggle("paired", result.mode === "paired");
   $("#recording-label").textContent = label;
-  $("#baseline-label").textContent = result.series?.baseline?.source || (result.mode === "paired" ? "PROVIDED IDEAL" : "DEV-IDEAL REFERENCE");
+  $("#baseline-label").textContent = result.series?.baseline?.source || (result.mode === "paired" ? "Provided ideal" : "DEV-IDEAL reference");
+  $("#summary-total-score").textContent = formatNumber(result.total_score, 1);
+  renderSummary(result);
+  updateLowToggle(result);
   renderDimensions(result);
   renderRadar(result);
   renderRegions(result);
@@ -475,10 +569,17 @@ function renderResult(result, { label = "", transcript = "", audioUrl = null, au
   renderWaveRegions(result);
   renderTimelines(result);
   setLoading(false);
+  requestAnimationFrame(() => {
+    if (window.Plotly) {
+      window.Plotly.Plots.resize("radar-chart");
+      window.Plotly.Plots.resize("timeseries-chart");
+    }
+  });
   setAudioSource(audioUrl, audioFile, label);
 }
 
 function setAudioSource(url, file, label) {
+  state.waveformReady = false;
   if (state.wavesurfer) {
     state.wavesurfer.destroy();
     state.wavesurfer = null;
@@ -496,9 +597,8 @@ function setAudioSource(url, file, label) {
     $("#waveform").classList.remove("is-loaded");
     return;
   }
-  $("#waveform").classList.add("is-loaded");
   nativeAudio.src = source;
-  nativeAudio.hidden = Boolean(window.WaveSurfer);
+  nativeAudio.hidden = false;
   nativeAudio.onloadedmetadata = () => {
     if (Number.isFinite(nativeAudio.duration) && nativeAudio.duration > 0) {
       state.duration = nativeAudio.duration;
@@ -518,25 +618,41 @@ function setAudioSource(url, file, label) {
     state.wavesurfer = window.WaveSurfer.create({
       container: "#waveform", height: 96, waveColor: "#94b4aa", progressColor: "#087f78",
       cursorColor: "#172d2d", cursorWidth: 2, barWidth: 2, barGap: 2, barRadius: 1,
-      normalize: true, interact: true,
+      normalize: true, interact: true, media: nativeAudio,
     });
     state.wavesurfer.on("timeupdate", (seconds) => {
       syncTranscript(seconds);
       updatePlotCursor(seconds);
     });
     state.wavesurfer.on("ready", () => {
-      state.duration = state.wavesurfer.getDuration() || state.duration;
-      renderWaveRegions(state.currentResult || { regions: [] });
+      requestAnimationFrame(() => {
+        if (!$("#waveform").querySelector("canvas")) {
+          state.wavesurfer?.destroy();
+          state.wavesurfer = null;
+          state.waveformReady = false;
+          nativeAudio.hidden = false;
+          $("#waveform").classList.remove("is-loaded");
+          setBanner("Waveform rendering is unavailable. Use the audio player below; analysis remains available.");
+          return;
+        }
+        state.waveformReady = true;
+        nativeAudio.hidden = true;
+        $("#waveform").classList.add("is-loaded");
+        state.duration = state.wavesurfer.getDuration() || state.duration;
+        renderWaveRegions(state.currentResult || { regions: [] });
+      });
     });
     state.wavesurfer.on("error", () => {
       state.wavesurfer?.destroy();
       state.wavesurfer = null;
+      state.waveformReady = false;
       $("#waveform").classList.remove("is-loaded");
       nativeAudio.hidden = false;
       setBanner("Waveform playback could not load. The browser audio player is available instead.");
     });
     state.wavesurfer.load(source);
   } catch (_error) {
+    state.waveformReady = false;
     $("#waveform").classList.remove("is-loaded");
     nativeAudio.hidden = false;
     setBanner("Waveform playback is unavailable. The browser audio player is available instead.");
@@ -651,10 +767,13 @@ function connectEvents() {
       loadDemo(id);
     }
   });
+  $("#show-low-regions").addEventListener("change", (event) => {
+    state.showLowReliability = event.currentTarget.checked;
+    refreshFilteredRegions();
+  });
   $("#analyze-form").addEventListener("submit", submitAnalysis);
   $("#play-button").addEventListener("click", () => {
-    if (state.wavesurfer) state.wavesurfer.playPause();
-    else if (state.currentAudio) {
+    if (state.currentAudio) {
       if (state.currentAudio.paused) state.currentAudio.play().catch(() => {});
       else state.currentAudio.pause();
     }

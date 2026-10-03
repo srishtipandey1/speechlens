@@ -253,6 +253,9 @@ def build_typed_deviation_table(
     table["explicit_filler"] = False
     table["nonlexical_voiced"] = False
     table["rate_ratio"] = 1.0
+    for flaw_type in ("pace_fast", "pace_slow"):
+        table[f"trigger_rate_ratio_{flaw_type}"] = np.nan
+        table[f"trigger_rate_z_{flaw_type}"] = np.nan
     table["f0_std_ratio"] = 1.0
     table["intensity_drop_db"] = 0.0
     table["pause_excess_s"] = 0.0
@@ -349,8 +352,18 @@ def build_typed_deviation_table(
             fast_score = max(0.0, 1.0 - ratio) if paired else max(0.0, -rate_z)
             slow_score = max(0.0, ratio - 1.0) if paired else max(0.0, rate_z)
             monotone_score = max(0.0, 1.0 - f0_ratio) if paired else max(0.0, -f0_z)
-            _raise_score(table, window_mask, "pace_fast", fast_score)
-            _raise_score(table, window_mask, "pace_slow", slow_score)
+            for flaw_type, window_score in (
+                ("pace_fast", fast_score),
+                ("pace_slow", slow_score),
+            ):
+                score_column = f"score_{flaw_type}"
+                better_mask = window_mask & (
+                    window_score > table[score_column].to_numpy(dtype=np.float64)
+                )
+                _raise_score(table, window_mask, flaw_type, window_score)
+                table.loc[better_mask, f"trigger_rate_ratio_{flaw_type}"] = ratio
+                if not paired:
+                    table.loc[better_mask, f"trigger_rate_z_{flaw_type}"] = rate_z
             _raise_score(table, window_mask, "monotone", monotone_score)
             _raise_score(table, window_mask, "volume_dropoff", volume_drop)
             table.loc[window_mask, "rate_ratio"] = ratio
@@ -457,7 +470,9 @@ def detect_typed_regions(
             row_slice = table.loc[mask]
             if row_slice.empty:
                 continue
-            score = float(row_slice[f"score_{flaw_type}"].max())
+            score_column = f"score_{flaw_type}"
+            peak_row = row_slice.loc[row_slice[score_column].idxmax()]
+            score = float(peak_row[score_column])
             confidence_values = row_slice["alignment_confidence"].to_numpy(dtype=np.float64)
             low_threshold = float(config["low_alignment_confidence"])
             low_fraction = float(np.mean(confidence_values < low_threshold))
@@ -487,6 +502,14 @@ def detect_typed_regions(
                 "features": {
                     "score": score,
                     "rate_ratio": float(row_slice["rate_ratio"].median()),
+                    "peak_rate_ratio": float(peak_row.get(
+                        f"trigger_rate_ratio_{flaw_type}", row_slice["rate_ratio"].median()
+                    )),
+                    "peak_rate_z": (
+                        float(peak_row[f"trigger_rate_z_{flaw_type}"])
+                        if np.isfinite(peak_row.get(f"trigger_rate_z_{flaw_type}", np.nan))
+                        else None
+                    ),
                     "f0_std_ratio": float(row_slice["f0_std_ratio"].median()),
                     "intensity_drop_db": float(row_slice["intensity_drop_db"].max()),
                     "pause_excess_s": float(row_slice["pause_excess_s"].max()),

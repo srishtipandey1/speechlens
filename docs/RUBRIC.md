@@ -56,6 +56,15 @@ disabled or the available reference statistics are only indirect proxies.
 Paired mode uses the same-transcript ideal and is preferred when an ideal audio
 recording is available.
 
+## Dashboard Score Bands
+
+The dashboard labels the existing weighted total without changing or rounding
+the score used by evaluation: totals of at least 80 are labeled **Close to
+reference**, totals from 60 up to but not including 80 are **Noticeable
+differences**, and totals below 60 are **Substantial differences**. These are
+presentation labels only; they do not affect scoring, detector thresholds, or
+evaluation metrics.
+
 ## Evaluation
 
 `python run.py score_eval` writes one row per recording and mode to

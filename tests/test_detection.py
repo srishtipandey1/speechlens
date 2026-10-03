@@ -143,7 +143,7 @@ def test_explanation_rendering_is_byte_deterministic_and_contains_numbers() -> N
         "end_s": 45.8,
         "words": ["we", "shall", "never"],
         "type": "pace_fast",
-        "features": {"rate_z": 2.8},
+        "features": {"rate_z": -2.8, "peak_rate_ratio": 0.63, "score": 0.37},
         "observed_rate_sps": 4.9,
         "expected_rate_sps": 3.1,
         "severity": 0.7,
@@ -158,8 +158,45 @@ def test_explanation_rendering_is_byte_deterministic_and_contains_numbers() -> N
     assert render_explanation(first_record).encode() == render_explanation(
         second_record
     ).encode()
-    assert "4.9 syllables/s vs 3.1 expected (z=+2.8)" in first_record["sentence"]
+    assert "0.63, below 1.00 expected" in first_record["sentence"]
+    assert "rushed" in first_record["sentence"]
     assert first_record["suggestion"]
+
+
+def test_pacing_explanation_direction_comes_from_peak_ratio() -> None:
+    """Pacing language follows the peak measurement, not the detector label."""
+    def sentence(flaw_type: str, peak_ratio: float, score: float) -> str:
+        return explanation_record({
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "words": ["sample"],
+            "type": flaw_type,
+            "features": {"peak_rate_ratio": peak_ratio, "score": score},
+        })["sentence"]
+
+    rushed = sentence("pace_fast", 0.72, 0.28)
+    drawn_out = sentence("pace_fast", 1.24, 0.24)
+    neutral = sentence("pace_slow", 1.0, 0.0)
+    legacy_paired = explanation_record({
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "words": ["sample"],
+        "type": "pace_slow",
+        "features": {"score": 0.24},
+    }, mode="paired")["sentence"]
+    unavailable = explanation_record({
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "words": ["sample"],
+        "type": "pace_fast",
+    })
+
+    assert "rushed" in rushed
+    assert "drawn out" in drawn_out
+    assert "timing differs from the reference here" in neutral
+    assert "1.24, above 1.00 expected" in legacy_paired
+    assert unavailable["observed_value"] == "Peak rate unavailable"
+    assert "timing differs from the reference here" in unavailable["sentence"]
 
 
 def test_filler_explanation_includes_numeric_expected_value() -> None:

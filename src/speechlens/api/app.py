@@ -7,6 +7,7 @@ import json
 import re
 import threading
 import csv
+from difflib import SequenceMatcher
 from collections import OrderedDict
 from pathlib import Path
 from typing import Any
@@ -17,6 +18,8 @@ from fastapi.staticfiles import StaticFiles
 
 from speechlens.api import service
 from speechlens.detection.core import load_detection_config
+from speechlens.detection.measurements import normalize_token
+from speechlens.explain import explanation_record
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
@@ -116,9 +119,82 @@ def demo_recording(recording_id: str) -> dict[str, Any]:
     if not path.is_file():
         raise HTTPException(status_code=404, detail="precomputed demo recording not found")
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        result = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as error:
         raise HTTPException(status_code=500, detail="precomputed demo JSON is invalid") from error
+    for index, region in enumerate(result.get("regions", [])):
+        if region.get("type") not in {"pace_fast", "pace_slow"}:
+            continue
+        if region.get("formula") == "peak-scoring local participant/ideal word-duration ratio":
+            record = region
+        else:
+            peak_ratio = _legacy_paired_peak_ratio(region, result)
+            source = {
+                "start_s": region["start_s"],
+                "end_s": region["end_s"],
+                "words": region.get("words", []),
+                "type": region["type"],
+                "severity": region.get("severity", 0.0),
+                "confidence": region.get("confidence", 0.0),
+                "features": {"peak_rate_ratio": peak_ratio} if peak_ratio is not None else {},
+            }
+            record = explanation_record(source, mode=result.get("mode"))
+        record["reliability"] = region.get("reliability", {})
+        result["regions"][index] = record
+    return result
+
+
+def _legacy_paired_peak_ratio(region: dict[str, Any], result: dict[str, Any]) -> float | None:
+    """Recover the max-scoring paired pace ratio from precomputed word intervals."""
+    if result.get("mode") != "paired":
+        return None
+    participant = result.get("series", {}).get("participant", {}).get("speech_rate_sps", [])
+    baseline = result.get("series", {}).get("baseline", {}).get("speech_rate_sps", [])
+    if not participant or not baseline:
+        return None
+    participant_tokens = [normalize_token(str(item.get("word", ""))) for item in participant]
+    baseline_tokens = [normalize_token(str(item.get("word", ""))) for item in baseline]
+    mapping: dict[int, int] = {}
+    matcher = SequenceMatcher(a=baseline_tokens, b=participant_tokens, autojunk=False)
+    for baseline_start, participant_start, count in matcher.get_matching_blocks():
+        for offset in range(count):
+            mapping[participant_start + offset] = baseline_start + offset
+
+    config = load_detection_config(PROJECT_ROOT / "config" / "detection.yaml")
+    widths = tuple(int(value) for value in config["measurements"]["pace"]["window_words"])
+    flaw_type = str(region.get("type", ""))
+    region_start = float(region["start_s"])
+    region_end = float(region["end_s"])
+    best_ratio: float | None = None
+    best_score = 0.0
+    for width in widths:
+        for start in range(len(participant) - width + 1):
+            indices = range(start, start + width)
+            baseline_indices = [mapping.get(index) for index in indices]
+            if any(index is None for index in baseline_indices):
+                continue
+            if any(right != left + 1 for left, right in zip(baseline_indices, baseline_indices[1:])):
+                continue
+            window_start = float(participant[start]["start_s"])
+            window_end = float(participant[start + width - 1]["end_s"])
+            if window_start >= region_end or window_end <= region_start:
+                continue
+            participant_duration = sum(
+                float(participant[index]["end_s"]) - float(participant[index]["start_s"])
+                for index in indices
+            )
+            baseline_duration = sum(
+                float(baseline[index]["end_s"]) - float(baseline[index]["start_s"])
+                for index in baseline_indices
+            )
+            if participant_duration <= 0 or baseline_duration <= 0:
+                continue
+            ratio = participant_duration / baseline_duration
+            score = max(0.0, 1.0 - ratio) if flaw_type == "pace_fast" else max(0.0, ratio - 1.0)
+            if score > best_score:
+                best_ratio = ratio
+                best_score = score
+    return best_ratio
 
 
 def _read_csv(name: str, missing: list[str]) -> list[dict[str, str]]:

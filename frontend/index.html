@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#132b2a">
+  <meta name="theme-color" content="#f4f5f4">
   <title>SpeechLens | Delivery analysis</title>
   <link rel="stylesheet" href="/style.css">
   <script>
@@ -13,31 +13,18 @@
     };
   </script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.6/wavesurfer.min.js" onerror="speechLensCdnFailed('WaveSurfer')"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.2/plotly.min.js" onerror="speechLensCdnFailed('Plotly')"></script>
+  <!-- Vendored Plotly.js v3.0.1 is distributed under the MIT License; see docs/THIRD_PARTY.md. -->
+  <script defer src="/vendor/plotly.min.js" onerror="speechLensCdnFailed('Plotly')"></script>
   <script defer src="/app.js"></script>
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="/" aria-label="SpeechLens home">
-      <span class="brand-mark" aria-hidden="true">S</span>
-      <span><strong>SpeechLens</strong><small>DELIVERY ANALYSIS</small></span>
-    </a>
-    <p class="disclaimer">Educational and decision-support prototype; not a substitute for a human judge or formal assessment.</p>
-    <div class="mode-wrap">ANALYSIS MODE <span id="mode-badge" class="mode-badge">Waiting for recording</span></div>
+    <a class="brand" href="/" aria-label="SpeechLens home">SpeechLens</a>
+    <div class="mode-wrap"><span>Mode</span><span id="mode-badge" class="mode-badge">Waiting for recording</span></div>
   </header>
+  <p class="disclaimer">Educational and decision-support prototype; not a substitute for a human judge or formal assessment.</p>
 
   <main>
-    <section class="workspace-head" aria-labelledby="page-title">
-      <div>
-        <p class="eyebrow">CONTRASTIVE SPEECH ANALYTICS</p>
-        <h1 id="page-title">Delivery, made visible.</h1>
-        <p class="intro">Explore timing, vocal variation, and grounded feedback across a matched read.</p>
-      </div>
-      <div class="signal-stamp" aria-label="Analysis uses local deterministic scoring">
-        <span class="signal-dot"></span> LOCAL · DETERMINISTIC · NO LLM SCORING
-      </div>
-    </section>
-
     <nav class="tabs" aria-label="Analysis options" role="tablist">
       <button id="tab-demo" class="tab is-active" type="button" role="tab" aria-selected="true" aria-controls="panel-demo">Try a demo</button>
       <button id="tab-own" class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-own">Analyze your own</button>
@@ -63,7 +50,7 @@
         <label class="control-field" for="transcript-input">Transcript
           <textarea id="transcript-input" name="transcript" rows="3" placeholder="Paste the words spoken in the recording…" required></textarea>
         </label>
-        <label class="control-field" for="ideal-file">Ideal audio <span class="optional-label">OPTIONAL · PAIRED MODE</span><input id="ideal-file" name="ideal_audio" type="file" accept="audio/*"></label>
+        <label class="control-field" for="ideal-file">Ideal audio <span class="optional-label">Optional · paired mode</span><input id="ideal-file" name="ideal_audio" type="file" accept="audio/*"></label>
         <button id="analyze-button" class="primary-button" type="submit"><span aria-hidden="true">↗</span> Analyze recording</button>
       </form>
       <p id="analysis-progress" class="progress-note" role="status" hidden><span class="spinner" aria-hidden="true"></span> Aligning speech and extracting features…</p>
@@ -78,63 +65,76 @@
       </div>
 
       <div id="result-content" hidden>
+        <section class="summary-block" aria-labelledby="summary-title">
+          <div class="summary-total">
+            <h2 id="summary-title">Score</h2>
+            <p><strong id="summary-total-score">--</strong><span> / 100</span></p>
+            <span id="score-band" class="score-band" role="status">Score band unavailable</span>
+          </div>
+          <div class="summary-findings">
+            <h3>Top findings</h3>
+            <ol id="summary-findings-list"><li class="empty-state">No findings available.</li></ol>
+          </div>
+        </section>
+
         <section class="analysis-top" aria-label="Score summary">
           <div class="score-overview">
-            <div class="score-heading"><div><p class="eyebrow">OVERALL DELIVERY</p><h2>Contrastive score</h2></div><span id="recording-label" class="recording-label"></span></div>
-            <div class="total-score-line"><strong id="total-score">--</strong><span> / 100</span><span class="score-caption">closer to the reference</span></div>
+            <div class="score-heading"><h2>Dimensions</h2><span id="recording-label" class="recording-label"></span></div>
             <div id="dimension-list" class="dimension-list"></div>
             <p id="reference-note" class="reference-note"></p>
           </div>
           <div class="radar-panel">
-            <div class="section-title"><div><p class="eyebrow">SIX DIMENSIONS</p><h2>Score profile</h2></div><span class="chart-kicker">0–100</span></div>
+            <div class="section-title"><h2>Score profile</h2><span class="chart-kicker">0–100</span></div>
             <div id="radar-chart" class="radar-chart" role="img" aria-label="Radar chart of six delivery scores"></div>
             <div id="radar-fallback" class="chart-fallback" hidden>Chart library unavailable. Dimension scores remain listed alongside this panel.</div>
           </div>
         </section>
 
         <section class="media-section" aria-labelledby="media-title">
-          <div class="section-title"><div><p class="eyebrow">TEMPORAL REVIEW</p><h2 id="media-title">Listen and locate</h2></div><button id="play-button" class="icon-button" type="button" aria-label="Play recording" title="Play or pause">▶</button></div>
+          <div class="section-title"><h2 id="media-title">Waveform and transcript</h2><button id="play-button" class="icon-button" type="button" aria-label="Play recording" title="Play or pause">▶</button></div>
           <div id="waveform" class="waveform" aria-label="Recording waveform">
             <div id="wave-regions" class="wave-regions" aria-label="Flaw regions on waveform"></div>
           </div>
           <audio id="native-audio" class="native-audio" controls preload="metadata" hidden></audio>
           <div id="flaw-legend" class="flaw-legend" aria-label="Flaw type legend"></div>
           <div class="media-grid">
-            <div class="transcript-panel"><div class="subsection-head"><h3>Aligned transcript</h3><span>SELECT A WORD TO SEEK</span></div><div id="transcript-words" class="transcript-words"><p class="empty-state">Choose a recording to load its aligned transcript.</p></div></div>
-            <div class="audio-source"><span class="eyebrow">AUDIO SOURCE</span><p id="audio-source-label">No recording loaded</p><p id="playback-time">00:00.0</p></div>
+            <div class="transcript-panel"><div class="subsection-head"><h3>Transcript</h3><span>Select a word to seek</span></div><div id="transcript-words" class="transcript-words"><p class="empty-state">Choose a recording to load its aligned transcript.</p></div></div>
+            <div class="audio-source"><span>Audio source</span><p id="audio-source-label">No recording loaded</p><p id="playback-time">00:00.0</p></div>
           </div>
         </section>
 
         <section class="charts-section" aria-labelledby="charts-title">
-          <div class="section-title"><div><p class="eyebrow">PARTICIPANT VS BASELINE</p><h2 id="charts-title">Feature timelines</h2></div><span id="baseline-label" class="chart-kicker"></span></div>
+          <div class="section-title"><h2 id="charts-title">Feature timelines</h2><span id="baseline-label" class="chart-kicker"></span></div>
           <div id="timeseries-chart" class="timeseries-chart" role="img" aria-label="F0, energy, and speech-rate timelines"></div>
           <div id="timeseries-fallback" class="chart-fallback" hidden>Plotly is unavailable. Scores, region explanations, and transcript remain available.</div>
         </section>
 
         <section class="regions-section" aria-labelledby="regions-title">
-          <div class="section-title"><div><p class="eyebrow">GROUNDED FEEDBACK</p><h2 id="regions-title">Flaw regions <span id="region-count" class="count-pill">0</span></h2></div><span class="chart-kicker">RENDERED TIMELINE</span></div>
+          <div class="section-title"><h2 id="regions-title">Flaw regions <span id="region-count" class="count-pill">0</span></h2><span class="chart-kicker">Rendered timeline</span></div>
+          <label class="low-toggle" for="show-low-regions"><input id="show-low-regions" type="checkbox"><span id="low-toggle-label">Show low-reliability regions (0)</span></label>
           <div class="table-scroll">
             <table>
-              <thead><tr><th scope="col">Time</th><th scope="col">Type</th><th scope="col">Observed / expected</th><th scope="col">Ratio / z</th><th scope="col">Formula</th><th scope="col">Explanation</th><th scope="col">Test reliability</th></tr></thead>
-              <tbody id="region-rows"><tr><td colspan="7" class="empty-state">No detected regions in this recording.</td></tr></tbody>
+              <thead><tr><th scope="col">Time</th><th scope="col">Type</th><th scope="col">What was measured</th><th scope="col">Explanation</th><th scope="col">Reliability</th></tr></thead>
+              <tbody id="region-rows"><tr><td colspan="5" class="empty-state">No detected regions in this recording.</td></tr></tbody>
             </table>
           </div>
         </section>
 
         <section class="reliability-section" aria-labelledby="reliability-title">
-          <div class="section-title"><div><p class="eyebrow">EVIDENCE, NOT PROMISES</p><h2 id="reliability-title">How reliable is this?</h2></div><span id="metrics-source" class="chart-kicker">READ FROM EVALUATION ARTIFACTS</span></div>
-          <div id="reliability-content" class="reliability-content"><p class="empty-state">Loading reported evaluation results…</p></div>
+          <div class="section-title"><h2 id="reliability-title">How reliable is this?</h2><span id="metrics-source" class="chart-kicker">Reading evaluation results…</span></div>
+          <div class="table-scroll">
+            <table class="metrics-table"><thead><tr><th scope="col">Metric</th><th scope="col">Value</th><th scope="col">Note</th></tr></thead>
+              <tbody id="reliability-content"><tr><td colspan="3" class="empty-state">Loading reported evaluation results…</td></tr></tbody></table>
+          </div>
           <details class="detector-details"><summary>Detector coverage by mode</summary><div id="detector-coverage" class="detector-coverage"></div></details>
         </section>
       </div>
     </section>
     <section id="initial-state" class="initial-state">
-      <span class="initial-mark" aria-hidden="true">◎</span>
-      <p class="eyebrow">READY WHEN YOU ARE</p>
-      <h2>Choose a demo or bring a recording.</h2>
-      <p>Scores compare delivery features; the supplied transcript is used for plain forced alignment.</p>
+      <h2>Choose a demo or analyze a recording.</h2>
+      <p>Scores compare delivery features using the supplied transcript for plain forced alignment.</p>
     </section>
   </main>
-  <footer><span>SpeechLens · Contrastive speech analytics</span><span>Scores are evidence summaries, not verdicts.</span></footer>
+  <footer><span>SpeechLens</span></footer>
 </body>
 </html>

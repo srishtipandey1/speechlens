@@ -29,7 +29,7 @@ def _phrase_text(words: Sequence[str]) -> str:
 	return " ".join(str(word) for word in words).strip()
 
 
-def explanation_record(region: Mapping) -> dict:
+def explanation_record(region: Mapping, *, mode: str | None = None) -> dict:
 	"""Build a structured record with deterministic causal explanation text."""
 	flaw_type = str(region["type"])
 	start_s = float(region["start_s"])
@@ -37,23 +37,50 @@ def explanation_record(region: Mapping) -> dict:
 	words = [str(word) for word in region.get("words", [])]
 	features = region.get("features", {})
 	if flaw_type in {"pace_fast", "pace_slow"}:
-		if "rate_ratio" in features:
-			observed = float(features["rate_ratio"])
+		peak_ratio = features.get("peak_rate_ratio")
+		if peak_ratio is None and mode == "paired" and "score" in features:
+			peak_score = float(features["score"])
+			peak_ratio = 1.0 - peak_score if flaw_type == "pace_fast" else 1.0 + peak_score
+		if peak_ratio is not None or "rate_ratio" in features:
+			observed = float(peak_ratio if peak_ratio is not None else features["rate_ratio"])
 			expected = 1.0
 			z_or_ratio = observed
-			formula = "local participant/ideal word-duration ratio / passage-wide rate ratio"
-			observed_value = f"{observed:.2f} normalized duration ratio"
-			expected_value = "1.00 normalized ideal duration"
-			causal = f"the normalized local duration ratio was {observed:.2f} vs 1.00 expected"
+			formula = "peak-scoring local participant/ideal word-duration ratio"
+			observed_value = f"{observed:.2f} duration ratio at peak score"
+			expected_value = "1.00 relative to the ideal"
+			if observed < expected:
+				causal = f"the peak-scoring duration ratio was {observed:.2f}, below 1.00 expected"
+				consequence = "this section was rushed"
+			elif observed > expected:
+				causal = f"the peak-scoring duration ratio was {observed:.2f}, above 1.00 expected"
+				consequence = "this section was drawn out"
+			else:
+				causal = f"the peak-scoring duration ratio was {observed:.2f}, matching 1.00 expected"
+				consequence = "timing differs from the reference here"
 		else:
-			observed = float(region.get("observed_rate_sps", 0.0))
-			expected = float(region.get("expected_rate_sps", 0.0))
-			z_or_ratio = float(features.get("rate_z", 0.0))
+			z_or_ratio = float(features.get("peak_rate_z", features.get("rate_z", 0.0)))
 			formula = "log(observed_rate_sps / expected_rate_sps) / paired_rate_scale"
-			observed_value = f"{observed:.1f} syllables/s"
-			expected_value = f"{expected:.1f} syllables/s"
-			causal = f"{observed:.1f} syllables/s vs {expected:.1f} expected (z={z_or_ratio:+.1f})"
-		consequence = "this section was rushed" if flaw_type == "pace_fast" else "this section was drawn out"
+			if region.get("observed_rate_sps") is None or region.get("expected_rate_sps") is None:
+				observed = None
+				expected = None
+				observed_value = "Peak rate unavailable"
+				expected_value = "Expected rate unavailable"
+				causal = "the peak-scoring rate is unavailable"
+				consequence = "timing differs from the reference here"
+			else:
+				observed = float(region["observed_rate_sps"])
+				expected = float(region["expected_rate_sps"])
+				observed_value = f"{observed:.1f} syllables/s"
+				expected_value = f"{expected:.1f} syllables/s"
+				if observed < expected:
+					causal = f"the peak-scoring rate was {observed:.1f} syllables/s, below {expected:.1f} expected (z={z_or_ratio:+.1f})"
+					consequence = "this section was rushed"
+				elif observed > expected:
+					causal = f"the peak-scoring rate was {observed:.1f} syllables/s, above {expected:.1f} expected (z={z_or_ratio:+.1f})"
+					consequence = "this section was drawn out"
+				else:
+					causal = f"the peak-scoring rate was {observed:.1f} syllables/s, matching {expected:.1f} expected"
+					consequence = "timing differs from the reference here"
 	elif flaw_type == "long_pause":
 		observed = float(features.get("pause_excess_s", 0.0))
 		expected = 0.0
@@ -126,9 +153,9 @@ def explanation_record(region: Mapping) -> dict:
 		"words": words,
 		"type": flaw_type,
 		"observed_value": observed_value,
-		"observed_numeric": float(observed),
+		"observed_numeric": float(observed) if observed is not None else None,
 		"expected_value": expected_value,
-		"expected_numeric": float(expected),
+		"expected_numeric": float(expected) if expected is not None else None,
 		"z_score_or_ratio": float(z_or_ratio),
 		"formula": formula,
 		"severity": float(region.get("severity", 0.0)),
